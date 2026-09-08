@@ -1,0 +1,125 @@
+/* FA Lens design tokens — CSS form of tokens.json. LIGHT default (readability decision 2026-09-09).
+   Theme resolution (3 states):
+   - bare :root            = light (default)
+   - prefers-color-scheme: dark, unless data-theme="light" is stamped
+   - data-theme="dark"     = dark (explicit toggle wins)
+   Density: data-density="dense" on :root switches rows/padding; default is comfortable.
+   Components reference ONLY these variables. */
+
+:root {
+  --ground: #F5F7FC;
+  --surface-1: #FFFFFF;
+  --surface-2: #EEF1F8;
+  --surface-3: #E3E8F4;
+  --hairline: #D5DBEA;
+  --hairline-soft: #E6EAF4;
+  --text: #0F1424;
+  --text-dim: #4B5675;
+  --text-faint: #8A94B3;
+  --accent: #0B84D6;
+  --accent-strong: #066BB0;
+  --accent-soft: rgba(11,132,214,0.12);
+  --accent-text: #FFFFFF;          /* text ON solid accent */
+  --accent-ink: #085E9E;           /* accent-colored text on soft/ground */
+  --flare: #E8562F;
+  --flare-soft: rgba(232,86,47,0.14);
+  --ok: #0E9F6E;     --ok-soft: rgba(14,159,110,0.12);   --ok-text: #157A56;
+  --warn: #B7791F;   --warn-soft: rgba(183,121,31,0.14); --warn-text: #8A5A12;
+  --crit: #DC2650;   --crit-soft: rgba(220,38,80,0.12);  --crit-text: #B01E42;
+  --info: #4C63D2;   --info-soft: rgba(76,99,210,0.12);  --info-text: #3A4DAE;
+  --overlay: rgba(15,20,36,0.45);
+  --code-bg: #F0F3FA;
+
+  --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --font-ui: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  --fs-xs: 11.5px; --lh-xs: 1.45;
+  --fs-sm: 12.5px; --lh-sm: 1.5;
+  --fs-base: 13.5px; --lh-base: 1.55;
+  --fs-md: 15px;  --lh-md: 1.45;
+  --fs-lg: 18px;  --lh-lg: 1.4;
+  --fs-xl: 24px;  --lh-xl: 1.2;
+  --fs-2xl: 32px; --lh-2xl: 1.1;
+  --fs-3xl: 48px; --lh-3xl: 1.05;
+
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --sp-16: 64px;
+
+  --r-xs: 4px; --r-sm: 6px; --r-md: 12px; --r-lg: 16px; --r-pill: 999px;
+
+  --el-1: 0 1px 2px rgba(15,20,36,0.06), 0 0 0 1px var(--hairline);
+  --el-2: 0 8px 24px rgba(15,20,36,0.12), 0 0 0 1px var(--hairline);
+  --el-3: 0 24px 64px rgba(15,20,36,0.18), 0 0 0 1px var(--hairline);
+  --glow-accent: 0 0 0 3px var(--accent-soft);
+  --glow-flare: 0 0 24px rgba(232,86,47,0.28);
+  --aberration: -1px 0 0 rgba(11,132,214,0.45), 1px 0 0 rgba(232,86,47,0.45);
+
+  --d-instant: 80ms; --d-fast: 160ms; --d-base: 240ms; --d-slow: 400ms; --d-cinematic: 700ms;
+  --stagger-row: 30ms; --stagger-step: 160ms;
+  --e-standard: cubic-bezier(0.2, 0, 0, 1);
+  --e-enter: cubic-bezier(0, 0, 0.2, 1);
+  --e-exit: cubic-bezier(0.4, 0, 1, 1);
+  --e-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* density: comfortable (default) */
+  --row-h: 44px; --row-pad: 14px; --card-pad: 20px; --tile-min: 112px; --th-h: 36px;
+
+  --dw: 260px; --dw-min: 56px; --ctx-h: 52px; --tabs-h: 44px;
+  --panel-w: min(560px, 46vw);
+
+  --z-sticky: 10; --z-panel: 20; --z-dropdown: 30; --z-toast: 40; --z-palette: 50;
+
+  color-scheme: light;
+}
+
+:root[data-density="dense"] {
+  --row-h: 36px; --row-pad: 12px; --card-pad: 14px; --tile-min: 92px; --th-h: 32px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0A0D14; --surface-1: #111624; --surface-2: #182033; --surface-3: #1F2A42;
+    --hairline: #26304A; --hairline-soft: #1B2338;
+    --text: #EEF2FF; --text-dim: #9AA6C8; --text-faint: #5F6B8C;
+    --accent: #4FD1FF; --accent-strong: #22B8F0; --accent-soft: rgba(79,209,255,0.14); --accent-text: #0A0D14; --accent-ink: #8FE0FF;
+    --flare: #FF7A59; --flare-soft: rgba(255,122,89,0.16);
+    --ok: #3DDC97; --ok-soft: rgba(61,220,151,0.14); --ok-text: #86EBC0;
+    --warn: #FFC145; --warn-soft: rgba(255,193,69,0.14); --warn-text: #FFD98A;
+    --crit: #FF4D6D; --crit-soft: rgba(255,77,109,0.16); --crit-text: #FF9DB0;
+    --info: #8FA3FF; --info-soft: rgba(143,163,255,0.14); --info-text: #BCC8FF;
+    --overlay: rgba(5,7,12,0.66); --code-bg: #0C1020;
+    --el-1: 0 1px 0 rgba(0,0,0,0.25), 0 0 0 1px var(--hairline);
+    --el-2: 0 8px 24px rgba(0,0,0,0.35), 0 0 0 1px var(--hairline);
+    --el-3: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px var(--hairline);
+    --glow-flare: 0 0 24px rgba(255,122,89,0.35);
+    --aberration: -1px 0 0 rgba(79,209,255,0.55), 1px 0 0 rgba(255,122,89,0.55);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground: #0A0D14; --surface-1: #111624; --surface-2: #182033; --surface-3: #1F2A42;
+  --hairline: #26304A; --hairline-soft: #1B2338;
+  --text: #EEF2FF; --text-dim: #9AA6C8; --text-faint: #5F6B8C;
+  --accent: #4FD1FF; --accent-strong: #22B8F0; --accent-soft: rgba(79,209,255,0.14); --accent-text: #0A0D14; --accent-ink: #8FE0FF;
+  --flare: #FF7A59; --flare-soft: rgba(255,122,89,0.16);
+  --ok: #3DDC97; --ok-soft: rgba(61,220,151,0.14); --ok-text: #86EBC0;
+  --warn: #FFC145; --warn-soft: rgba(255,193,69,0.14); --warn-text: #FFD98A;
+  --crit: #FF4D6D; --crit-soft: rgba(255,77,109,0.16); --crit-text: #FF9DB0;
+  --info: #8FA3FF; --info-soft: rgba(143,163,255,0.14); --info-text: #BCC8FF;
+  --overlay: rgba(5,7,12,0.66); --code-bg: #0C1020;
+  --el-1: 0 1px 0 rgba(0,0,0,0.25), 0 0 0 1px var(--hairline);
+  --el-2: 0 8px 24px rgba(0,0,0,0.35), 0 0 0 1px var(--hairline);
+  --el-3: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px var(--hairline);
+  --glow-flare: 0 0 24px rgba(255,122,89,0.35);
+  --aberration: -1px 0 0 rgba(79,209,255,0.55), 1px 0 0 rgba(255,122,89,0.55);
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --d-instant: 0ms; --d-fast: 120ms; --d-base: 120ms; --d-slow: 120ms; --d-cinematic: 0ms;
+    --stagger-row: 0ms; --stagger-step: 0ms;
+  }
+}

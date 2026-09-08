@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FA Lens Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* ===== tokens (mirror of ../tokens.css, LIGHT default) ===== */
+:root { --ground: #F5F7FC; --surface-1: #FFFFFF; --surface-2: #EEF1F8; --surface-3: #E3E8F4; --hairline: #D5DBEA; --hairline-soft: #E6EAF4; --text: #0F1424; --text-dim: #4B5675; --text-faint: #8A94B3; --accent: #0B84D6; --accent-strong: #066BB0; --accent-soft: rgba(11,132,214,0.12); --accent-text: #FFFFFF;           --accent-ink: #085E9E;            --flare: #E8562F; --flare-soft: rgba(232,86,47,0.14); --ok: #0E9F6E;     --ok-soft: rgba(14,159,110,0.12);   --ok-text: #157A56; --warn: #B7791F;   --warn-soft: rgba(183,121,31,0.14); --warn-text: #8A5A12; --crit: #DC2650;   --crit-soft: rgba(220,38,80,0.12);  --crit-text: #B01E42; --info: #4C63D2;   --info-soft: rgba(76,99,210,0.12);  --info-text: #3A4DAE; --overlay: rgba(15,20,36,0.45); --code-bg: #F0F3FA; --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif; --font-ui: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif; --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; --fs-xs: 11.5px; --lh-xs: 1.45; --fs-sm: 12.5px; --lh-sm: 1.5; --fs-base: 13.5px; --lh-base: 1.55; --fs-md: 15px;  --lh-md: 1.45; --fs-lg: 18px;  --lh-lg: 1.4; --fs-xl: 24px;  --lh-xl: 1.2; --fs-2xl: 32px; --lh-2xl: 1.1; --fs-3xl: 48px; --lh-3xl: 1.05; --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --sp-16: 64px; --r-xs: 4px; --r-sm: 6px; --r-md: 12px; --r-lg: 16px; --r-pill: 999px; --el-1: 0 1px 2px rgba(15,20,36,0.06), 0 0 0 1px var(--hairline); --el-2: 0 8px 24px rgba(15,20,36,0.12), 0 0 0 1px var(--hairline); --el-3: 0 24px 64px rgba(15,20,36,0.18), 0 0 0 1px var(--hairline); --glow-accent: 0 0 0 3px var(--accent-soft); --glow-flare: 0 0 24px rgba(232,86,47,0.28); --aberration: -1px 0 0 rgba(11,132,214,0.45), 1px 0 0 rgba(232,86,47,0.45); --d-instant: 80ms; --d-fast: 160ms; --d-base: 240ms; --d-slow: 400ms; --d-cinematic: 700ms; --stagger-row: 30ms; --stagger-step: 160ms; --e-standard: cubic-bezier(0.2, 0, 0, 1); --e-enter: cubic-bezier(0, 0, 0.2, 1); --e-exit: cubic-bezier(0.4, 0, 1, 1); --e-spring: cubic-bezier(0.34, 1.56, 0.64, 1); --row-h: 44px; --row-pad: 14px; --card-pad: 20px; --tile-min: 112px; --th-h: 36px; --dw: 260px; --dw-min: 56px; --ctx-h: 52px; --tabs-h: 44px; --panel-w: min(560px, 46vw); --z-sticky: 10; --z-panel: 20; --z-dropdown: 30; --z-toast: 40; --z-palette: 50; color-scheme: light; } :root[data-density="dense"] { --row-h: 36px; --row-pad: 12px; --card-pad: 14px; --tile-min: 92px; --th-h: 32px; } @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ground: #0A0D14; --surface-1: #111624; --surface-2: #182033; --surface-3: #1F2A42; --hairline: #26304A; --hairline-soft: #1B2338; --text: #EEF2FF; --text-dim: #9AA6C8; --text-faint: #5F6B8C; --accent: #4FD1FF; --accent-strong: #22B8F0; --accent-soft: rgba(79,209,255,0.14); --accent-text: #0A0D14; --accent-ink: #8FE0FF; --flare: #FF7A59; --flare-soft: rgba(255,122,89,0.16); --ok: #3DDC97; --ok-soft: rgba(61,220,151,0.14); --ok-text: #86EBC0; --warn: #FFC145; --warn-soft: rgba(255,193,69,0.14); --warn-text: #FFD98A; --crit: #FF4D6D; --crit-soft: rgba(255,77,109,0.16); --crit-text: #FF9DB0; --info: #8FA3FF; --info-soft: rgba(143,163,255,0.14); --info-text: #BCC8FF; --overlay: rgba(5,7,12,0.66); --code-bg: #0C1020; --el-1: 0 1px 0 rgba(0,0,0,0.25), 0 0 0 1px var(--hairline); --el-2: 0 8px 24px rgba(0,0,0,0.35), 0 0 0 1px var(--hairline); --el-3: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px var(--hairline); --glow-flare: 0 0 24px rgba(255,122,89,0.35); --aberration: -1px 0 0 rgba(79,209,255,0.55), 1px 0 0 rgba(255,122,89,0.55); color-scheme: dark; } } :root[data-theme="dark"] { --ground: #0A0D14; --surface-1: #111624; --surface-2: #182033; --surface-3: #1F2A42; --hairline: #26304A; --hairline-soft: #1B2338; --text: #EEF2FF; --text-dim: #9AA6C8; --text-faint: #5F6B8C; --accent: #4FD1FF; --accent-strong: #22B8F0; --accent-soft: rgba(79,209,255,0.14); --accent-text: #0A0D14; --accent-ink: #8FE0FF; --flare: #FF7A59; --flare-soft: rgba(255,122,89,0.16); --ok: #3DDC97; --ok-soft: rgba(61,220,151,0.14); --ok-text: #86EBC0; --warn: #FFC145; --warn-soft: rgba(255,193,69,0.14); --warn-text: #FFD98A; --crit: #FF4D6D; --crit-soft: rgba(255,77,109,0.16); --crit-text: #FF9DB0; --info: #8FA3FF; --info-soft: rgba(143,163,255,0.14); --info-text: #BCC8FF; --overlay: rgba(5,7,12,0.66); --code-bg: #0C1020; --el-1: 0 1px 0 rgba(0,0,0,0.25), 0 0 0 1px var(--hairline); --el-2: 0 8px 24px rgba(0,0,0,0.35), 0 0 0 1px var(--hairline); --el-3: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px var(--hairline); --glow-flare: 0 0 24px rgba(255,122,89,0.35); --aberration: -1px 0 0 rgba(79,209,255,0.55), 1px 0 0 rgba(255,122,89,0.55); color-scheme: dark; } @media (prefers-reduced-motion: reduce) { :root { --d-instant: 0ms; --d-fast: 120ms; --d-base: 120ms; --d-slow: 120ms; --d-cinematic: 0ms; --stagger-row: 0ms; --stagger-step: 0ms; } }
+
+/* ===== base ===== */
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{background:var(--ground);color:var(--text);font:400 var(--fs-base)/var(--lh-base) var(--font-ui);-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none;padding:0;text-align:left}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}.dim{color:var(--text-dim)}.faint{color:var(--text-faint)}
+.eyebrow{font-size:var(--fs-xs);letter-spacing:.04em;text-transform:uppercase;color:var(--text-dim);font-weight:600}
+.tile .eyebrow,.idblock .k,.field label{text-transform:none;letter-spacing:0;font-size:var(--fs-sm);font-weight:500}
+.lead{margin:2px 0 0;color:var(--text-dim);font-size:var(--fs-base);max-width:80ch}
+:focus-visible{outline:none;box-shadow:var(--glow-accent)}
+.kbd{font-family:var(--font-mono);font-size:10.5px;color:var(--text-dim);border:1px solid var(--hairline);border-radius:4px;padding:1px 5px;background:var(--surface-1)}
+.hint{margin:14px 0 0;color:var(--text-faint);font-size:var(--fs-sm)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--hairline);flex:none}
+.dot.ok{background:var(--ok)}.dot.warn{background:var(--warn)}.dot.crit{background:var(--crit)}.dot.none{background:var(--hairline)}
+
+/* ===== shell + drawer ===== */
+.shell{display:grid;grid-template-columns:var(--dw) 1fr;height:100vh;transition:grid-template-columns var(--d-base) var(--e-standard)}
+.shell.mini{grid-template-columns:var(--dw-min) 1fr}
+.drawer{background:var(--surface-1);border-right:1px solid var(--hairline);display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.dhead{height:var(--ctx-h);display:flex;align-items:center;gap:10px;padding:0 12px 0 14px;border-bottom:1px solid var(--hairline);flex:none}
+.dhead .logo{width:26px;height:26px;flex:none}
+.dhead .name{font:650 var(--fs-md)/20px var(--font-display);letter-spacing:-.01em;white-space:nowrap}
+.dhead .collapse{margin-left:auto}
+.iconbtn{width:30px;height:30px;border-radius:var(--r-sm);display:grid;place-items:center;color:var(--text-dim);transition:background var(--d-fast),color var(--d-fast);flex:none}
+.iconbtn:hover{background:var(--surface-3);color:var(--text)}.iconbtn svg{width:16px;height:16px}
+.dsearch{margin:10px 10px 6px;height:32px;display:flex;align-items:center;gap:8px;padding:0 10px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:var(--r-sm);color:var(--text-faint);cursor:text;white-space:nowrap;overflow:hidden}
+.dsearch .kbd{margin-left:auto}
+.dscroll{overflow:auto;flex:1;padding:4px 10px 10px}
+.dco{display:flex;align-items:center;gap:10px;padding:8px 8px;border-radius:var(--r-md);cursor:pointer;transition:background var(--d-fast),box-shadow var(--d-fast);margin:4px 0 8px}
+.dco:hover{background:var(--surface-3);box-shadow:var(--aberration)}.dco.on{background:var(--accent-soft)}
+.dco .ring{width:30px;height:30px}.dco .ring svg{width:30px;height:30px}.dco .ring .arc,.dco .ring .track{stroke-width:3}.dco .ring .core{width:8px;height:8px}
+.dco .t{min-width:0}.dco .t b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dco .t span{font-size:var(--fs-xs);color:var(--text-dim);font-family:var(--font-mono);white-space:nowrap}
+.dgrp{display:flex;align-items:center;gap:6px;padding:10px 8px 4px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);font-weight:600;cursor:pointer;white-space:nowrap;user-select:none}
+.dgrp .car{transition:transform var(--d-fast);font-size:9px}.dgrp.closed .car{transform:rotate(-90deg)}
+.dgrp.closed+.dmods{display:none}
+.dmod{position:relative;display:flex;align-items:center;gap:10px;height:34px;padding:0 8px;border-radius:var(--r-sm);cursor:pointer;color:var(--text-dim);transition:background var(--d-fast),color var(--d-fast),box-shadow var(--d-fast);white-space:nowrap}
+.dmod:hover{background:var(--surface-3);color:var(--text);box-shadow:var(--aberration)}
+.dmod.on{background:var(--accent-soft);color:var(--text)}.dmod.on::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:2px;background:var(--accent);border-radius:2px}
+.dmod svg{width:16px;height:16px;flex:none}.dmod .n{flex:1;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.dmod .s{font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--text-faint)}.dmod .s.crit{color:var(--crit-text)}.dmod .s.warn{color:var(--warn-text)}
+.dmod .pin{opacity:0;font-size:11px;color:var(--text-faint)}.dmod:hover .pin{opacity:1}.dmod .pin.on{opacity:1;color:var(--accent)}
+.dfoot{border-top:1px solid var(--hairline);padding:8px 10px;flex:none}
+.dfoot .dmod .cnt{min-width:18px;height:18px;padding:0 5px;border-radius:var(--r-pill);background:var(--info);color:#fff;font-size:10px;font-weight:600;display:grid;place-items:center;font-family:var(--font-mono)}
+.shell.mini .dhead .name,.shell.mini .dsearch,.shell.mini .dgrp,.shell.mini .dmod .n,.shell.mini .dmod .s,.shell.mini .dmod .pin,.shell.mini .dco .t,.shell.mini .dmod .cnt{display:none}
+.shell.mini .dmod{justify-content:center;padding:0}.shell.mini .dmod.on::before{display:none}.shell.mini .dco{justify-content:center;padding:6px}
+.shell.mini .dhead{padding:0;justify-content:center}.shell.mini .dhead .collapse{display:none}
+.shell.mini .dmod .dot{position:absolute;right:6px;top:7px;width:7px;height:7px;box-shadow:0 0 0 2px var(--surface-1)}
+/* flyout */
+.fly{position:fixed;z-index:30;width:300px;background:var(--surface-1);box-shadow:var(--el-2);border-radius:var(--r-md);padding:10px 12px;display:none;animation:pal var(--d-fast) var(--e-enter)}
+.fly.open{display:block}
+.fly h4{margin:0 0 8px;font-size:var(--fs-base);font-weight:600;display:flex;align-items:center;gap:8px}
+.fly .types{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px}
+.fly .ty{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:var(--r-xs);cursor:pointer;font-size:var(--fs-sm)}
+.fly .ty:hover{background:var(--surface-3)}.fly .ty .s{margin-left:auto;font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--text-dim)}
+.fly .acts{display:flex;gap:6px}
+
+/* ===== drawer: reusable NavTree ===== */
+.drawer{position:relative}
+.dresize{position:absolute;top:0;right:-3px;width:6px;height:100%;cursor:col-resize;z-index:5}
+.dresize:hover,.dresize.on{background:var(--accent-soft)}
+.shell.mini .dresize{display:none}
+.dsearch input{flex:1;background:none;border:0;outline:0;min-width:0;color:var(--text);font-size:var(--fs-sm)}
+.dsearch input::placeholder{color:var(--text-faint)}
+.dsearch .kbd{cursor:pointer}
+.dsec{display:flex;align-items:center;gap:6px;padding:12px 8px 4px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);font-weight:600;cursor:pointer;white-space:nowrap;user-select:none;border-radius:var(--r-xs)}
+.dsec:hover{color:var(--text-dim)}
+.dsec .car{transition:transform var(--d-fast);font-size:9px;width:10px}
+.dsec.closed .car{transform:rotate(-90deg)}
+.dsec .cnt{margin-left:auto;font-family:var(--font-mono);letter-spacing:0;font-weight:500}
+.dsec.closed+.ditems{display:none}
+.drow{position:relative;display:flex;align-items:center;gap:8px;height:34px;padding:0 8px 0 6px;border-radius:var(--r-sm);cursor:pointer;color:var(--text-dim);transition:background var(--d-fast),color var(--d-fast),box-shadow var(--d-fast);white-space:nowrap;outline:none}
+.drow:hover{background:var(--surface-3);color:var(--text)}
+.drow:focus-visible{box-shadow:var(--glow-accent);color:var(--text)}
+.drow.on{background:var(--accent-soft);color:var(--text)}
+.drow.on::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:2px;background:var(--accent);border-radius:2px}
+.drow.child{height:30px;padding-left:34px;font-size:var(--fs-sm)}
+.drow.child .lbl{font-weight:400}
+.drow .chev{width:16px;height:16px;display:grid;place-items:center;border-radius:4px;color:var(--text-faint);flex:none;transition:transform var(--d-fast),background var(--d-fast)}
+.drow .chev:hover{background:var(--surface-2);color:var(--text)}
+.drow.open>.chev{transform:rotate(90deg)}
+.drow .chev.none{visibility:hidden}
+.drow .ico{width:16px;height:16px;flex:none;display:grid;place-items:center}
+.drow .ico svg{width:16px;height:16px}
+.drow .lbl{flex:1;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.drow .bdg{font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--text-faint)}
+.drow .bdg.crit{color:var(--crit-text)}.drow .bdg.warn{color:var(--warn-text)}
+.drow .pin{opacity:0;font-size:11px;color:var(--text-faint);width:14px;text-align:center}
+.drow:hover .pin{opacity:1}.drow .pin.on{opacity:1;color:var(--accent)}
+.drow .cnt{min-width:18px;height:18px;padding:0 5px;border-radius:var(--r-pill);background:var(--info);color:#fff;font-size:10px;font-weight:600;display:grid;place-items:center;font-family:var(--font-mono)}
+.drow .cnt.q{background:var(--surface-3);color:var(--text-dim)}
+.dchildren{overflow:hidden}
+.dchildren.anim{animation:dopen var(--d-base) var(--e-standard)}
+@keyframes dopen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.dempty{padding:16px 8px;color:var(--text-faint);font-size:var(--fs-sm)}
+mark.hl{background:var(--warn-soft);color:inherit;border-radius:2px;padding:0 1px}
+.userrow{display:flex;align-items:center;gap:10px;padding:8px;border-radius:var(--r-sm);cursor:pointer;margin-top:4px}
+.userrow:hover{background:var(--surface-3)}
+.userrow .t{min-width:0;flex:1}.userrow .t b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.userrow .t span{font-size:var(--fs-xs);color:var(--text-dim)}
+.shell.mini .drow{justify-content:center;padding:0;height:36px}.shell.mini .drow .lbl,.shell.mini .drow .bdg,.shell.mini .drow .pin,.shell.mini .drow .chev,.shell.mini .drow .cnt,.shell.mini .dsec,.shell.mini .drow.child,.shell.mini .userrow .t,.shell.mini .dsearch{display:none}
+.shell.mini .drow.on::before{display:none}
+.shell.mini .drow .dot{position:absolute;right:6px;top:7px;width:7px;height:7px;box-shadow:0 0 0 2px var(--surface-1)}
+.shell.mini .ditems{display:block!important}
+.shell.mini .dsep{height:1px;background:var(--hairline-soft);margin:6px 10px}
+.dsep{display:none}
+/* dropdown (company switcher, user menu) */
+.dd{position:fixed;z-index:35;min-width:260px;background:var(--surface-1);box-shadow:var(--el-3);border-radius:var(--r-md);padding:6px;display:none;animation:pal var(--d-fast) var(--e-enter)}
+.dd.open{display:block}
+.dd .ddh{padding:6px 8px 4px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);font-weight:600}
+.dd .ddi{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r-sm);cursor:pointer;font-size:var(--fs-base)}
+.dd .ddi:hover,.dd .ddi.on{background:var(--surface-3)}
+.dd .ddi .m{margin-left:auto;font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--text-faint)}
+.dd .ddi .chk{width:14px;color:var(--accent)}
+.dd .ddsep{height:1px;background:var(--hairline-soft);margin:4px 0}
+.dd .ddin{display:flex;align-items:center;gap:8px;padding:4px 8px 8px}
+.dd .ddin input{flex:1;height:30px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:var(--r-sm);padding:0 10px;outline:0;color:var(--text);font-size:var(--fs-sm)}
+
+/* ===== main ===== */
+.main{display:grid;grid-template-rows:var(--ctx-h) 1fr;min-width:0;min-height:0}
+.ctx{display:flex;align-items:center;background:var(--surface-1);border-bottom:1px solid var(--hairline);padding:0 16px 0 0}
+.ctx .pick{display:flex;flex-direction:column;justify-content:center;padding:0 14px;height:100%;border-right:1px solid var(--hairline);min-width:110px;cursor:pointer;transition:background var(--d-fast)}
+.ctx .pick:hover{background:var(--surface-3)}
+.ctx .pick .k{font-size:var(--fs-xs);letter-spacing:.04em;text-transform:uppercase;color:var(--text-faint);line-height:14px}
+.ctx .pick .v{font-weight:500;line-height:18px;display:flex;gap:6px;align-items:baseline;white-space:nowrap}
+.ctx .pick .v .id{font-family:var(--font-mono);color:var(--text-dim);font-size:var(--fs-sm)}
+.ctx .pick .v::after{content:"▾";color:var(--text-faint);font-size:10px;margin-left:2px}
+.ctx .right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:var(--r-pill);background:var(--surface-3);color:var(--text-dim);font-size:var(--fs-sm);white-space:nowrap}
+.chip .mono{color:var(--text)}
+.avatar{width:28px;height:28px;border-radius:50%;background:var(--surface-3);display:grid;place-items:center;color:var(--text);font-weight:600;font-size:12px}
+.page{display:grid;grid-template-rows:auto 1fr;min-height:0}
+.phead{padding:12px 24px 0;display:flex;flex-direction:column;gap:8px}
+.crumbs{display:flex;align-items:center;gap:6px;font-size:var(--fs-xs);color:var(--text-faint);flex-wrap:wrap}
+.crumbs a{color:var(--text-dim);cursor:pointer}.crumbs a:hover{color:var(--accent)}.crumbs b{color:var(--text);font-weight:500}
+.mhead{display:flex;align-items:center;gap:14px}
+.mhead h1{font:650 var(--fs-xl)/30px var(--font-display);margin:0;letter-spacing:-.01em}
+.mhead .health{display:flex;align-items:center;gap:8px;color:var(--text-dim);font-size:var(--fs-sm)}
+.mhead .right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:var(--r-sm);font-weight:500;transition:transform var(--d-fast) var(--e-spring),background var(--d-fast),box-shadow var(--d-fast),color var(--d-fast);white-space:nowrap}
+.btn:active{transform:scale(.97);transition-duration:var(--d-instant)}
+.btn.primary{background:var(--flare);color:var(--ground)}.btn.primary:hover{box-shadow:var(--glow-flare)}
+.btn.accent{background:var(--accent);color:var(--accent-text)}
+.btn.ghost{color:var(--text-dim)}.btn.ghost:hover{background:var(--surface-3);color:var(--text)}
+.btn.outline{box-shadow:inset 0 0 0 1px var(--hairline)}
+.btn.sm{height:28px;padding:0 10px;font-size:var(--fs-sm)}
+.btn svg{width:14px;height:14px}
+.btn .spin{width:14px;height:14px;border:2px solid rgba(0,0,0,.25);border-top-color:var(--ground);border-radius:50%;animation:spin .8s linear infinite;display:none}
+.btn.loading .spin{display:block}@keyframes spin{to{transform:rotate(360deg)}}
+.tabs{display:flex;align-items:flex-end;border-bottom:1px solid var(--hairline);position:relative;gap:2px;margin-top:4px}
+.tab{height:var(--tabs-h);padding:0 14px;display:flex;align-items:center;gap:8px;color:var(--text-dim);font-weight:500;position:relative;border-radius:var(--r-sm) var(--r-sm) 0 0;transition:color var(--d-fast),background var(--d-fast)}
+.tab:hover{color:var(--text);background:var(--surface-3)}.tab.active{color:var(--text)}
+.tab .n{font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--text-faint);background:var(--surface-2);padding:1px 6px;border-radius:var(--r-pill)}
+.tab.active .n{color:var(--accent);background:var(--accent-soft)}
+.tab .dot{width:6px;height:6px}
+.tabs .ink{position:absolute;bottom:-1px;height:2px;background:var(--accent);border-radius:2px;transition:left var(--d-base) var(--e-standard),width var(--d-base) var(--e-standard)}
+.body{display:grid;grid-template-columns:1fr 0;min-height:0;transition:grid-template-columns var(--d-slow) var(--e-standard)}
+.body.panel-open{grid-template-columns:1fr var(--panel-w)}
+.content{overflow:auto;padding:18px 24px 40px;min-width:0}
+.view{display:none;animation:fade var(--d-fast) var(--e-enter)}.view.active{display:block}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.status{font-family:var(--font-mono);font-size:var(--fs-sm);color:var(--text-dim);margin:0 0 12px;min-height:18px}.status b{color:var(--text);font-weight:500}
+
+/* tiles / ring / strip / cards */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.tile{position:relative;background:var(--surface-1);border-radius:var(--r-md);box-shadow:var(--el-1);padding:var(--card-pad);min-height:var(--tile-min);display:flex;gap:14px;align-items:center;cursor:pointer;transition:box-shadow var(--d-fast),transform var(--d-fast) var(--e-spring)}
+.tile:hover{box-shadow:var(--el-1),var(--aberration)}.tile:active{transform:scale(.985)}
+.tile .stripe{position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:2px}
+.tile.ok .stripe{background:var(--ok)}.tile.crit .stripe{background:var(--crit)}.tile.warn .stripe{background:var(--warn)}
+.tile .num{font:650 var(--fs-2xl)/38px var(--font-display);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.tile.ok .num{color:var(--ok-text)}.tile.crit .num{color:var(--crit-text)}.tile.warn .num{color:var(--warn-text)}
+.tile .num small{font:500 var(--fs-md)/20px var(--font-mono);color:var(--text-faint);margin-left:4px}
+.tile .delta{font-size:var(--fs-sm);font-family:var(--font-mono)}.tile .delta.up{color:var(--crit-text)}.tile .delta.down{color:var(--ok-text)}
+.ring{width:44px;height:44px;flex:none;position:relative}.ring svg{width:44px;height:44px;transform:rotate(-90deg)}
+.ring .track{fill:none;stroke:var(--hairline);stroke-width:3}
+.ring .arc{fill:none;stroke:var(--flare);stroke-width:3;stroke-linecap:round;stroke-dasharray:119.4;stroke-dashoffset:119.4;transition:stroke var(--d-fast)}
+.ring.done .arc{stroke-dashoffset:0;transition:stroke-dashoffset var(--d-cinematic) var(--e-standard),stroke var(--d-fast) var(--d-cinematic)}
+.ring.done.ok .arc{stroke:var(--ok)}.ring.done.crit .arc{stroke:var(--crit)}.ring.done.warn .arc{stroke:var(--warn)}
+.ring .core{position:absolute;inset:0;margin:auto;width:10px;height:10px;border-radius:50%;background:var(--hairline);transform:scale(0);transition:transform var(--d-base) var(--e-spring) calc(var(--d-cinematic) + 60ms),background var(--d-fast)}
+.ring.done .core{transform:scale(1)}.ring.done.ok .core{background:var(--ok)}.ring.done.crit .core{background:var(--crit)}.ring.done.warn .core{background:var(--warn)}
+.ring.running .arc{stroke-dashoffset:90;animation:orbit 1.2s linear infinite}
+.ring.running .core{background:var(--flare);transform:scale(1);animation:pulse-live 1.4s ease-out infinite;transition:none}
+@keyframes orbit{to{transform:rotate(270deg)}}@keyframes pulse-live{0%{box-shadow:0 0 0 0 var(--flare-soft)}100%{box-shadow:0 0 0 10px transparent}}
+.strip{display:flex;align-items:flex-end;gap:2px;height:24px}
+.strip i{display:block;width:6px;height:100%;border-radius:2px;background:var(--surface-3);transition:transform var(--d-fast)}
+.strip i:hover{transform:scaleY(1.15)}.strip i.ok{background:var(--ok)}.strip i.crit{background:var(--crit)}.strip i.warn{background:var(--warn)}
+.strip i.last{box-shadow:0 0 0 2px var(--ground),0 0 0 3px var(--text)}
+.card{background:var(--surface-1);border-radius:var(--r-md);box-shadow:var(--el-1);padding:var(--card-pad)}
+.card h3{margin:0 0 10px;font-size:var(--fs-md);font-weight:600}
+.cols{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin-top:12px}
+.list{display:flex;flex-direction:column}
+.li{display:flex;align-items:center;gap:10px;min-height:calc(var(--row-h) - 4px);padding:4px 8px;margin:0 -8px;border-radius:var(--r-xs);border-bottom:1px solid var(--hairline-soft);cursor:pointer;transition:background var(--d-fast),box-shadow var(--d-fast)}
+.li:hover{background:var(--surface-3);box-shadow:var(--aberration)}.li:last-child{border-bottom:0}.li.on{background:var(--accent-soft)}
+.li .grow{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;gap:6px;height:20px;padding:0 8px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:600;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;font-family:var(--font-ui)}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.badge.ok{background:var(--ok-soft);color:var(--ok-text)}.badge.crit{background:var(--crit-soft);color:var(--crit-text)}.badge.warn{background:var(--warn-soft);color:var(--warn-text)}.badge.info{background:var(--info-soft);color:var(--info-text)}.badge.neutral{background:var(--surface-3);color:var(--text-dim)}
+.badge.running{background:var(--flare-soft);color:var(--flare)}.badge.running::before{animation:pulse-live 1.4s ease-out infinite}
+.badge.count{text-transform:none;letter-spacing:0;font-family:var(--font-mono)}
+.badge.none{background:transparent;color:var(--text-faint);box-shadow:inset 0 0 0 1px var(--hairline)}.badge.none::before{background:var(--hairline)}
+
+/* matrix */
+.matrix{background:var(--surface-1);border-radius:var(--r-md);box-shadow:var(--el-1);overflow:auto}
+.matrix table{border-collapse:collapse;width:100%;min-width:760px}
+.matrix th{position:sticky;top:0;background:var(--surface-2);font-size:var(--fs-xs);letter-spacing:.04em;text-transform:uppercase;color:var(--text-dim);font-weight:600;height:34px;padding:0 12px;text-align:left;z-index:1}
+.matrix th.c{text-align:center}
+.matrix td{height:calc(var(--row-h) + 4px);padding:0 var(--row-pad);border-top:1px solid var(--hairline-soft);white-space:nowrap}
+.matrix td.c{text-align:center}
+.matrix tr.mrow{cursor:pointer;transition:background var(--d-fast),box-shadow var(--d-fast)}
+.matrix tr.mrow:hover{background:var(--surface-3);box-shadow:var(--aberration)}
+.matrix tr.gh td{height:28px;background:var(--ground);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);font-weight:600;border-top:0}
+.cell{display:inline-flex;align-items:center;justify-content:center;min-width:88px;height:26px;padding:0 10px;border-radius:var(--r-sm);font-size:var(--fs-xs);font-weight:600;font-family:var(--font-mono);cursor:pointer;transition:transform var(--d-fast) var(--e-spring),box-shadow var(--d-fast)}
+.cell:hover{transform:translateY(-1px);box-shadow:var(--aberration)}
+.cell.ok{background:var(--ok-soft);color:var(--ok-text)}.cell.warn{background:var(--warn-soft);color:var(--warn-text)}.cell.crit{background:var(--crit-soft);color:var(--crit-text)}.cell.none{color:var(--text-faint);box-shadow:inset 0 0 0 1px var(--hairline)}.cell.running{background:var(--flare-soft);color:var(--flare)}
+.cell.running::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;margin-right:6px;animation:pulse-live 1.4s ease-out infinite}
+.mname{display:flex;align-items:center;gap:10px;font-weight:500}.mname svg{width:16px;height:16px;color:var(--text-dim)}
+.mname .roll{margin-left:4px}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--hairline);border-radius:var(--r-sm);padding:2px;height:32px}
+.seg button{padding:0 10px;border-radius:4px;color:var(--text-dim);font-size:var(--fs-sm);font-weight:500;transition:background var(--d-fast),color var(--d-fast)}
+.seg button.on{background:var(--surface-3);color:var(--text)}
+.seg.sm{height:28px}.seg.sm button{padding:0 8px;font-size:var(--fs-xs)}
+
+/* tables */
+.inbar{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.field{display:flex;flex-direction:column;gap:4px}.field label{font-size:var(--fs-xs);letter-spacing:.04em;text-transform:uppercase;color:var(--text-faint)}
+.input{height:32px;padding:0 10px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:var(--r-sm);display:flex;align-items:center;gap:8px;min-width:150px;transition:border-color var(--d-fast),box-shadow var(--d-fast)}
+.input:focus-within{border-color:var(--accent);box-shadow:var(--glow-accent)}
+.input input{background:none;border:0;outline:0;width:100%;font-family:var(--font-mono);font-size:var(--fs-sm)}
+.tablewrap{background:var(--surface-1);border-radius:var(--r-md);box-shadow:var(--el-1);overflow:auto}
+table.grid{border-collapse:collapse;width:100%;min-width:980px}
+.grid thead th{position:sticky;top:0;background:var(--surface-2);text-align:left;font-size:var(--fs-xs);letter-spacing:.03em;text-transform:uppercase;color:var(--text-dim);font-weight:600;height:var(--th-h);padding:0 var(--row-pad);white-space:nowrap;z-index:1}
+.grid tbody td{height:var(--row-h);padding:0 var(--row-pad);border-top:1px solid var(--hairline-soft);font-size:var(--fs-sm);white-space:nowrap;vertical-align:middle}
+.grid tbody tr{cursor:pointer;transition:background var(--d-fast),box-shadow var(--d-fast)}
+.grid tbody tr:hover{background:var(--surface-3);box-shadow:var(--aberration)}
+.grid tbody tr.crit{background:var(--crit-soft)}.grid tbody tr.warn{background:var(--warn-soft)}.grid tbody tr.info{background:var(--info-soft)}
+.grid tbody tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--flare)}.grid tbody tr.sel{background:color-mix(in srgb,var(--flare-soft) 60%,transparent)}
+.ent{display:flex;flex-direction:column;line-height:15px}.ent .n{font-weight:500}.ent .m{font-family:var(--font-mono);color:var(--text-dim);font-size:11px}
+td.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;text-align:right}th.num{text-align:right}
+.opt{display:none}:root[data-cols="all"] .opt{display:table-cell}
+.reason{max-width:260px;overflow:hidden;text-overflow:ellipsis;color:var(--text-dim)}
+tr.reveal{animation:reveal var(--d-base) var(--e-enter) both;animation-delay:calc(var(--i,0)*var(--stagger-row))}
+@keyframes reveal{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.method{font-family:var(--font-mono);font-size:11px;font-weight:600;padding:2px 6px;border-radius:4px;letter-spacing:.02em}
+.method.get{background:var(--accent-soft);color:var(--accent-ink)}.method.post{background:var(--ok-soft);color:var(--ok-text)}.method.put{background:var(--warn-soft);color:var(--warn-text)}.method.del{background:var(--crit-soft);color:var(--crit-text)}.method.sql{background:var(--info-soft);color:var(--info-text)}
+.parity{display:inline-flex;gap:3px}.parity i{width:8px;height:8px;border-radius:50%;display:block}
+
+/* focus panel */
+.panel{background:var(--surface-1);border-left:1px solid var(--hairline);box-shadow:var(--el-2);display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.panel .ph{padding:12px 16px 10px;border-bottom:1px solid var(--hairline);display:flex;flex-direction:column;gap:6px}
+.panel .ph h2{margin:0;font-size:var(--fs-lg);font-weight:600;display:flex;align-items:center;gap:10px;min-width:0}
+.panel .ph .acts{display:flex;gap:6px;align-items:center;margin-left:auto}.panel .ph .row{display:flex;align-items:center;gap:8px}
+.pb{overflow:auto;padding:14px 16px;flex:1}
+.lvl{animation:focus-in var(--d-slow) var(--e-enter) both}.lvl.out{animation:focus-out var(--d-base) var(--e-exit) both}
+@keyframes focus-in{from{opacity:0;filter:blur(8px);transform:translateX(12px)}to{opacity:1;filter:blur(0);transform:none}}
+@keyframes focus-out{to{opacity:0;filter:blur(4px);transform:translateX(-8px)}}
+.sums{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.sums .chip .mono{font-weight:500}
+.mini th{height:28px}.mini td{height:30px}
+.trace{display:flex;flex-direction:column;position:relative;padding-left:22px}
+.trace::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:var(--hairline)}
+.tev{position:relative;padding:8px 0 8px 8px;display:grid;grid-template-columns:1fr auto;gap:2px 10px;border-bottom:1px solid var(--hairline-soft)}
+.tev::before{content:"";position:absolute;left:-19px;top:14px;width:10px;height:10px;border-radius:50%;background:var(--surface-1);border:2px solid var(--accent)}
+.tev.sale::before{border-color:var(--info)}.tev.end::before{border-color:var(--crit)}
+.tev .t{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);grid-column:2;grid-row:1/3;align-self:start}.tev .m{font-family:var(--font-mono);font-size:11px;color:var(--text-dim)}
+.diff{margin-top:12px;background:var(--code-bg);border-radius:var(--r-sm);padding:10px 12px;font-family:var(--font-mono);font-size:var(--fs-sm);display:grid;grid-template-columns:1fr 1fr auto;gap:6px 14px;box-shadow:inset 0 0 0 1px var(--hairline-soft)}
+.diff .k{color:var(--text-faint);font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.04em}.diff .del{color:var(--crit-text);font-weight:600}
+.code{background:var(--code-bg);border-radius:var(--r-sm);padding:8px 10px;font-family:var(--font-mono);font-size:11px;line-height:16px;white-space:pre;overflow:auto;box-shadow:inset 0 0 0 1px var(--hairline-soft);color:var(--text-dim)}
+.code .h{color:var(--text-faint);text-transform:uppercase;letter-spacing:.04em;font-size:10px;margin-bottom:4px;display:block}
+.code .bad{color:var(--crit-text);background:var(--crit-soft)}.code .good{color:var(--ok-text);background:var(--ok-soft)}
+.wb{display:grid;gap:10px}.wb .row{display:flex;gap:6px;align-items:center}
+.wb .tabsm{display:flex;gap:2px;border-bottom:1px solid var(--hairline)}.wb .tabsm button{padding:6px 10px;font-size:var(--fs-sm);color:var(--text-dim);border-bottom:2px solid transparent}.wb .tabsm button.on{color:var(--text);border-color:var(--accent)}
+.hist{display:flex;gap:4px;flex-wrap:wrap}
+
+/* flows */
+.flow{display:grid;grid-template-columns:250px 1fr;gap:16px;min-height:0}
+.fhead{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}.fhead h3{margin:0;font-size:var(--fs-lg);font-weight:600}.fhead .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.tl{position:relative;padding-left:36px;display:flex;flex-direction:column;gap:12px}
+.step{position:relative;background:var(--surface-1);border-radius:var(--r-md);box-shadow:var(--el-1);padding:10px 14px;transition:box-shadow var(--d-fast),transform var(--d-base)}
+.step:hover{box-shadow:var(--el-1),var(--aberration)}
+.step .node{position:absolute;left:-36px;top:12px;width:24px;height:24px;border-radius:50%;background:var(--surface-1);border:2px solid var(--hairline);display:grid;place-items:center;font-size:11px;font-weight:600;color:var(--text-faint);transition:border-color var(--d-fast),background var(--d-fast),color var(--d-fast)}
+.step.running .node{border-color:var(--flare);background:var(--flare);color:var(--ground);animation:pulse-live 1.4s ease-out infinite}
+.step.pass .node{border-color:var(--ok);background:var(--ok);color:var(--ground)}.step.fail .node{border-color:var(--crit);background:var(--crit);color:#fff}.step.skip .node{border-style:dashed}
+.step.fail{box-shadow:0 0 0 1px var(--crit),var(--el-1);animation:pulse-once 360ms var(--e-standard)}
+@keyframes pulse-once{0%{transform:scale(1)}40%{transform:scale(1.012)}100%{transform:scale(1)}}
+.step .hd{display:flex;align-items:center;gap:10px}.step .path{font-family:var(--font-mono);font-size:var(--fs-sm)}
+.step .dur{margin-left:auto;font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--text-faint);min-width:52px;text-align:right}
+.step .bd{margin-top:8px;display:flex;flex-direction:column;gap:4px;font-size:var(--fs-sm)}
+.step .kv{display:flex;gap:8px;align-items:center;font-family:var(--font-mono);font-size:11.5px;color:var(--text-dim)}.step .kv .k{color:var(--text-faint);width:56px}.step .kv .badge{margin-left:auto}
+.step .detail{display:none;margin-top:8px;gap:8px;grid-template-columns:1fr 1fr}.step.fail .detail{display:grid}
+.dl{position:absolute;left:11px;width:2px;background:var(--hairline);overflow:hidden}
+.dl::after{content:"";position:absolute;left:0;top:-24px;width:2px;height:24px;background:linear-gradient(var(--flare),transparent);opacity:0}
+.dl.live::after{opacity:1;animation:refract 1.2s linear infinite}.dl.done{background:var(--ok)}.dl.bad{background:var(--crit)}
+@keyframes refract{to{transform:translateY(calc(var(--h,80px) + 24px))}}
+@media (prefers-reduced-motion:reduce){.dl.live::after{animation:none;opacity:0}.ring.running .arc{animation:none}}
+
+/* ===== data & sync (flow map, hops, failure grid, evidence, issues, rules) ===== */
+.fmap{background:var(--surface-1);border-radius:var(--r-md);box-shadow:var(--el-1);padding:14px 16px;position:relative}
+.fmap svg{width:100%;height:230px;display:block}
+.fmap .node{cursor:pointer}
+.fmap .node rect{fill:var(--surface-2);stroke:var(--hairline);stroke-width:1;rx:8;transition:stroke var(--d-fast),filter var(--d-fast)}
+.fmap .node:hover rect{stroke:var(--accent);filter:drop-shadow(-1px 0 0 rgba(79,209,255,.55)) drop-shadow(1px 0 0 rgba(255,122,89,.55))}
+.fmap .node text{font-family:var(--font-ui);font-size:12.5px;font-weight:600;fill:var(--text)}
+.fmap .node .sub{font-family:var(--font-mono);font-size:10.5px;font-weight:400;fill:var(--text-dim)}
+.fmap .edge{fill:none;stroke-width:6;stroke-linecap:round;cursor:pointer;opacity:.85;transition:opacity var(--d-fast),stroke-width var(--d-fast)}
+.fmap .edge:hover{opacity:1;stroke-width:8}
+.fmap .edge.ok{stroke:var(--ok)}.fmap .edge.warn{stroke:var(--warn)}.fmap .edge.crit{stroke:var(--crit)}.fmap .edge.soon{stroke:var(--hairline);stroke-dasharray:4 6;stroke-width:3;cursor:default}
+.fmap .edge.live{stroke-dasharray:10 14;animation:flowdash 1.2s linear infinite}
+@keyframes flowdash{to{stroke-dashoffset:-24}}
+.fmap .elabel{pointer-events:none}
+.fmap .elabel rect{rx:10;fill:var(--surface-1);stroke:var(--hairline)}
+.fmap .elabel text{font-family:var(--font-mono);font-size:10.5px;font-weight:600;text-anchor:middle;dominant-baseline:central}
+.fmap .elabel.ok text{fill:var(--ok-text)}.fmap .elabel.warn text{fill:var(--warn-text)}.fmap .elabel.crit text{fill:var(--crit-text)}.fmap .elabel.soon text{fill:var(--text-faint)}
+.legend{display:flex;gap:14px;font-size:var(--fs-xs);color:var(--text-dim);margin-top:6px;flex-wrap:wrap}
+.legend i{display:inline-block;width:14px;height:4px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.hops{display:flex;align-items:stretch;gap:0;overflow:auto;padding:4px 0 8px}
+.hop{position:relative;min-width:190px;flex:1;background:var(--surface-1);border-radius:var(--r-md);box-shadow:var(--el-1);padding:12px 14px;cursor:pointer;transition:box-shadow var(--d-fast)}
+.hop:hover{box-shadow:var(--el-1),var(--aberration)}
+.hop.on{box-shadow:var(--el-1),inset 0 0 0 1px var(--accent)}
+.hop .src{font-size:var(--fs-xs);letter-spacing:.04em;text-transform:uppercase;color:var(--text-faint);font-weight:600}
+.hop .tbl{font-family:var(--font-mono);font-size:var(--fs-sm);margin:2px 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hop .cnt{font:650 var(--fs-xl)/28px var(--font-display);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.hop .bar{height:4px;border-radius:2px;background:var(--surface-3);margin-top:8px;overflow:hidden}.hop .bar i{display:block;height:100%;background:var(--ok);border-radius:2px;transition:width var(--d-cinematic) var(--e-standard)}
+.hop.crit .bar i{background:var(--crit)}.hop.warn .bar i{background:var(--warn)}
+.gap{flex:none;width:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;position:relative}
+.gap::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--hairline)}
+.gap .drop{position:relative;background:var(--ground);padding:2px 6px;border-radius:var(--r-pill);font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text-dim);cursor:pointer;transition:transform var(--d-fast) var(--e-spring)}
+.gap .drop:hover{transform:translateY(-1px)}
+.gap .drop.crit{color:var(--crit-text)}.gap .drop.warn{color:var(--warn-text)}.gap .drop.ok{color:var(--ok-text)}
+.gap .why{position:relative;font-size:10px;color:var(--text-faint);background:var(--ground);padding:0 4px;white-space:nowrap}
+.cause{display:inline-flex;align-items:center;gap:6px;height:20px;padding:0 8px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:600;background:var(--surface-3);color:var(--text-dim);white-space:nowrap}
+.cause.crit{background:var(--crit-soft);color:var(--crit-text)}.cause.warn{background:var(--warn-soft);color:var(--warn-text)}.cause.ok{background:var(--ok-soft);color:var(--ok-text)}.cause.info{background:var(--info-soft);color:var(--info-text)}
+.sev{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-xs);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.sev i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.sev.critical{color:var(--crit-text)}.sev.critical i{background:var(--crit)}.sev.high{color:var(--warn-text)}.sev.high i{background:var(--warn)}.sev.medium{color:var(--text-dim)}.sev.medium i{background:var(--text-faint)}.sev.low{color:var(--text-faint)}.sev.low i{background:var(--hairline)}
+td.diffc{background:var(--crit-soft)}
+.copy{cursor:copy;border-bottom:1px dashed var(--hairline)}.copy:hover{color:var(--accent);border-color:var(--accent)}
+.evid{display:grid;gap:12px}
+.idblock{background:var(--surface-2);border-radius:var(--r-md);padding:10px 12px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:var(--fs-sm)}
+.idblock .k{color:var(--text-faint);font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.04em;align-self:center}
+.idblock .v{font-family:var(--font-mono)}
+.cmp{background:var(--surface-1);border-radius:var(--r-md);box-shadow:var(--el-1);overflow:hidden}
+.cmp table{border-collapse:collapse;width:100%}
+.cmp th{background:var(--surface-2);font-size:var(--fs-xs);letter-spacing:.04em;text-transform:uppercase;color:var(--text-dim);font-weight:600;height:30px;padding:0 12px;text-align:left}
+.cmp td{height:32px;padding:0 12px;border-top:1px solid var(--hairline-soft);font-size:var(--fs-sm);font-family:var(--font-mono)}
+.cmp td:first-child{font-family:var(--font-ui);color:var(--text-dim)}
+.cmp tr.d td:nth-child(2),.cmp tr.d td:nth-child(3){background:var(--crit-soft);color:var(--crit-text);font-weight:600}
+.cmp tr.d td:nth-child(2){box-shadow:inset 2px 0 0 var(--crit)}
+.expire{display:flex;align-items:center;gap:8px;font-size:var(--fs-xs);color:var(--text-dim)}
+.expire .bar{flex:1;height:3px;background:var(--surface-3);border-radius:2px;overflow:hidden}.expire .bar i{display:block;height:100%;width:38%;background:var(--warn)}
+.banner{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--r-sm);font-size:var(--fs-sm);margin-bottom:12px}
+.banner.warn{background:var(--warn-soft);color:var(--warn-text)}.banner.info{background:var(--info-soft);color:var(--info-text)}
+.banner .btn{margin-left:auto}
+.score{display:flex;align-items:baseline;gap:6px}.score b{font:650 var(--fs-2xl)/38px var(--font-display);letter-spacing:-.02em}.score span{font-family:var(--font-mono);color:var(--text-dim)}
+.spark{display:flex;align-items:flex-end;gap:2px;height:28px}.spark i{display:block;width:5px;background:var(--accent-soft);border-radius:1px}.spark i.hi{background:var(--accent)}
+select.sel{height:24px;background:var(--surface-2);border:1px solid var(--hairline);border-radius:var(--r-xs);color:var(--text);font-size:var(--fs-xs);padding:0 4px}
+.rulecard{display:grid;grid-template-columns:auto 1fr auto;gap:8px 12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--hairline-soft)}
+.rulecard:last-child{border-bottom:0}
+.rtype{font-family:var(--font-mono);font-size:10.5px;font-weight:600;padding:2px 6px;border-radius:4px;background:var(--info-soft);color:var(--info-text);width:110px;text-align:center}
+.rulecard .nm{font-weight:500}.rulecard .meta{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);grid-column:2}
+.toggle{width:30px;height:18px;border-radius:var(--r-pill);background:var(--surface-3);position:relative;cursor:pointer;transition:background var(--d-fast)}
+.toggle::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--text-faint);transition:transform var(--d-fast) var(--e-spring),background var(--d-fast)}
+.toggle.on{background:var(--accent-soft)}.toggle.on::after{transform:translateX(12px);background:var(--accent)}
+
+/* palette + scenarios + toast */
+.scrim{position:fixed;inset:0;background:var(--overlay);backdrop-filter:blur(6px);display:none;z-index:50;align-items:flex-start;justify-content:center;padding-top:14vh}
+.scrim.open{display:flex;animation:fade var(--d-fast)}
+.pal{width:640px;max-width:92vw;background:var(--surface-1);border-radius:var(--r-lg);box-shadow:var(--el-3);overflow:hidden;animation:pal var(--d-fast) var(--e-enter)}
+@keyframes pal{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:none}}
+.pal .in{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--hairline)}.pal .in input{flex:1;background:none;border:0;outline:0;font-size:var(--fs-md)}
+.pal .grp{padding:8px 8px 4px;font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.04em;color:var(--text-faint)}
+.pal .it{display:flex;align-items:center;gap:10px;padding:8px 12px;margin:0 8px;border-radius:var(--r-sm);cursor:pointer}.pal .it.on,.pal .it:hover{background:var(--surface-3)}
+.pal .it .meta{margin-left:auto;font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--text-faint)}
+.pal .foot{padding:8px 16px;border-top:1px solid var(--hairline);display:flex;gap:14px;font-size:var(--fs-xs);color:var(--text-faint)}
+.scen{position:fixed;right:20px;top:60px;width:340px;background:var(--surface-1);box-shadow:var(--el-3);border-radius:var(--r-lg);z-index:45;display:none;animation:pal var(--d-fast) var(--e-enter);overflow:hidden}
+.scen.open{display:block}
+.scen .sh{padding:12px 14px;border-bottom:1px solid var(--hairline);display:flex;align-items:center;gap:8px}.scen .sh b{font-weight:600}.scen .sh .iconbtn{margin-left:auto}
+.scen .si{padding:10px 14px;border-bottom:1px solid var(--hairline-soft);cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:center;transition:background var(--d-fast)}
+.scen .si:hover{background:var(--surface-3)}.scen .si:last-child{border-bottom:0}
+.scen .si .who{grid-row:1/3;width:30px;height:30px;border-radius:var(--r-sm);display:grid;place-items:center;font-size:11px;font-weight:600;background:var(--accent-soft);color:var(--accent)}
+.scen .si .who.v{background:var(--warn-soft);color:var(--warn)}.scen .si .who.c{background:var(--ok-soft);color:var(--ok)}.scen .si .who.a{background:var(--info-soft);color:var(--info)}
+.scen .si b{font-weight:600;font-size:var(--fs-base)}.scen .si span{grid-column:2;font-size:var(--fs-sm);color:var(--text-dim)}
+.scen .si .go{grid-row:1/3;color:var(--text-faint)}
+.narr{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--surface-2);box-shadow:var(--el-3);border-radius:var(--r-pill);padding:8px 16px 8px 12px;display:none;align-items:center;gap:10px;z-index:46;font-size:var(--fs-base);max-width:80vw}
+.narr.open{display:flex;animation:toast var(--d-slow) var(--e-spring)}
+.narr .st{font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--flare);font-weight:600}
+.narr .stop{margin-left:6px;color:var(--text-dim);cursor:pointer}
+.toasts{position:fixed;right:20px;bottom:20px;display:flex;flex-direction:column;gap:8px;z-index:40}
+.toast{background:var(--surface-2);box-shadow:var(--el-2);border-radius:var(--r-md);padding:10px 14px;display:flex;align-items:center;gap:10px;min-width:280px;animation:toast var(--d-slow) var(--e-spring)}
+.toast .ic{width:8px;height:8px;border-radius:50%}.toast a{color:var(--accent);margin-left:auto;cursor:pointer;font-weight:500}
+@keyframes toast{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.spot{animation:spot 1.2s var(--e-standard) 2}
+@keyframes spot{0%,100%{box-shadow:0 0 0 0 transparent}40%{box-shadow:0 0 0 4px var(--flare-soft),0 0 24px rgba(255,122,89,.35)}}
+.swatches{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.sw{width:88px;border-radius:var(--r-sm);box-shadow:var(--el-1);overflow:hidden;background:var(--surface-1)}.sw i{display:block;height:36px}.sw span{display:block;padding:6px 8px;font-family:var(--font-mono);font-size:10px;color:var(--text-dim)}
+@media (max-width:1100px){.tiles{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.flist{display:none}.body.panel-open{grid-template-columns:0 1fr}}
+/* readability: sentence-case labels everywhere except table headers (declared last so it wins) */
+.tile .eyebrow,.idblock .k,.field label,.hop .src{text-transform:none;letter-spacing:0;font-size:var(--fs-sm);font-weight:500;color:var(--text-dim)}
+</style>
+</head>
+<body>
+<div class="shell" id="shell">
+  <nav class="drawer" id="drawer" aria-label="Navigation">
+    <div class="dhead">
+      <svg class="logo" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="10.5" stroke="var(--accent)" stroke-width="2"/><circle cx="13" cy="13" r="4" fill="var(--flare)"/><path d="M13 2.5v4M13 19.5v4M2.5 13h4M19.5 13h4" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></svg>
+      <span class="name">FA Lens</span>
+      <button class="iconbtn collapse" id="collapseBtn" title="Collapse sidebar ( [ )"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+    </div>
+    <div class="dsearch" id="dsearch"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="dfilter" placeholder="Filter modules and types…" autocomplete="off"><span class="kbd" id="dsearchKbd" title="Open command palette">⌘K</span></div>
+    <div class="dscroll" id="dscroll" role="tree" aria-label="Company, modules, testing types"></div>
+    <div class="dfoot" id="dfoot"></div>
+    <div class="dresize" id="dresize" title="Drag to resize"></div>
+  </nav>
+  <div class="dd" id="dd"></div>
+
+  <div class="main">
+    <header class="ctx">
+      <div class="pick"><span class="k">Env</span><span class="v">Beta</span></div>
+      <div class="pick"><span class="k">Tenant</span><span class="v">Mars</span></div>
+      <div class="pick" style="min-width:200px"><span class="k">Company</span><span class="v">Mars Wrigley VN <span class="id">234474</span></span></div>
+      <div class="pick"><span class="k">User</span><span class="v">DSR-1 <span class="id">003526</span></span></div>
+      <div class="right">
+        <span class="chip">preset <span class="mono">Mars · 234474 · DSR-1</span></span>
+        <button class="btn ghost sm" id="densBtn" title="Row density">Comfortable</button><button class="btn ghost sm" id="scenBtn">Scenarios</button>
+        <button class="iconbtn" id="themeBtn" title="Toggle theme (⌘.)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+        <div class="avatar">KS</div>
+      </div>
+    </header>
+
+    <div class="page">
+      <div class="phead" id="phead"></div>
+      <div class="body" id="body">
+        <main class="content" id="content"></main>
+        <aside class="panel" id="panel" aria-label="Detail">
+          <div class="ph"><div class="crumbs" id="pcrumbs"></div><div class="row"><h2 id="ptitle"></h2><div class="acts"><button class="btn ghost sm" id="pback" title="Back (Esc)">←</button><button class="btn outline sm">Share</button><button class="btn ghost sm" id="pclose" title="Close">✕</button></div></div></div>
+          <div class="pb" id="pbody"></div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fly" id="fly"></div>
+
+<div class="scrim" id="scrim"><div class="pal" role="dialog" aria-label="Command palette">
+  <div class="in"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="palIn" placeholder="Run a flow, open an endpoint, jump to a company or module…" autocomplete="off"></div>
+  <div id="palList"></div>
+  <div class="foot"><span><span class="kbd">↑↓</span> move</span><span><span class="kbd">↵</span> open</span><span><span class="kbd">esc</span> close</span><span style="margin-left:auto">digits → company · <span class="mono">/</span> → endpoint · <span class="mono">run</span> → flows</span></div>
+</div></div>
+
+<div class="scen" id="scen">
+  <div class="sh"><b>Scenarios</b><span class="dim" style="font-size:var(--fs-sm)">watch a real task play out</span><button class="iconbtn" id="scenClose">✕</button></div>
+  <div id="scenList"></div>
+</div>
+<div class="narr" id="narr"><span class="st">1/5</span><span id="narrText"></span><span class="stop" id="narrStop">stop</span></div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+(function(){
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const sleep=ms=>new Promise(r=>setTimeout(r,reduced?Math.min(ms,80):ms));
+
+/* ================= DATA ================= */
+const ICON={van:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>',
+route:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 18c4-8 6-8 8-4s4 4 8-4"/><circle cx="4" cy="18" r="1.5"/><circle cx="20" cy="10" r="1.5"/></svg>',
+shop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10l1.5-5h13L20 10M5 10v9h14v-9M10 19v-5h4v5"/></svg>',
+order:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16H6zM9 9h6M9 13h6"/></svg>',
+clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>',
+tag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h7l9 9-7 7-9-9z"/><circle cx="8" cy="8" r="1.2"/></svg>',
+truck:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h10v10H4zM14 9h4l2 3v4h-6z"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/></svg>',
+chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19h16M7 16V9M12 16V5M17 16v-6"/></svg>',
+sync:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12a8 8 0 0 1 14-5l2 2M20 12a8 8 0 0 1-14 5l-2-2M18 4v4h-4M6 20v-4h4"/></svg>'};
+const TYPES=['apis','cases','flows','validations','load'];
+const TNAME={apis:'APIs',cases:'Cases',flows:'Flows',validations:'Validations',load:'Load'};
+const MODS=[
+ {id:'van',name:'Van Sales',group:'Field app',icon:'van',apis:{v:'warn',t:'42/61'},cases:{v:'crit',t:'3 fail'},flows:{v:'warn',t:'flaky'},validations:{v:'crit',t:'3 issue'},load:{v:'none',t:'—'},p95:412},
+ {id:'jp',name:'Journey Plan',group:'Field app',icon:'route',apis:{v:'ok',t:'58/58'},cases:{v:'ok',t:'ok'},flows:{v:'ok',t:'ok'},validations:{v:'ok',t:'ok'},load:{v:'ok',t:'p95 210'},p95:210},
+ {id:'out',name:'Outlets',group:'Field app',icon:'shop',apis:{v:'warn',t:'31/40'},cases:{v:'ok',t:'ok'},flows:{v:'ok',t:'ok'},validations:{v:'none',t:'—'},load:{v:'none',t:'—'},p95:265},
+ {id:'ord',name:'Orders',group:'Field app',icon:'order',apis:{v:'ok',t:'27/27'},cases:{v:'warn',t:'2 warn'},flows:{v:'ok',t:'ok'},validations:{v:'ok',t:'ok'},load:{v:'none',t:'—'},p95:388},
+ {id:'att',name:'Attendance',group:'Field app',icon:'clock',apis:{v:'ok',t:'12/12'},cases:{v:'ok',t:'ok'},flows:{v:'ok',t:'ok'},validations:{v:'ok',t:'ok'},load:{v:'none',t:'—'},p95:140},
+ {id:'sch',name:'Schemes',group:'Dashboard',icon:'tag',apis:{v:'warn',t:'12/19'},cases:{v:'none',t:'no runs'},flows:{v:'none',t:'no runs'},validations:{v:'none',t:'—'},load:{v:'none',t:'—'},p95:0},
+ {id:'dist',name:'Distributors',group:'Dashboard',icon:'truck',apis:{v:'ok',t:'22/22'},cases:{v:'ok',t:'ok'},flows:{v:'ok',t:'ok'},validations:{v:'ok',t:'ok'},load:{v:'none',t:'—'},p95:301},
+ {id:'rep',name:'Reports',group:'Dashboard',icon:'chart',apis:{v:'warn',t:'8/34'},cases:{v:'none',t:'no runs'},flows:{v:'ok',t:'ok'},validations:{v:'none',t:'—'},load:{v:'none',t:'—'},p95:1180},
+ {id:'sync',name:'FA ↔ Report ↔ DMS sync',group:'Data & sync',icon:'sync',apis:{v:'none',t:'—'},cases:{v:'none',t:'—'},flows:{v:'crit',t:'F5 broke'},validations:{v:'warn',t:'14 missing'},load:{v:'none',t:'—'},p95:0,sync:true}
+];
+/* data & sync pack: flows are chains between sources; rules are declarative */
+const SYNC={
+ sources:[{id:'fa',name:'FA Transactions',db:'mssql · FA_Transactions',x:60,y:95},{id:'report',name:'Report',db:'mssql · FA_Reports',x:520,y:28},{id:'dms',name:'DMS',db:'postgres · dms_pg_prod',x:520,y:110},{id:'unify',name:'Unify',db:'clickhouse',x:520,y:192}],
+ edges:[{id:'F1',from:'fa',to:'report',v:'warn',fails:14,label:'F1 / F2 · 14 fails',rows:12480},{id:'F5',from:'fa',to:'dms',v:'crit',fails:378,label:'F5 / F6 · 378 fails',rows:12480},{id:'F3',from:'fa',to:'fa',v:'ok',fails:3,label:'F3 / F4 intra-FA · 3 dup',rows:12480},{id:'U1',from:'fa',to:'unify',v:'soon',fails:0,label:'coming soon'},{id:'U2',from:'dms',to:'unify',v:'soon',fails:0,label:'coming soon'}],
+ flows:{F5:{name:'F5 · FA attendance → DMS order → DMS invoice',hops:[{src:'fa',tbl:'dbo.Attendances',cnt:12480,note:'IsValid=1 · IsVanSales=1 · Productive=1',v:'ok'},{src:'dms',tbl:'tran.SecondarySalesOrder',cnt:12115,drop:365,why:'no order',v:'crit'},{src:'dms',tbl:'tran.SecondarySalesInvoice',cnt:12102,drop:13,why:'no invoice',v:'warn'}],
+   rules:[{id:'f5-att-order-presence',name:'Attendance reached DMS order',type:'presence',sev:'critical',fails:365,cause:'sync gap'},{id:'f5-order-invoice-presence',name:'Order has an invoice',type:'presence',sev:'high',fails:13,cause:'audit pending'},{id:'f5-order-value-match',name:'Order value = attendance sale value',type:'field_match',sev:'medium',fails:9,cause:'unexplained'},{id:'f5-sum-per-van',name:'Σ order value per van = Σ FA sale value',type:'aggregate_match',sev:'medium',fails:2,cause:'physical short'}]},
+  F1:{name:'F1 · FA attendance → Report attendance',hops:[{src:'fa',tbl:'dbo.Attendances',cnt:12480,note:'valid · van sales',v:'ok'},{src:'report',tbl:'dbo.Attendance',cnt:12466,drop:14,why:'missing',v:'warn'}],rules:[{id:'f1-presence',name:'Attendance present in Report',type:'presence',sev:'high',fails:14,cause:'sync gap'},{id:'f1-fields',name:'InvoiceNo · units · revenue equal',type:'field_match',sev:'medium',fails:0,cause:'balanced'}]},
+  F3:{name:'F3 · intra-FA duplicates',hops:[{src:'fa',tbl:'dbo.Attendances',cnt:12480,note:'valid rows',v:'ok'},{src:'fa',tbl:'distinct Guid',cnt:12477,drop:3,why:'duplicate',v:'ok'}],rules:[{id:'dup-guid',name:'Attendance GUID unique',type:'uniqueness',sev:'critical',fails:3,cause:'duplicate'}]}},
+ failures:[['90211','8f2c1a…','2026-08-27','5512','f5-att-order-presence','present','—','missing','critical','sync gap','new'],['90218','a77d02…','2026-08-27','5512','f5-att-order-presence','present','—','missing','critical','sync gap','new'],['90240','c01e9b…','2026-08-28','5498','f5-order-value-match','1,240.00','1,190.00','−50.00','medium','unexplained','acknowledged'],['90255','d9a4f1…','2026-08-28','5498','f5-order-invoice-presence','order 55871','—','no invoice','high','audit pending','new'],['90301','e12b77…','2026-08-29','5512','f5-order-value-match','860.00','860.00','0.00 · qty 12≠11','medium','unexplained','new'],['90333','f0c3d8…','2026-08-29','5512','f5-att-order-presence','present','—','missing','critical','sync gap','resolved']],
+ issues:[['critical','Missing','F5','fa.Attendances → dms.SecondarySalesOrder','365','2h ago','new'],['high','Missing','F5','dms.SecondarySalesOrder → SecondarySalesInvoice','13','2h ago','new'],['high','Missing','F1','fa.Attendances → report.Attendance','14','2h ago','acknowledged'],['medium','Mismatch','F5','OrderValue ≠ SaleValue','9','2h ago','new'],['medium','Aggregate','F5','Σ per van Δ','2','2h ago','new'],['critical','Duplicate','F3','fa.Attendances.Guid','3','1d ago','resolved']]};
+const RANK={crit:3,warn:2,ok:1,none:0};
+const worst=(...vs)=>vs.reduce((a,b)=>RANK[b]>RANK[a]?b:a,'none');
+MODS.forEach(m=>m.health=worst(...TYPES.map(t=>m[t].v)));
+const COMPANY={name:'Mars Wrigley VN',id:'234474',health:worst(...MODS.map(m=>m.health))};
+const SUITES=[{name:'Release regression',cells:22,sched:'on deploy · beta',v:'crit',t:'3 fail'},{name:'Nightly smoke',cells:9,sched:'02:00 IST · all tenants',v:'ok',t:'pass'},{name:'Security sweep',cells:9,sched:'weekly · Sun',v:'warn',t:'2 warn'},{name:'Van sales month-end',cells:4,sched:'manual',v:'ok',t:'pass'}];
+const ENDPOINTS={van:[['POST','check/login','Login and issue token',3,2,'ok',188],['GET','master/appConfig','Company app configuration',2,2,'ok',96],['POST','day/begin','Start day session',3,2,'crit',388],['GET','data/activity','Assigned activity for today',1,1,'ok',240],['GET','journey/employeeRoutesV2','Routes for position',0,1,'warn',412],['POST','EventsSync/Post','Sync field events',2,1,'ok',540],['POST','api/vansales/registry','Van sales registry (v7.1.5)',0,0,'none',0],['GET','master/distributorsV2','Distributors for employee',1,1,'ok',170]],
+ jp:[['GET','journey/employeeBeats','Beats for position',2,1,'ok',120],['POST','journey/plan','Create journey plan',2,1,'ok',300],['GET','journey/calendar','Month calendar',1,0,'ok',150]],
+ default:[['GET','…/list','List',1,1,'ok',120],['POST','…/create','Create',1,0,'ok',260],['PUT','…/update','Update',0,0,'none',0]]};
+const CYCLES=[
+ {emp:'Rahul Verma',erp:'ASPL00006727',id:'003526',no:13,date:'2026-08-26',van:5512,app:'ok',rule:'ok',start:'Fresh',prod:38,rec:'ok',reason:'',carry:'ok',ctx:true},
+ {emp:'Rahul Verma',erp:'ASPL00006727',id:'003526',no:14,date:'2026-08-27',van:5512,app:'ok',rule:'ok',start:'Old stock',prod:41,rec:'crit',n:3,reason:'3 MISMATCH · Limca PET 150 ML Δ −1, Snickers 45g Δ +2, Orbit 14g Δ −1',carry:'crit',crit:true},
+ {emp:'Rahul Verma',erp:'ASPL00006727',id:'003526',no:15,date:'2026-08-28',van:5512,app:'ok',rule:'ok',start:'Old stock',prod:40,rec:'ok',reason:'',carry:'crit',ctx:true},
+ {emp:'Priya Nair',erp:'ASPL00006731',id:'003541',no:8,date:'2026-08-19',van:5498,app:'ok',rule:'ok',start:'Fresh',prod:36,rec:'ok',reason:'',carry:'ok',ctx:true},
+ {emp:'Priya Nair',erp:'ASPL00006731',id:'003541',no:9,date:'2026-08-20',van:5498,app:'warn',rule:'crit',start:'Old stock',prod:36,rec:'crit',n:6,reason:'6 MISMATCH · next PureDayStart opened while End #8812 still pending',carry:'ok',crit:true},
+ {emp:'Priya Nair',erp:'ASPL00006731',id:'003541',no:10,date:'2026-08-21',van:5498,app:'ok',rule:'ok',start:'Old stock',prod:37,rec:'ok',reason:'',carry:'ok',ctx:true},
+ {emp:'Priya Nair',erp:'ASPL00006731',id:'003541',no:17,date:'2026-08-29',van:5498,app:'ok',rule:'ok',start:'Fresh',prod:35,rec:'crit',n:2,reason:'2 MISMATCH · Orbit 14g SALE ONLY, Twix 50g Δ −2',carry:'ok',crit:true}];
+const B=(k,t)=>`<span class="badge ${k}">${t}</span>`;
+const RING=(cls,id)=>`<div class="ring ${cls}" ${id?`id="${id}"`:''}><svg viewBox="0 0 44 44"><circle class="track" cx="22" cy="22" r="19"/><circle class="arc" cx="22" cy="22" r="19"/></svg><i class="core"></i></div>`;
+
+/* ================= STATE + ROUTER ================= */
+const S={view:'company',mod:null,tab:'overview',pins:new Set(['van']),stack:[],tenantView:false};
+const root=document.documentElement;
+$('#themeBtn').onclick=()=>{const cur=root.getAttribute('data-theme');const dark=cur?cur==='dark':matchMedia('(prefers-color-scheme: dark)').matches;root.setAttribute('data-theme',dark?'light':'dark');};
+/* density toggle (comfortable default, remembered per viewer) */
+const densBtn=$('#densBtn');function setDens(d){if(d==='dense')root.setAttribute('data-density','dense');else root.removeAttribute('data-density');densBtn.textContent=d==='dense'?'Dense':'Comfortable';try{localStorage.setItem('falens.density',d)}catch(e){}}
+try{setDens(localStorage.getItem('falens.density')||'comfortable')}catch(e){setDens('comfortable')}
+densBtn.onclick=()=>setDens(root.getAttribute('data-density')==='dense'?'comfortable':'dense');
+$('#colsBtn')&&0;
+$('#collapseBtn').onclick=()=>$('#shell').classList.toggle('mini');
+$('#drawer').addEventListener('dblclick',e=>{if(e.target.closest('.dhead'))$('#shell').classList.toggle('mini');});
+
+function nav(view,mod,tab){S.view=view;S.mod=mod||null;S.tab=tab||'overview';if(view==='module'&&mod)noteRecent(mod);closePanel(true);renderDrawer();renderPage();try{history.replaceState(null,'','#/'+[view,mod,tab].filter(Boolean).join('/'));}catch(e){}}
+function bootFromHash(){const p=(location.hash||'').replace(/^#\/?/,'').split('/').filter(Boolean);if(!p.length)return nav('company');if(p[0]==='module'&&MODS.find(m=>m.id===p[1]))return nav('module',p[1],p[2]||'overview');nav(p[0]);}
+
+/* ================= DRAWER: reusable NavTree ================= */
+const COMPANIES=[{name:'Mars Wrigley VN',id:'234474',tenant:'Mars'},{name:'Big Tree Zambia',id:'193008',tenant:'General'},{name:'Bisleri - LIVE',id:'244531',tenant:'General'},{name:'HCCB Prod',id:'193054',tenant:'General'}];
+const persist=(k,v)=>{try{localStorage.setItem('falens.'+k,JSON.stringify(v))}catch(e){}};
+const recall=(k,d)=>{try{const v=localStorage.getItem('falens.'+k);return v==null?d:JSON.parse(v)}catch(e){return d}};
+S.open=new Set(recall('nav.open',['m:van']));S.closed=new Set(recall('nav.closed',[]));S.pins=new Set(recall('nav.pins',['van']));S.recent=recall('nav.recent',[]);S.filter='';
+/* nav model: sections → items → children. Any pack contributes items; the renderer knows nothing about van sales. */
+function navModel(){
+ const item=m=>({id:'m:'+m.id,mod:m.id,icon:ICON[m.icon],label:m.name,badge:summary(m),health:m.health,children:TYPES.map(t=>({id:'t:'+m.id+':'+t,mod:m.id,tab:t,label:TNAME[t],badge:m[t].t,health:m[t].v}))});
+ const secs=[];
+ const shortcut=m=>({...item(m),id:'s:'+m.id,children:null}); /* pinned/recent rows are shortcuts: no tree under them */
+ if(!S.filter&&S.pins.size)secs.push({id:'pinned',label:'Pinned',items:MODS.filter(m=>S.pins.has(m.id)).map(shortcut)});
+ const rec=S.recent.filter(id=>!S.pins.has(id)&&id!==S.mod);
+ if(!S.filter&&rec.length)secs.push({id:'recent',label:'Recent',items:rec.map(id=>MODS.find(m=>m.id===id)).filter(Boolean).map(shortcut)});
+ [...new Set(MODS.map(m=>m.group))].forEach(g=>secs.push({id:'g:'+g,label:g,items:MODS.filter(m=>m.group===g).map(item)}));
+ return secs;}
+function summary(m){if(m.health==='crit'){const c=TYPES.map(t=>m[t]).find(x=>x.v==='crit');return c.t;}if(m.health==='warn'){const c=TYPES.map(t=>m[t]).find(x=>x.v==='warn');return c.t.includes('/')?'gaps':c.t;}if(m.health==='ok')return 'ok';return 'no runs';}
+const hl=t=>{if(!S.filter)return t;const i=t.toLowerCase().indexOf(S.filter.toLowerCase());return i<0?t:t.slice(0,i)+'<mark class="hl">'+t.slice(i,i+S.filter.length)+'</mark>'+t.slice(i+S.filter.length);};
+function matches(it){const q=S.filter.toLowerCase();return !q||it.label.toLowerCase().includes(q)||(it.children||[]).some(c=>c.label.toLowerCase().includes(q));}
+function rowHtml(it,depth){const active=S.view==='module'&&S.mod===it.mod&&(depth?S.tab===it.tab:true);const open=S.open.has(it.id)||(S.filter&&it.children);const kids=it.children&&it.children.filter(c=>!S.filter||matches(it)&&(c.label.toLowerCase().includes(S.filter.toLowerCase())||it.label.toLowerCase().includes(S.filter.toLowerCase())));
+ return `<div class="drow ${depth?'child':''} ${active&&(depth||S.tab==='overview'||!S.open.has(it.id))?'on':''} ${open?'open':''}" role="treeitem" aria-expanded="${it.children?!!open:''}" tabindex="0" data-id="${it.id}" data-mod="${it.mod}" ${it.tab?`data-tab="${it.tab}"`:''} title="${it.label}${it.badge?' · '+it.badge:''}">
+  <span class="chev ${it.children?'':'none'}" data-chev="${it.id}"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span>
+  ${depth?`<i class="dot ${it.health}"></i>`:`<span class="ico">${it.icon}</span>`}<span class="lbl">${hl(it.label)}</span><span class="bdg ${it.health}">${it.badge||''}</span>${depth?'':`<span class="pin ${S.pins.has(it.mod)?'on':''}" data-pin="${it.mod}" title="Pin">${S.pins.has(it.mod)?'★':'☆'}</span><i class="dot ${it.health}"></i>`}</div>
+ ${it.children&&open?`<div class="dchildren anim" role="group">${kids.map(c=>rowHtml(c,1)).join('')}</div>`:''}`;}
+function renderDrawer(){
+ const secs=navModel().map(sec=>({...sec,items:sec.items.filter(matches)})).filter(sec=>sec.items.length);
+ const co=COMPANIES[0];
+ $('#dscroll').innerHTML=`<div class="dco ${S.view==='company'?'on':''}" id="dco" role="treeitem" tabindex="0" title="Company home · click name to switch">${RING('done '+COMPANY.health)}<div class="t"><b>${COMPANY.name} <span class="faint" style="font-size:10px">▾</span></b><span>${COMPANY.id} · ${MODS.length} modules · ${MODS.filter(m=>m.health==='crit').length} failing</span></div></div>`
+  +(secs.length?secs.map(sec=>`<div class="dsec ${S.closed.has(sec.id)&&!S.filter?'closed':''}" data-sec="${sec.id}" role="button" aria-expanded="${!S.closed.has(sec.id)}"><span class="car">▾</span>${sec.label}<span class="cnt">${sec.items.length}</span></div><div class="ditems" role="group">${sec.items.map(it=>rowHtml(it,0)).join('')}</div><div class="dsep"></div>`).join(''):`<div class="dempty">Nothing matches "${S.filter}". Try ⌘K for endpoints, runs, and companies.</div>`);
+ const foot=[{id:'suites',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v4H4zM4 15h16v4H4zM4 10h10v4H4z"/></svg>',label:'Suites',cnt:SUITES.length,q:true,children:SUITES.map(x=>({label:x.name,badge:x.t,health:x.v==='ok'?'ok':x.v}))},
+  {id:'runs',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h4l2-6 3 12 2-6h3"/></svg>',label:'Runs'},
+  {id:'suggestions',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16v10H8l-4 4z"/></svg>',label:'Suggestions',cnt:3},
+  {id:'settings',icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>',label:'Settings'}];
+ $('#dfoot').innerHTML=foot.map(f=>`<div class="drow ${S.view===f.id?'on':''} ${S.open.has('f:'+f.id)?'open':''}" role="treeitem" tabindex="0" data-view="${f.id}" data-id="f:${f.id}" title="${f.label}"><span class="chev ${f.children?'':'none'}" data-chev="f:${f.id}"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span><span class="ico">${f.icon}</span><span class="lbl">${f.label}</span>${f.cnt?`<span class="cnt ${f.q?'q':''}">${f.cnt}</span>`:''}</div>${f.children&&S.open.has('f:'+f.id)?`<div class="dchildren anim">${f.children.map(c=>`<div class="drow child" role="treeitem" tabindex="0" data-view="suites"><i class="dot ${c.health}"></i><span class="lbl">${c.label}</span><span class="bdg ${c.health}">${c.badge}</span></div>`).join('')}</div>`:''}`).join('')
+  +`<div class="userrow" id="userrow" title="Account"><div class="avatar">KS</div><div class="t"><b>Kapil Sharma</b><span>Admin · kapil@fieldassist</span></div><span class="faint">⋯</span></div>`;
+ /* wiring */
+ $('#dco').onclick=e=>{if(e.target.closest('b'))openCompanySwitcher(e.target.closest('.dco'));else nav('company');};
+ $$('.dsec').forEach(g=>g.onclick=()=>{const id=g.dataset.sec;S.closed.has(id)?S.closed.delete(id):S.closed.add(id);persist('nav.closed',[...S.closed]);renderDrawer();});
+ $$('.drow').forEach(el=>{el.onclick=e=>{
+   if(e.target.closest('[data-pin]')){const id=e.target.closest('[data-pin]').dataset.pin;S.pins.has(id)?S.pins.delete(id):S.pins.add(id);persist('nav.pins',[...S.pins]);renderDrawer();return;}
+   if(e.target.closest('[data-chev]')){toggleOpen(e.target.closest('[data-chev]').dataset.chev);return;}
+   if(el.dataset.view){if(el.dataset.id&&el.dataset.id.startsWith('f:')&&el.querySelector('.chev:not(.none)')&&!$('#shell').classList.contains('mini')){toggleOpen(el.dataset.id);}nav(el.dataset.view);return;}
+   if(el.dataset.tab){nav('module',el.dataset.mod,el.dataset.tab);return;}
+   if(el.dataset.mod){if(!S.open.has(el.dataset.id)&&!$('#shell').classList.contains('mini')){S.open.add(el.dataset.id);persist('nav.open',[...S.open]);}nav('module',el.dataset.mod,'overview');}};
+  if(el.dataset.mod&&!el.classList.contains('child')){el.onmouseenter=()=>{if($('#shell').classList.contains('mini'))showFly(el);};el.onmouseleave=()=>hideFlySoon();}});
+ $('#userrow').onclick=e=>openUserMenu(e.currentTarget);
+}
+function toggleOpen(id){S.open.has(id)?S.open.delete(id):S.open.add(id);persist('nav.open',[...S.open]);renderDrawer();}
+function noteRecent(id){S.recent=[id,...S.recent.filter(x=>x!==id)].slice(0,3);persist('nav.recent',S.recent);}
+/* live filter in the drawer; ⌘K still opens the palette */
+$('#dfilter').oninput=e=>{S.filter=e.target.value.trim();renderDrawer();};
+$('#dfilter').onkeydown=e=>{if(e.key==='Escape'){e.target.value='';S.filter='';renderDrawer();e.target.blur();}if(e.key==='ArrowDown'){e.preventDefault();const r=$('#dscroll .drow');r&&r.focus();}};
+$('#dsearchKbd').onclick=()=>openPal();
+/* keyboard: arrows move, → expands / opens types, ← collapses / goes to parent, Enter activates, * pins */
+$('#drawer').addEventListener('keydown',e=>{const el=e.target.closest('.drow,.dco');if(!el)return;const rows=$$('#dscroll .drow, #dscroll .dco, #dfoot .drow').filter(r=>r.offsetParent!==null);const i=rows.indexOf(el);
+ if(e.key==='ArrowDown'){e.preventDefault();(rows[i+1]||rows[0]).focus();}
+ else if(e.key==='ArrowUp'){e.preventDefault();(rows[i-1]||$('#dfilter')).focus();}
+ else if(e.key==='ArrowRight'){e.preventDefault();if(el.dataset.id&&!S.open.has(el.dataset.id)&&el.querySelector('.chev:not(.none)')){S.open.add(el.dataset.id);persist('nav.open',[...S.open]);renderDrawer();$(`.drow[data-id="${el.dataset.id}"]`)?.focus();}else if(el.classList.contains('open')){const k=$(`.drow[data-id="${el.dataset.id}"]+.dchildren .drow`);k&&k.focus();}}
+ else if(e.key==='ArrowLeft'){e.preventDefault();if(el.dataset.id&&S.open.has(el.dataset.id)){S.open.delete(el.dataset.id);persist('nav.open',[...S.open]);renderDrawer();$(`.drow[data-id="${el.dataset.id}"]`)?.focus();}else if(el.classList.contains('child')){const p=$(`.drow[data-id="m:${el.dataset.mod}"]`);p&&p.focus();}}
+ else if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}
+ else if(e.key==='*'&&el.dataset.mod){const id=el.dataset.mod;S.pins.has(id)?S.pins.delete(id):S.pins.add(id);persist('nav.pins',[...S.pins]);renderDrawer();}
+});
+/* resize handle */
+(function(){const h=$('#dresize'),shell=$('#shell');const w=recall('nav.width',260);document.documentElement.style.setProperty('--dw',w+'px');let drag=false;h.onmousedown=e=>{drag=true;h.classList.add('on');e.preventDefault();};window.addEventListener('mousemove',e=>{if(!drag)return;const nw=Math.max(200,Math.min(380,e.clientX));document.documentElement.style.setProperty('--dw',nw+'px');});window.addEventListener('mouseup',()=>{if(!drag)return;drag=false;h.classList.remove('on');persist('nav.width',parseInt(getComputedStyle(document.documentElement).getPropertyValue('--dw')));});h.ondblclick=()=>{document.documentElement.style.setProperty('--dw','260px');persist('nav.width',260);};})();
+/* dropdowns */
+const dd=$('#dd');function openDD(anchor,html){const r=anchor.getBoundingClientRect();dd.innerHTML=html;dd.style.left=Math.min(r.left,innerWidth-300)+'px';dd.style.top=(r.bottom+6)+'px';dd.classList.add('open');setTimeout(()=>document.addEventListener('click',closeDDOnce),0);}
+function closeDD(){dd.classList.remove('open');}function closeDDOnce(e){if(!dd.contains(e.target)){closeDD();document.removeEventListener('click',closeDDOnce);}}
+function openCompanySwitcher(anchor){openDD(anchor,`<div class="ddh">Switch company</div><div class="ddin"><input placeholder="name or id…" id="coq" autofocus></div>${COMPANIES.map((c,i)=>`<div class="ddi ${i===0?'on':''}" data-co="${i}"><span class="chk">${i===0?'✓':''}</span><span>${c.name}</span><span class="m">${c.tenant} · ${c.id}</span></div>`).join('')}<div class="ddsep"></div><div class="ddi"><span class="chk"></span><span>Manage companies…</span></div>`);
+ const filt=()=>{const q=$('#coq').value.toLowerCase();$$('.ddi[data-co]',dd).forEach(el=>el.style.display=el.textContent.toLowerCase().includes(q)?'':'none');};$('#coq').oninput=filt;$('#coq').focus();
+ $$('.ddi[data-co]',dd).forEach(el=>el.onclick=()=>{const c=COMPANIES[+el.dataset.co];closeDD();toast('ok',`Scope changed to ${c.name} · ${c.id}`);});}
+function openUserMenu(anchor){const theme=root.getAttribute('data-theme')||'system',dens=root.getAttribute('data-density')==='dense'?'dense':'comfortable';
+ openDD(anchor,`<div class="ddh">Theme</div>${['light','dark','system'].map(t=>`<div class="ddi" data-theme="${t}"><span class="chk">${theme===t?'✓':''}</span><span>${t[0].toUpperCase()+t.slice(1)}</span><span class="m">${t==='dark'?'⌘.':''}</span></div>`).join('')}<div class="ddsep"></div><div class="ddh">Density</div>${['comfortable','dense'].map(d=>`<div class="ddi" data-dens="${d}"><span class="chk">${dens===d?'✓':''}</span><span>${d[0].toUpperCase()+d.slice(1)}</span></div>`).join('')}<div class="ddsep"></div><div class="ddi" data-act="keys"><span class="chk"></span><span>Keyboard shortcuts</span><span class="m">?</span></div><div class="ddi" data-act="out"><span class="chk"></span><span>Sign out</span></div>`);
+ $$('[data-theme]',dd).forEach(el=>el.onclick=()=>{const t=el.dataset.theme;if(t==='system')root.removeAttribute('data-theme');else root.setAttribute('data-theme',t);closeDD();});
+ $$('[data-dens]',dd).forEach(el=>el.onclick=()=>{setDens(el.dataset.dens);closeDD();});
+ $$('[data-act]',dd).forEach(el=>el.onclick=()=>{closeDD();toast('ok',el.dataset.act==='keys'?'Shortcuts: ⌘K palette · [ sidebar · 1–9 tabs · ↑↓→← tree · * pin':'Signed out (demo)');});}
+/* flyout */
+const fly=$('#fly');let flyT;
+function showFly(el){clearTimeout(flyT);const m=MODS.find(x=>x.id===el.dataset.mod);const r=el.getBoundingClientRect();fly.style.left=(r.right+8)+'px';fly.style.top=Math.min(r.top-6,innerHeight-220)+'px';
+ fly.innerHTML=`<h4>${m.name}<span class="badge ${m.health==='none'?'none':m.health}">${m.health==='none'?'no runs':m.health}</span></h4><div class="types">${TYPES.map(t=>`<div class="ty" data-t="${t}"><i class="dot ${m[t].v}"></i>${TNAME[t]}<span class="s">${m[t].t}</span></div>`).join('')}</div><div class="acts"><button class="btn accent sm" data-a="smoke">Run smoke</button><button class="btn ghost sm" data-a="fail">Open failures</button></div>`;
+ fly.classList.add('open');fly.onmouseenter=()=>clearTimeout(flyT);fly.onmouseleave=hideFlySoon;
+ $$('.ty',fly).forEach(t=>t.onclick=()=>{fly.classList.remove('open');nav('module',m.id,t.dataset.t);});
+ $('[data-a=smoke]',fly).onclick=()=>{fly.classList.remove('open');nav('module',m.id,'overview');setTimeout(()=>$('#runBtn')&&$('#runBtn').click(),200);};
+ $('[data-a=fail]',fly).onclick=()=>{fly.classList.remove('open');const t=TYPES.find(t=>m[t].v==='crit')||TYPES.find(t=>m[t].v==='warn')||'overview';nav('module',m.id,t);};}
+function hideFlySoon(){flyT=setTimeout(()=>fly.classList.remove('open'),180);}
+
+/* ================= PAGES ================= */
+function renderPage(){const ph=$('#phead'),c=$('#content');
+ if(S.view==='company')return renderCompany(ph,c);
+ if(S.view==='module')return renderModule(ph,c);
+ if(S.view==='suites')return renderSuites(ph,c);
+ ph.innerHTML=`<div class="crumbs"><a data-nav="company">${COMPANY.name}</a><span>›</span><b>${S.view[0].toUpperCase()+S.view.slice(1)}</b></div><div class="mhead"><h1>${S.view[0].toUpperCase()+S.view.slice(1)}</h1></div><div style="height:12px"></div>`;
+ c.innerHTML=`<div class="card"><h3>${S.view}</h3><p class="dim">Described in <span class="mono">screens.md</span>. Same tokens, same table, same panel.</p>${S.view==='settings'?'<div class="swatches" id="swatches"></div>':''}</div>`;bindNav();
+ if(S.view==='settings')$('#swatches').innerHTML='ground surface-1 surface-2 surface-3 hairline text text-dim accent flare ok warn crit info'.split(' ').map(n=>`<div class="sw"><i style="background:var(--${n})"></i><span>--${n}</span></div>`).join('');}
+function bindNav(){$$('[data-nav]').forEach(a=>a.onclick=()=>{const [v,m,t]=a.dataset.nav.split(':');nav(v,m,t);});}
+
+/* ---- company ---- */
+function renderCompany(ph,c){
+ const fails=MODS.filter(m=>m.health==='crit').length,warns=MODS.filter(m=>m.health==='warn').length,noruns=MODS.filter(m=>m.health==='none').length;
+ const cov=MODS.reduce((a,m)=>{const [x,y]=(m.apis.t.match(/(\d+)\/(\d+)/)||[0,0,0]).slice(1).map(Number);return [a[0]+x,a[1]+y];},[0,0]);
+ ph.innerHTML=`<div class="crumbs"><b>${COMPANY.name}</b><span class="mono">${COMPANY.id}</span><span>·</span><span>Beta</span></div>
+ <div class="mhead"><h1>${COMPANY.name}</h1><div class="health">${B(COMPANY.health,fails+' failing · '+warns+' warn')}<span>last full run <span class="mono">#128 · 14:02</span></span></div>
+ <div class="right"><div class="seg"><button class="${S.tenantView?'':'on'}" data-tv="0">By type</button><button class="${S.tenantView?'on':''}" data-tv="1">Compare tenants</button></div><button class="btn ghost sm">Schedule</button><button class="btn primary" id="runBtn"><span class="spin"></span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg><span class="lbl">Run all (${MODS.length} modules)</span></button></div></div>
+ <p class="lead">API coverage, test cases, flows, and data validations across ${MODS.length} modules · Mars Wrigley VN · Beta · August 2026. A cell is one testing type in one module; click it to open exactly that.</p><div style="height:10px"></div>`;
+ c.innerHTML=`<p class="status" id="cstatus">Run <b>#128</b> · ran <b>14:02</b> · <b>${MODS.length}</b> modules · <b>36</b> flows · <b>412</b> cases · looked at <b>84,120</b> rows · <b>41 s</b></p>
+ <div class="tiles">
+  <div class="tile ${COMPANY.health}"><i class="stripe"></i>${RING('done '+COMPANY.health,'ring')}<div><div class="eyebrow">Failing modules</div><div class="num"><span data-count="${fails}">0</span><small>failing</small></div><div class="delta up">▲ 1 vs baseline</div></div></div>
+  <div class="tile"><div><div class="eyebrow">API coverage</div><div class="num"><span data-count="${cov[0]}">0</span><small>/ ${cov[1]}</small></div><div class="delta">${Math.round(cov[0]/cov[1]*100)}% · 7 changed without tests</div></div></div>
+  <div class="tile warn"><i class="stripe"></i><div><div class="eyebrow">No runs yet</div><div class="num"><span data-count="${noruns}">0</span><small>modules</small></div><div class="delta">Schemes, Reports partially</div></div></div>
+  <div class="tile"><div><div class="eyebrow">Slowest p95</div><div class="num"><span data-count="1180">0</span><small>ms</small></div><div class="delta up">Reports · ▲ 240 ms</div></div></div>
+ </div>
+ <div class="matrix" id="matrix">${S.tenantView?tenantMatrix():typeMatrix()}</div>
+ <div class="cols"><div class="card"><h3>Coverage gaps</h3><div class="list">
+  <div class="li" data-nav="module:van:apis"><span class="badge warn">no tests</span><span class="grow"><span class="mono">POST /api/vansales/registry</span> · Van Sales · changed in v7.1.5</span><span class="mono faint">2d</span></div>
+  <div class="li" data-nav="module:sch:apis"><span class="badge warn">no runs</span><span class="grow">Schemes has 19 endpoints and no cases</span><span class="mono faint">—</span></div>
+  <div class="li" data-nav="module:rep:apis"><span class="badge warn">8 / 34</span><span class="grow">Reports coverage 24% · slowest module</span><span class="mono faint">1.2 s</span></div>
+  <div class="li" data-nav="module:out:validations"><span class="badge none">—</span><span class="grow">Outlets has no validation flow yet</span><span class="mono faint">—</span></div>
+ </div></div>
+ <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><h3 style="margin:0">Company verdict · last 30 runs</h3><a style="margin-left:auto;color:var(--accent);cursor:pointer;font-size:var(--fs-sm)" data-nav="runs">View all</a></div><div class="strip" id="strip"></div>
+ <div class="list" style="margin-top:10px">${SUITES.slice(0,3).map(s=>`<div class="li" data-nav="suites"><span class="grow"><b>${s.name}</b> <span class="dim">· ${s.cells} cells · ${s.sched}</span></span>${B(s.v,s.t)}</div>`).join('')}</div></div></div>
+ <p class="hint">Rows are modules, columns are testing types. A cell is the verdict of that type in this company and scope. Click a cell to open exactly that. Example data.</p>`;
+ strip($('#strip'));countUp();bindNav();bindMatrix();
+ $$('[data-tv]').forEach(b=>b.onclick=()=>{S.tenantView=b.dataset.tv==='1';renderPage();});
+ $('#runBtn').onclick=runAll;}
+function typeMatrix(){const groups=[...new Set(MODS.map(m=>m.group))];
+ return `<table><thead><tr><th>Module</th>${TYPES.map(t=>`<th class="c">${TNAME[t]}</th>`).join('')}<th class="num" style="text-align:right">p95</th></tr></thead><tbody>${groups.map(g=>`<tr class="gh"><td colspan="7">${g}</td></tr>`+MODS.filter(m=>m.group===g).map(m=>`<tr class="mrow" data-mod="${m.id}"><td><div class="mname">${ICON[m.icon]}${m.name}<i class="dot ${m.health} roll"></i></div></td>${TYPES.map(t=>`<td class="c"><span class="cell ${m[t].v}" data-mod="${m.id}" data-t="${t}">${m[t].t}</span></td>`).join('')}<td class="mono" style="text-align:right;color:var(--text-dim)">${m.p95?m.p95+' ms':'—'}</td></tr>`).join('')).join('')}</tbody></table>`;}
+function tenantMatrix(){const T=['General','Mars','Colpal','Haldiram','SLMG','BDF'];const seed=(i,j)=>['ok','ok','ok','warn','ok','crit','ok','ok','ok','ok','warn','ok'][(i*3+j*5)%12];
+ return `<table><thead><tr><th>Module</th>${T.map(t=>`<th class="c">${t}</th>`).join('')}</tr></thead><tbody>${MODS.map((m,i)=>`<tr class="mrow" data-mod="${m.id}"><td><div class="mname">${ICON[m.icon]}${m.name}</div></td>${T.map((t,j)=>{const v=t==='Mars'?m.health:(m.health==='none'?'none':seed(i,j));return `<td class="c"><span class="cell ${v}" data-mod="${m.id}" data-t="overview" title="${t}">${v==='none'?'—':v==='ok'?'pass':v}</span></td>`;}).join('')}</tr>`).join('')}</tbody></table>`;}
+function bindMatrix(){$$('.cell[data-mod]').forEach(c=>c.onclick=e=>{e.stopPropagation();nav('module',c.dataset.mod,c.dataset.t);});$$('tr.mrow').forEach(r=>r.onclick=()=>nav('module',r.dataset.mod,'overview'));}
+async function runAll(){const b=$('#runBtn');if(b.classList.contains('loading'))return;b.classList.add('loading');$('.lbl',b).textContent='Running';const ring=$('#ring');ring.className='ring running';const cells=$$('.cell[data-mod]').filter(c=>!c.classList.contains('none'));const orig=cells.map(c=>[c.className,c.textContent]);cells.forEach(c=>{c.className='cell running';c.textContent='…';});$('#cstatus').innerHTML='Running <b>36</b> flows across <b>'+MODS.length+'</b> modules · <b>Van Sales</b> · cycle.reconcile · <b>1,200</b> rows';
+ for(let i=0;i<cells.length;i++){await sleep(110);cells[i].className=orig[i][0];cells[i].textContent=orig[i][1];}
+ ring.className='ring done '+COMPANY.health;b.classList.remove('loading');$('.lbl',b).textContent=`Run all (${MODS.length} modules)`;$('#cstatus').innerHTML='Run <b>#129</b> · ran <b>just now</b> · <b>'+MODS.length+'</b> modules · <b>36</b> flows · <b>412</b> cases · looked at <b>84,120</b> rows · <b>41 s</b>';countUp();toast('crit','Run #129 finished · 2 modules failing','Open Van Sales',()=>nav('module','van','validations'));}
+
+/* ---- suites ---- */
+function renderSuites(ph,c){ph.innerHTML=`<div class="crumbs"><a data-nav="company">${COMPANY.name}</a><span>›</span><b>Suites</b></div><div class="mhead"><h1>Suites</h1><div class="health"><span>cross-module bundles · run on schedule or on deploy</span></div><div class="right"><button class="btn accent">New suite</button></div></div><div style="height:12px"></div>`;
+ c.innerHTML=`<div class="card"><div class="list">${SUITES.map(s=>`<div class="li" style="min-height:52px"><div class="grow"><b>${s.name}</b><div class="dim" style="font-size:var(--fs-sm)">${s.cells} cells · ${s.sched}</div></div><div class="strip" style="height:16px;width:120px">${Array.from({length:12},(_,i)=>`<i class="${i===11?s.v+' last':i%5===3?'warn':'ok'}"></i>`).join('')}</div>${B(s.v,s.t)}<button class="btn accent sm">Run</button></div>`).join('')}</div></div><p class="hint">A suite is a saved selection of matrix cells. Its page looks like the company matrix with only the selected cells lit.</p>`;bindNav();}
+
+/* ---- module ---- */
+const TABS=[['overview','Overview'],['apis','APIs'],['cases','Cases'],['flows','Flows'],['validations','Validations'],['load','Load'],['runs','Runs'],['data','Data'],['knowledge','Knowledge']];
+function renderModule(ph,c){const m=MODS.find(x=>x.id===S.mod);const cnt={apis:(m.apis.t.split('/')[1]||'').trim(),cases:m.id==='van'?'42':'',flows:m.id==='van'?'6':'',validations:m.id==='van'?'2':'',runs:m.id==='van'?'128':''};
+ const runLabel={overview:`Run ${m.name} smoke`,apis:'Run all cases',cases:'Run selected',flows:'Run flow',validations:'Run',load:'Run load test',runs:'Compare',data:'Save',knowledge:'Sync from ADO'}[S.tab];
+ ph.innerHTML=`<div class="crumbs"><a data-nav="company">${COMPANY.name}</a><span class="mono">${COMPANY.id}</span><span>›</span><a data-nav="module:${m.id}:overview">${m.name}</a><span>›</span><b>${TABS.find(t=>t[0]===S.tab)[1]}</b></div>
+ <div class="mhead"><h1>${m.name}</h1><div class="health">${B(m.health==='none'?'none':m.health,summary(m))}<span>last run <span class="mono">14:02</span> · <span class="mono">${m.id==='van'?'12,480':'2,310'}</span> rows</span></div>
+ <div class="right"><button class="btn ghost sm">Share</button><button class="btn primary" id="runBtn"><span class="spin"></span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg><span class="lbl">${runLabel}</span></button></div></div>
+ <p class="lead">${m.sync?'Rows compared between FA, Report, and DMS for this company and month. Missing rows, mismatches, duplicates, and aggregate gaps, with the evidence for each.':`${m.name} APIs, test cases, automated flows, and data validations for Mars Wrigley VN on Beta, scoped to August 2026.`}</p>
+ <nav class="tabs" id="tabs">${TABS.map(t=>`<button class="tab ${S.tab===t[0]?'active':''}" data-tab="${t[0]}"><i class="dot ${(m[t[0]]||{}).v||''}" style="${m[t[0]]?'':'display:none'}"></i>${t[1]}${cnt[t[0]]?`<span class="n">${cnt[t[0]]}</span>`:''}</button>`).join('')}<span class="ink" id="ink"></span></nav>`;
+ $$('.tab').forEach(t=>t.onclick=()=>{S.tab=t.dataset.tab;closePanel(true);renderModule(ph,c);renderDrawer();try{history.replaceState(null,'','#/module/'+m.id+'/'+S.tab);}catch(e){}});
+ requestAnimationFrame(()=>{const t=$('.tab.active');if(t){$('#ink').style.left=t.offsetLeft+'px';$('#ink').style.width=t.offsetWidth+'px';}});
+ c.innerHTML='';const v=document.createElement('section');v.className='view active';c.appendChild(v);
+ const table=m.sync?{overview:syncOverview,flows:syncFlows,validations:syncValidations}:{overview:modOverview,apis:modApis,cases:modCases,flows:modFlows,validations:modValidations,load:modLoad};
+ (table[S.tab]||modStub)(v,m);bindNav();
+ const rb=$('#runBtn');if(S.tab==='flows')rb.onclick=()=>$('#flowRun')&&$('#flowRun').click();else if(S.tab==='validations')rb.onclick=runValidation;else rb.onclick=()=>genericRun(rb,m);}
+function genericRun(b,m){if(b.classList.contains('loading'))return;b.classList.add('loading');const l=$('.lbl',b),t=l.textContent;l.textContent='Running';const ring=$('#ring');if(ring)ring.className='ring running';setTimeout(()=>{b.classList.remove('loading');l.textContent=t;if(ring)ring.className='ring done '+(m.health==='none'?'ok':m.health);countUp();toast(m.health==='crit'?'crit':'ok',`${m.name} · run finished`,'Open',()=>nav('module',m.id,'runs'));},reduced?200:2000);}
+function modOverview(v,m){const isVan=m.id==='van';
+ v.innerHTML=`<div class="tiles">
+  <div class="tile" data-nav="module:${m.id}:apis"><div><div class="eyebrow">Endpoints covered</div><div class="num"><span data-count="${m.apis.t.split('/')[0]||0}">0</span><small>/ ${m.apis.t.split('/')[1]||'—'}</small></div><div class="delta down">▲ 4 since release</div></div></div>
+  <div class="tile ${m.health==='none'?'':m.health}"><i class="stripe"></i>${RING('done '+(m.health==='none'?'':m.health),'ring')}<div><div class="eyebrow">Last run</div><div class="num"><span data-count="${isVan?3:0}">0</span><small>${isVan?'issue cycles':'failures'}</small></div><div class="delta ${isVan?'up':''}">${isVan?'▲ 1 vs baseline':'same as baseline'}</div></div></div>
+  <div class="tile ${m.cases.v==='none'?'':m.cases.v}" data-nav="module:${m.id}:cases"><i class="stripe"></i><div><div class="eyebrow">Cases</div><div class="num">${m.cases.t}</div><div class="delta">${isVan?'3 fail · 2 flaky':'&nbsp;'}</div></div></div>
+  <div class="tile"><div><div class="eyebrow">p95 latency</div><div class="num"><span data-count="${m.p95}">0</span><small>ms</small></div><div class="delta down">▼ 38 ms vs last week</div></div></div></div>
+ <div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:10px"><h3 style="margin:0">Last 30 runs</h3><span class="dim" style="font-size:var(--fs-sm)">all types</span><a style="margin-left:auto;color:var(--accent);cursor:pointer;font-size:var(--fs-sm)" data-nav="module:${m.id}:runs">View all</a></div><div class="strip" id="strip"></div></div>
+ <div class="cols"><div class="card"><h3>Needs attention</h3><div class="list">${isVan?`
+  <div class="li" data-nav="module:van:validations"><span class="badge crit">mismatch</span><span class="grow">Cycle 14 · Rahul Verma · Limca PET 150 ML Δ −1</span><span class="mono faint">14:02</span></div>
+  <div class="li" data-nav="module:van:validations"><span class="badge crit">violation</span><span class="grow">Cycle 9 · Priya Nair · next start before end approved</span><span class="mono faint">14:02</span></div>
+  <div class="li" data-nav="module:van:flows"><span class="badge warn">flaky</span><span class="grow">Flow app.day-cycle alternated 3 of last 5 runs</span><span class="mono faint">13:10</span></div>
+  <div class="li" data-nav="module:van:apis"><span class="badge warn">no tests</span><span class="grow"><span class="mono">POST /api/vansales/registry</span> changed in v7.1.5</span><span class="mono faint">2d</span></div>`:`<div class="li"><span class="badge ok">clear</span><span class="grow">Nothing needs attention in ${m.name}</span></div>`}</div></div>
+ <div class="card"><h3>Recent runs</h3><div class="list">
+  <div class="li"><span class="mono dim">#128</span><span class="grow">${isVan?'Cycle reconciliation':m.name+' smoke'} · Mars · 234474</span>${B(isVan?'crit':'ok',isVan?'fail':'pass')}<span class="mono faint">6.1 s</span></div>
+  <div class="li"><span class="mono dim">#127</span><span class="grow">${isVan?'app.day-cycle':m.name+' regression'} · Mars · 234474</span>${B('ok','pass')}<span class="mono faint">2.4 s</span></div>
+  <div class="li"><span class="mono dim">#125</span><span class="grow">${isVan?'app.day-cycle':m.name+' smoke'} · Colpal · 198221</span>${B('warn','stopped')}<span class="mono faint">0.8 s</span></div></div></div></div>`;
+ strip($('#strip'));countUp();}
+function modApis(v,m){const rows=ENDPOINTS[m.id]||ENDPOINTS.default;
+ v.innerHTML=`<div class="inbar"><div class="input" style="min-width:260px"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input placeholder="path or summary…"></div><div class="seg"><button class="on">By controller</button><button>By tag</button><button>Flat</button></div><span class="chip">no tests <span class="mono">${rows.filter(r=>!r[3]&&!r[4]).length}</span></span><span class="chip">changed since release <span class="mono">1</span></span><span class="chip">slow <span class="mono">${rows.filter(r=>r[6]>400).length}</span></span><div class="seg"><button class="on">App</button><button>Dashboard</button><button>External</button></div><span style="flex:1"></span><button class="btn ghost sm">Import ▾</button><button class="btn accent sm">New endpoint</button></div>
+ <div class="tablewrap"><table class="grid" style="min-width:820px"><thead><tr><th>Method</th><th>Path</th><th>Summary</th><th>Coverage</th><th class="num">p95</th><th>Last run</th><th>Parity</th></tr></thead><tbody>${rows.map((r,i)=>`<tr class="reveal ${!r[3]&&!r[4]?'warn':''}" style="--i:${i}" data-i="${i}"><td><span class="method ${r[0].toLowerCase()}">${r[0]}</span></td><td class="mono">${r[1]}</td><td class="dim">${r[2]}</td><td>${r[3]||r[4]?`<span class="chip" style="height:20px;font-size:11px"><span class="mono">${r[3]}</span> cases · <span class="mono">${r[4]}</span> flows</span>`:B('warn','no tests')}</td><td class="num">${r[6]?r[6]+' ms':'—'}</td><td>${r[5]==='none'?B('none','never'):B(r[5],r[5]==='ok'?'pass 2h':r[5]==='crit'?'fail 2h':'warn 1d')}</td><td><span class="parity">${['ok','ok','warn','ok','ok',r[5]==='crit'?'crit':'ok'].map(x=>`<i class="dot ${x}"></i>`).join('')}</span></td></tr>`).join('')}</tbody></table></div>
+ <p class="hint">Click a row to open the workbench: auth and body come from the context, Send is one click, the response can be saved as a case.</p>`;
+ $$('tbody tr',v).forEach(tr=>tr.onclick=()=>openWorkbench(m,rows[+tr.dataset.i],tr));}
+function openWorkbench(m,r,tr){$$('.grid tbody tr.sel').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel');S.stack=[{crumb:r[1],title:`<span class="method ${r[0].toLowerCase()}">${r[0]}</span><span class="mono" style="font-size:14px">${r[1]}</span>`,html:`<div class="wb">
+ <div class="row"><span class="chip">env <span class="mono">beta</span></span><span class="chip">auth <span class="mono">Bearer · DSR-1 · auto</span></span><span class="chip">company <span class="mono">234474</span></span></div>
+ <div class="tabsm"><button class="on">Body</button><button>Params</button><button>Headers</button><button>Auth</button></div>
+ <div class="code" contenteditable spellcheck="false">{
+  "companyId": 234474,
+  "employeeId": "003526",
+  "vanId": 5512,
+  "deviceTime": "{{now}}"
+}</div>
+ <div class="row"><button class="btn primary" id="wbSend"><span class="spin"></span>Send</button><button class="btn ghost sm">Copy as curl</button><button class="btn ghost sm">Open in Postman</button><span style="flex:1"></span><button class="btn ghost sm">Save as case</button><button class="btn accent sm">Generate cases</button></div>
+ <div id="wbResp"><div class="eyebrow" style="margin-bottom:6px">Last response · 2h ago</div><div class="row" style="margin-bottom:6px">${B(r[5]==='crit'?'crit':'ok',r[5]==='crit'?'201 · assertion failed':'200')}<span class="mono dim" style="font-size:12px">${r[6]} ms · 1.2 KB</span><span class="dim" style="font-size:12px;margin-left:auto">Diff vs last · Raw · Tree</span></div><div class="code">{
+  "status": 201,
+  "data": { "sessionId": "8f2c…a1", ${r[5]==='crit'?'<span class="bad">"vanId": 5498</span>':'"vanId": 5512'} }
+}</div></div>
+ <div><div class="eyebrow" style="margin-bottom:6px">History</div><div class="hist">${['ok','ok','crit','ok','ok','ok','warn','ok','ok','crit'].map((x,i)=>`<span class="badge ${x}" title="${i+1}h ago">${x==='ok'?'200':x==='crit'?'201·F':'429'}</span>`).join('')}</div></div>
+ <div class="cols" style="margin-top:0"><div><div class="eyebrow" style="margin-bottom:6px">Cases · ${r[3]}</div><div class="list">${r[3]?['happy path','missing token → 401','other company id → 403'].slice(0,r[3]).map(x=>`<div class="li" style="min-height:30px"><span class="grow">${x}</span>${B('ok','pass')}</div>`).join(''):'<span class="dim">none yet</span>'}</div></div><div><div class="eyebrow" style="margin-bottom:6px">Used in flows · ${r[4]}</div><div class="list">${r[4]?['app.day-cycle','security.idor-sweep'].slice(0,r[4]).map(x=>`<div class="li" style="min-height:30px"><span class="grow mono">${x}</span></div>`).join(''):'<span class="dim">none</span>'}</div></div></div></div>`,bind:el=>{$('#wbSend',el).onclick=()=>{const b=$('#wbSend',el);b.classList.add('loading');setTimeout(()=>{b.classList.remove('loading');$('#wbResp .row .badge',el).outerHTML=B('ok','201');toast('ok',`${r[0]} ${r[1]} · 201 in 244 ms`,'Save as case');},reduced?100:900);};}}];openPanel();}
+function modCases(v,m){const rows=[['day/begin · happy path','happy','POST day/begin','ok'],['day/begin · missing token','security','POST day/begin','ok'],['day/begin · other company id','security','POST day/begin','crit'],['day/begin · van from another distributor','negative','POST day/begin','crit'],['check/login · locked user','negative','POST check/login','ok'],['EventsSync · 500 events batch','boundary','POST EventsSync/Post','warn'],['employeeRoutesV2 · departed employee routes','negative','GET journey/employeeRoutesV2','crit']];
+ v.innerHTML=`<div class="inbar"><div class="input" style="min-width:240px"><input placeholder="search cases…"></div><div class="seg">${['all','happy','negative','security','boundary','manual'].map((k,i)=>`<button class="${i?'':'on'}">${k}</button>`).join('')}</div><span style="flex:1"></span><button class="btn accent sm">Generate cases</button></div>
+ <div class="tablewrap"><table class="grid" style="min-width:820px"><thead><tr><th style="width:28px"><input type="checkbox"></th><th>Case</th><th>Kind</th><th>Endpoint</th><th>Last</th><th>Tenant parity</th><th>Owner</th></tr></thead><tbody>${rows.map((r,i)=>`<tr class="reveal ${r[3]==='crit'?'crit':r[3]==='warn'?'warn':''}" style="--i:${i}"><td><input type="checkbox"></td><td>${r[0]}</td><td>${B(r[1]==='security'?'info':'neutral',r[1])}</td><td class="mono">${r[2]}</td><td>${B(r[3],r[3]==='ok'?'pass':r[3]==='crit'?'fail':'flaky')}</td><td><span class="parity">${['ok','ok',r[3],'ok','warn','ok'].map(x=>`<i class="dot ${x}"></i>`).join('')}</span></td><td class="dim">kapil</td></tr>`).join('')}</tbody></table></div>
+ <p class="hint">Security cases (missing token, other company's id) are generated for every endpoint automatically. Parity dots are the six tenants.</p>`;}
+function modValidations(v,m){const isVan=m.id==='van';
+ v.innerHTML=`<div class="inbar"><div class="field"><label>Validation</label><div class="seg">${isVan?'<button class="on">Cycle reconciliation</button><button>Mapping validator</button>':`<button class="on">${m.name} integrity</button>`}</div></div>
+ <div class="field"><label>Employee / ERP / Distributor</label><div class="input" style="min-width:220px"><input value="003526, 003541" spellcheck="false"></div></div><div class="field"><label>From</label><div class="input"><input value="2026-08-01"></div></div><div class="field"><label>To</label><div class="input"><input value="2026-08-31"></div></div>
+ <div class="field"><label>Mode</label><div class="seg"><button class="on">Actual</button><button>Determined</button></div></div><div class="field"><label>Show</label><div class="seg"><button class="on">Issues</button><button>All</button></div></div><span style="flex:1"></span><button class="btn ghost sm">Presets ▾</button><button class="btn ghost sm" id="colsBtn">Columns · 7 of 11</button><button class="btn ghost sm">Download Excel</button></div>
+ <p class="status" id="vstatus">Run <b>#128</b> · ran <b>14:02</b> · looked at <b>12,480</b> rows · <b>6.1 s</b> · 2 employees · 23 cycles</p>
+ <div class="tiles"><div class="tile"><div><div class="eyebrow">Employees</div><div class="num">2</div></div></div><div class="tile"><div><div class="eyebrow">Cycles</div><div class="num">23</div></div></div><div class="tile crit"><i class="stripe"></i><div><div class="eyebrow">Issue cycles</div><div class="num">${isVan?3:0}</div></div></div><div class="tile warn"><i class="stripe"></i><div><div class="eyebrow">Mismatch rows</div><div class="num">${isVan?11:0}</div></div></div></div>
+ ${isVan?`<div class="tablewrap"><table class="grid" id="cycles"><thead><tr><th>Employee</th><th class="num">Cycle</th><th>Date</th><th class="num">Van</th><th class="opt">End approval</th><th>Rule</th><th class="opt">Start type</th><th class="num opt">Products</th><th>Reconciliation</th><th>Reason</th><th class="opt">Carry flag</th></tr></thead><tbody id="cyclesBody"></tbody></table></div><p class="hint">Tinted rows have a mismatch. Untinted rows are the cycle before and after an issue, kept for context. Click a row, then a product, for the full trace.</p>`:`<div class="card"><h3>No issues in ${m.name}</h3><p class="dim">Last validation passed. The table appears here when a rule flags something; the shape is the same as Van Sales.</p></div>`}`;
+ if(isVan)renderCycles();const cb=$('#colsBtn');if(cb)cb.onclick=()=>{const all=root.getAttribute('data-cols')==='all';if(all)root.removeAttribute('data-cols');else root.setAttribute('data-cols','all');cb.textContent=all?'Columns · 7 of 11':'Columns · 11 of 11';};}
+function renderCycles(){const tb=$('#cyclesBody');if(!tb)return;tb.innerHTML=CYCLES.map((c,i)=>`<tr class="${c.crit?'crit':''} reveal" style="--i:${i}" data-i="${i}"><td><div class="ent"><span class="n">${c.emp}</span><span class="m">ERP ${c.erp} · ID ${c.id}</span></div></td><td class="num">${c.no}</td><td class="mono">${c.date}</td><td class="num">${c.van}</td><td class="opt">${c.app==='ok'?B('ok','approved'):B('warn','pending')}</td><td>${c.rule==='ok'?B('ok','ok'):B('crit','violation')}</td><td class="opt">${c.start}</td><td class="num opt">${c.prod}</td><td>${c.rec==='ok'?B('ok','ok'):B('crit count',c.n+' mismatch')}</td><td class="reason" title="${c.reason}">${c.reason||(c.ctx?'<span class="chip" style="height:18px;font-size:10px">context</span>':'')}</td><td class="opt">${c.carry==='ok'?B('ok','ok'):B('crit','mismatch')}</td></tr>`).join('');$$('tr',tb).forEach(tr=>tr.onclick=()=>openCycle(+tr.dataset.i));}
+function runValidation(){const b=$('#runBtn');if(b.classList.contains('loading'))return;b.classList.add('loading');$('.lbl',b).textContent='Running';const st=$('#vstatus');const tb=$('#cyclesBody');if(tb)tb.innerHTML=Array.from({length:6},()=>`<tr><td colspan="11" style="height:36px"><div class="skel" style="height:12px;background:var(--surface-3);border-radius:4px;width:${40+Math.random()*50}%"></div></td></tr>`).join('');
+ const steps=['Fetching <b>VanDayStocks</b> · <b>1,200</b> rows','Building <b>23</b> cycles','Fetching <b>StockofDayStart</b> / <b>StockofDayEnd</b> · <b>8,400</b> rows','Attributing sales · <b>2,880</b> invoice lines','Reconciling · Actual · Productwise'];let i=0;const iv=setInterval(()=>{if(i<steps.length){st.innerHTML=steps[i++];}else{clearInterval(iv);st.innerHTML='Run <b>#129</b> · ran <b>just now</b> · looked at <b>12,480</b> rows · <b>6.1 s</b> · 2 employees · 23 cycles';b.classList.remove('loading');$('.lbl',b).textContent='Run';renderCycles();toast('crit','Run #129 · 3 issue cycles','Open first',()=>openCycle(1));}},reduced?60:480);}
+function modFlows(v,m){const isVan=m.id==='van';const flows=isVan?[['app.day-cycle','login → day begin → events sync','warn','flaky'],['cycle.reconcile','validation · 2 sources','crit','fail'],['mapping.beat-vs-van','validation','ok','pass'],['dashboard.smoke','42 endpoints','ok','pass'],['security.idor-sweep','generated · 61 endpoints','neutral','draft'],['load.day-begin','k6 · 50 vu','neutral','draft']]:[[m.name.toLowerCase().replace(/\s.*/,'')+'.smoke','generated from catalog','ok','pass'],[m.name.toLowerCase().replace(/\s.*/,'')+'.regression','release set','ok','pass']];
+ v.innerHTML=`<div class="flow"><div class="card flist" style="padding:8px"><div class="list">${flows.map((f,i)=>`<div class="li ${i?'':'on'}"><span class="grow"><b>${f[0]}</b><br><span class="dim" style="font-size:11px">${f[1]}</span></span>${B(f[2],f[3])}</div>`).join('')}<div class="li" style="justify-content:center;color:var(--accent);font-weight:500">+ New flow</div></div></div>
+ <div><div class="fhead"><h3>${flows[0][0]}</h3><span class="chip"><span class="mono">companyId</span></span><span class="chip"><span class="mono">employeeId</span></span><span class="badge neutral" id="flowState">idle</span><div class="right"><button class="btn ghost sm">Matrix run</button><button class="btn ghost sm">Export ▾</button><button class="btn ghost sm">YAML</button><button class="btn outline sm">Share</button><button class="btn primary sm" id="flowRun"><span class="spin"></span>Run flow</button></div></div>
+ <div class="tl" id="tl">
+  <div class="step"><i class="node">1</i><div class="hd"><span class="method post">POST</span><span class="path">check/login</span><span class="dur"></span></div><div class="bd"><div class="kv"><span class="k">extract</span>token ← $.data.token</div><div class="kv"><span class="k">assert</span>status 200 · schema LoginResponse<span class="badge neutral">—</span></div></div></div><div class="dl"></div>
+  <div class="step"><i class="node">2</i><div class="hd"><span class="method get">GET</span><span class="path">master/appConfig</span><span class="dur"></span></div><div class="bd"><div class="kv"><span class="k">assert</span>status 200 · $.usesVanSales = true<span class="badge neutral">—</span></div></div></div><div class="dl"></div>
+  <div class="step"><i class="node">3</i><div class="hd"><span class="method post">POST</span><span class="path">day/begin</span><span class="dur"></span></div><div class="bd"><div class="kv"><span class="k">extract</span>sessionId ← $.data.sessionId</div><div class="kv"><span class="k">assert</span>status 201 · $.data.vanId = 5512<span class="badge neutral">—</span></div></div><div class="detail"><div class="code"><span class="h">response</span>{
+  "status": 201,
+  "data": {
+    "sessionId": "8f2c…a1",
+    <span class="bad">"vanId": 5498</span>
+  }
+}</div><div class="code"><span class="h">assertion</span>$.data.vanId
+<span class="good">expected 5512</span>
+<span class="bad">actual   5498</span>
+
+Van mapping for user 003526
+changed 2026-08-27
+(VanDistributorMapping)</div></div></div><div class="dl"></div>
+  <div class="step"><i class="node">4</i><div class="hd"><span class="method get">GET</span><span class="path">data/activity</span><span class="dur"></span></div><div class="bd"><div class="kv"><span class="k">assert</span>status 200 · $.plan.routes.length ≥ 1<span class="badge neutral">—</span></div></div></div><div class="dl"></div>
+  <div class="step"><i class="node">5</i><div class="hd"><span class="method sql">SQL</span><span class="path">fa_txn · VanDayStocks where SessionId = {{sessionId}}</span><span class="dur"></span></div><div class="bd"><div class="kv"><span class="k">assert</span>rows = 1 · IsDayStartStock = 1 · IsApproved = 1<span class="badge neutral">—</span></div></div></div>
+ </div><p class="hint">Steps are the app's real sequence. The last step is a DB side-effect check on the same run. Step 3 is scripted to fail so the failure state is visible.</p></div></div>`;
+ const tl=$('#tl');const layout=()=>{const steps=$$('.step',tl),dls=$$('.dl',tl);dls.forEach((dl,i)=>{const a=steps[i],b=steps[i+1];if(!b)return;const top=a.offsetTop+36,h=b.offsetTop+12-top;dl.style.top=top+'px';dl.style.height=h+'px';dl.style.setProperty('--h',h+'px');});};new ResizeObserver(layout).observe(tl);layout();
+ $('#flowRun').onclick=()=>runFlow(isVan);}
+function runFlow(fail){const tl=$('#tl'),b=$('#flowRun'),st=$('#flowState');if(!tl||b.classList.contains('loading'))return;const steps=$$('.step',tl),dls=$$('.dl',tl);steps.forEach(s=>{s.className='step';$('.dur',s).textContent='';$$('.badge',s).forEach(x=>{x.className='badge neutral';x.textContent='—';});});dls.forEach(d=>d.className='dl');b.classList.add('loading');st.className='badge running';st.textContent='running';$('#runBtn').classList.add('loading');
+ const plan=fail?[['pass',412],['pass',188],['fail',377],['skip',0],['skip',0]]:[['pass',210],['pass',120],['pass',260],['pass',190],['pass',80]];let i=0;const gap=reduced?60:700;
+ (function next(){if(i>=steps.length)return done('pass');const s=steps[i];s.classList.add('running');if(dls[i])dls[i].classList.add('live');
+  setTimeout(()=>{const [v,ms]=plan[i];s.classList.remove('running');s.classList.add(v);if(v!=='skip'){$('.dur',s).textContent=ms+' ms';$$('.badge',s).forEach(x=>{x.className='badge '+(v==='pass'?'ok':'crit');x.textContent=v;});}
+   if(v==='fail'){if(dls[i])dls[i].className='dl bad';for(let k=i+1;k<steps.length;k++){steps[k].classList.add('skip');$$('.badge',steps[k]).forEach(x=>x.textContent='skipped');}return done('fail');}
+   if(dls[i])dls[i].className='dl done';i++;next();},gap);})();
+ function done(v){b.classList.remove('loading');$('#runBtn').classList.remove('loading');st.className='badge '+(v==='fail'?'crit':'ok');st.textContent=v==='fail'?'failed at step 3':'passed';toast(v==='fail'?'crit':'ok',v==='fail'?'app.day-cycle failed at day/begin':'flow passed');}}
+function modLoad(v,m){v.innerHTML=`<div class="inbar"><div class="field"><label>Target</label><div class="seg"><button class="on">Flow · app.day-cycle</button><button>Endpoint</button></div></div><div class="field"><label>Virtual users</label><div class="input" style="min-width:90px"><input value="50"></div></div><div class="field"><label>Duration</label><div class="input" style="min-width:90px"><input value="2m"></div></div><div class="field"><label>Ramp</label><div class="input" style="min-width:90px"><input value="30s"></div></div><div class="field"><label>Env</label><div class="seg"><button class="on">Load</button><button disabled title="Prod is blocked for load">Prod ⃠</button></div></div><span style="flex:1"></span><button class="btn ghost sm">Export k6 script</button></div>
+ <div class="tiles"><div class="tile"><div><div class="eyebrow">p50</div><div class="num">${Math.round(m.p95*.45)||120}<small>ms</small></div></div></div><div class="tile ${m.p95>400?'warn':''}"><i class="stripe"></i><div><div class="eyebrow">p95</div><div class="num">${m.p95||210}<small>ms</small></div><div class="delta">threshold 500 ms</div></div></div><div class="tile ok"><i class="stripe"></i><div><div class="eyebrow">Error rate</div><div class="num">0.2<small>%</small></div></div></div><div class="tile"><div><div class="eyebrow">Throughput</div><div class="num">184<small>req/s</small></div></div></div></div>
+ <div class="card"><h3>Latency over the run</h3><div class="strip" style="height:80px;align-items:flex-end;gap:3px">${Array.from({length:60},(_,i)=>{const h=30+Math.round(40*Math.abs(Math.sin(i/6)))+(i>44?15:0);return `<i class="${h>78?'warn':'ok'}" style="height:${h}%;width:8px"></i>`;}).join('')}</div><p class="hint">Every normal run already records p95 per endpoint. This tab is for a deliberate load test: k6 export in v1, in-tool run in v1.5. Prod is blocked at the adapter.</p></div>`;}
+/* ---- data & sync pack ---- */
+let syncFlow='F5',syncSeg='rules';
+function flowMap(){const N=SYNC.sources,E=SYNC.edges,W=160,H=44;const pos=Object.fromEntries(N.map(n=>[n.id,n]));
+ const path=e=>{const a=pos[e.from],b=pos[e.to];if(e.from===e.to){return `M${a.x+W},${a.y+H-6} C${a.x+W+90},${a.y+H+40} ${a.x-40},${a.y+H+40} ${a.x+8},${a.y+H}`;}const x1=a.x+W,y1=a.y+H/2,x2=b.x,y2=b.y+H/2,mx=(x1+x2)/2;return `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;};
+ const mid=e=>{const a=pos[e.from],b=pos[e.to];if(e.from===e.to)return [a.x+W/2,a.y+H+30];return [(a.x+W+b.x)/2,(a.y+b.y+H)/2];};
+ return `<svg viewBox="0 0 700 230" preserveAspectRatio="xMidYMid meet">${E.map(e=>`<path class="edge ${e.v}" data-e="${e.id}" d="${path(e)}"><title>${e.label}</title></path>`).join('')}
+ ${E.map(e=>{const [x,y]=mid(e),w=e.label.length*6.4+16;return `<g class="elabel ${e.v}" transform="translate(${x-w/2},${y-10})"><rect width="${w}" height="20"/><text x="${w/2}" y="10">${e.label}</text></g>`;}).join('')}
+ ${N.map(n=>`<g class="node" data-n="${n.id}" transform="translate(${n.x},${n.y})"><rect width="${W}" height="${H}"/><text x="12" y="19">${n.name}</text><text class="sub" x="12" y="35">${n.db}</text></g>`).join('')}</svg>`;}
+function syncOverview(v,m){
+ v.innerHTML=`<div class="tiles" style="grid-template-columns:1.2fr repeat(4,1fr)">
+  <div class="tile"><div style="flex:1"><div class="eyebrow">Health · checks passing</div><div class="score"><b data-count="97">0</b><span>.2 %</span></div><div class="delta down">▲ 0.4 vs last week</div></div><div class="spark">${[60,62,58,70,66,72,75,71,80,78,84,90,88,92].map((h,i)=>`<i style="height:${h}%" class="${i>10?'hi':''}"></i>`).join('')}</div></div>
+  <div class="tile crit" data-nav="module:sync:validations"><i class="stripe"></i><div><div class="eyebrow">Missing</div><div class="num"><span data-count="392">0</span></div><div class="delta">F5 365 · F1 14 · F5b 13</div></div></div>
+  <div class="tile warn" data-nav="module:sync:validations"><i class="stripe"></i><div><div class="eyebrow">Mismatch</div><div class="num"><span data-count="9">0</span></div><div class="delta">order value ≠ sale value</div></div></div>
+  <div class="tile warn" data-nav="module:sync:validations"><i class="stripe"></i><div><div class="eyebrow">Aggregate Δ</div><div class="num"><span data-count="2">0</span><small>vans</small></div><div class="delta">Σ per van</div></div></div>
+  <div class="tile ok" data-nav="module:sync:validations"><i class="stripe"></i><div><div class="eyebrow">Duplicates</div><div class="num"><span data-count="3">0</span></div><div class="delta">resolved 1d ago</div></div></div></div>
+ <div class="fmap"><div style="display:flex;align-items:center;gap:10px;margin-bottom:4px"><h3 style="margin:0;font-size:var(--fs-md)">Where rows travel</h3><span class="dim" style="font-size:var(--fs-sm)">rows enter at FA · edge width = volume · color = status · click an edge for its hops, a source for its issues</span><span class="chip" style="margin-left:auto">looked at <span class="mono">12,480</span> rows · <span class="mono">14:02</span></span></div>${flowMap()}
+ <div class="legend"><span><i style="background:var(--ok)"></i>in sync</span><span><i style="background:var(--warn)"></i>warnings</span><span><i style="background:var(--crit)"></i>failing</span><span><i style="background:var(--hairline)"></i>coming soon</span></div></div>
+ <div class="cols"><div class="card"><h3>Open issues by severity</h3><div class="list">${SYNC.issues.filter(i=>i[6]!=='resolved').map(i=>`<div class="li" data-nav="module:sync:validations"><span class="sev ${i[0]}"><i></i>${i[0]}</span><span class="grow"><span class="mono dim">${i[2]}</span> ${i[3]}</span><span class="mono">${i[4]}</span></div>`).join('')}</div></div>
+ <div class="card"><h3>Sources</h3><div class="list">${SYNC.sources.map(s=>`<div class="li"><i class="dot ${s.id==='unify'?'none':'ok'}"></i><span class="grow"><b>${s.name}</b> <span class="dim">· ${s.db}</span></span>${s.id==='unify'?B('none','not connected'):B('ok','read-only · p95 '+[140,220,310][SYNC.sources.indexOf(s)]+' ms')}</div>`).join('')}</div>
+ <p class="hint" style="margin-top:8px">Rows are compared in FA Lens, never with cross-server SQL. Row cap and time cap are shown on every result.</p></div></div>`;
+ countUp();$$('.fmap .edge',v).forEach(e=>{if(e.classList.contains('soon'))return;e.onclick=()=>{syncFlow=e.dataset.e;nav('module','sync','flows');};});
+ $$('.fmap .node',v).forEach(n=>n.onclick=()=>{syncSeg='issues';nav('module','sync','validations');toast('ok',`Issues filtered to source · ${SYNC.sources.find(s=>s.id===n.dataset.n).name}`);});}
+function syncFlows(v,m){const f=SYNC.flows[syncFlow];
+ v.innerHTML=`<div class="flow" style="grid-template-columns:230px 1fr"><div class="card flist" style="padding:8px"><div class="list">${Object.entries(SYNC.flows).map(([k,x])=>{const e=SYNC.edges.find(e=>e.id===k);return `<div class="li ${k===syncFlow?'on':''}" data-f="${k}"><span class="grow"><b>${k}</b><br><span class="dim" style="font-size:11px">${x.name.split('· ')[1]}</span></span>${B(e.v,e.fails?e.fails+' fails':'ok')}</div>`;}).join('')}<div class="li" style="justify-content:center;color:var(--accent);font-weight:500">+ New chain</div></div></div>
+ <div><div class="fhead"><h3>${f.name}</h3><span class="chip">scope <span class="mono">Mars · 234474 · Aug</span></span><span class="badge ${SYNC.edges.find(e=>e.id===syncFlow).v}" id="flowState">${SYNC.edges.find(e=>e.id===syncFlow).fails?'failing':'in sync'}</span><div class="right"><button class="btn ghost sm">Export ▾</button><button class="btn outline sm">Share</button><button class="btn primary sm" id="flowRun"><span class="spin"></span>Run chain</button></div></div>
+ <div class="hops" id="hops">${f.hops.map((h,i)=>(i?`<div class="gap"><span class="drop ${h.v}" data-hop="${i}">−${h.drop.toLocaleString()}</span><span class="why">${h.why}</span></div>`:'')+`<div class="hop ${h.v} ${i===f.hops.length-1?'on':''}" data-hop="${i}"><div class="src">${h.src} · hop ${i+1}</div><div class="tbl" title="${h.tbl}">${h.tbl}</div><div class="cnt">${h.cnt.toLocaleString()}</div><div class="dim" style="font-size:11px">${h.note||'rows that made it'}</div><div class="bar"><i style="width:${Math.round(h.cnt/f.hops[0].cnt*100)}%"></i></div></div>`).join('')}</div>
+ <p class="hint" style="margin:0 0 12px">Rows enter on the left. Each gap says how many fell out at that hop and the plain-language cause. Click a gap to see exactly those rows.</p>
+ <div class="card" style="margin-bottom:12px"><h3>Rules in this chain</h3><div class="tablewrap" style="box-shadow:none"><table class="grid" style="min-width:0"><thead><tr><th>Rule</th><th>Type</th><th>Severity</th><th class="num">Fails</th><th>Cause</th><th></th></tr></thead><tbody>${f.rules.map((r,i)=>`<tr class="reveal ${r.fails?(r.sev==='critical'?'crit':'warn'):''}" style="--i:${i}" data-r="${r.id}"><td>${r.name}</td><td><span class="rtype">${r.type}</span></td><td><span class="sev ${r.sev}"><i></i>${r.sev}</span></td><td class="num">${r.fails}</td><td><span class="cause ${r.fails?(r.sev==='critical'?'crit':'warn'):'ok'}">${r.cause}</span></td><td style="text-align:right"><span class="dim" style="font-size:11px">open rows ›</span></td></tr>`).join('')}</tbody></table></div></div>
+ <div class="banner info" id="truncNote">Showing failing rows for <b>&nbsp;${f.rules[0].name}&nbsp;</b> · <span class="mono">${f.rules[0].fails}</span> rows · evidence expires in <span class="mono">6h</span><button class="btn ghost sm">Export CSV</button></div>
+ <div class="tablewrap"><table class="grid" style="min-width:900px"><thead><tr><th>Attendance</th><th>Date</th><th class="num">Van</th><th>Rule</th><th>Source value</th><th>Target value</th><th>Δ</th><th>Severity</th><th>Cause</th><th>Status</th></tr></thead><tbody>${SYNC.failures.map((r,i)=>`<tr class="reveal ${r[8]==='critical'?'crit':r[8]==='high'?'warn':''}" style="--i:${i}" data-i="${i}"><td><div class="ent"><span class="n mono copy" title="copy">#${r[0]}</span><span class="m">guid ${r[1]}</span></div></td><td class="mono">${r[2]}</td><td class="num">${r[3]}</td><td class="mono dim" style="font-size:11px">${r[4]}</td><td class="mono">${r[5]}</td><td class="mono ${r[6]==='—'?'faint':''}">${r[6]}</td><td class="mono ${r[7]!=='0.00'?'diffc':''}">${r[7]}</td><td><span class="sev ${r[8]}"><i></i>${r[8]}</span></td><td><span class="cause ${r[8]==='critical'?'crit':r[8]==='high'?'warn':'info'}">${r[9]}</span></td><td><select class="sel" onclick="event.stopPropagation()"><option ${r[10]==='new'?'selected':''}>new</option><option ${r[10]==='acknowledged'?'selected':''}>acknowledged</option><option ${r[10]==='resolved'?'selected':''}>resolved</option></select></td></tr>`).join('')}</tbody></table></div>
+ <p class="hint">Click a row for the evidence panel: identity block, field-by-field source vs target, copy ids, export. Evidence is time-boxed to the run; expired evidence says so and offers a re-run.</p></div></div>`;
+ $$('.flist .li[data-f]',v).forEach(el=>el.onclick=()=>{syncFlow=el.dataset.f;renderPage();});
+ $$('.hop,.gap .drop',v).forEach(el=>el.onclick=()=>{$$('.hop',v).forEach(h=>h.classList.remove('on'));const h=$(`.hop[data-hop="${el.dataset.hop}"]`,v);h&&h.classList.add('on');toast('ok',`Rows filtered to hop ${+el.dataset.hop+1}`);});
+ $$('tbody tr[data-i]',v).forEach(tr=>tr.onclick=()=>openEvidence(SYNC.failures[+tr.dataset.i],tr));
+ $$('.copy',v).forEach(c=>c.onclick=e=>{e.stopPropagation();toast('ok','Copied '+c.textContent);});
+ $('#flowRun').onclick=()=>runChain(v);}
+function runChain(v){const b=$('#flowRun');if(b.classList.contains('loading'))return;b.classList.add('loading');$('#runBtn').classList.add('loading');const hops=$$('.hop',v),gaps=$$('.gap .drop',v);hops.forEach(h=>{$('.bar i',h).style.width='0';});$('#flowState').className='badge running';$('#flowState').textContent='running';
+ let i=0;(function next(){if(i>=hops.length){b.classList.remove('loading');$('#runBtn').classList.remove('loading');const e=SYNC.edges.find(e=>e.id===syncFlow);$('#flowState').className='badge '+e.v;$('#flowState').textContent=e.fails?'failing':'in sync';toast(e.v==='crit'?'crit':'ok',`${syncFlow} finished · ${e.fails} fails`);return;}const h=hops[i];h.classList.add('spot');setTimeout(()=>{$('.bar i',h).style.width=h.dataset.w||getComputedStyle(h).getPropertyValue('--w')||(Math.round(SYNC.flows[syncFlow].hops[i].cnt/SYNC.flows[syncFlow].hops[0].cnt*100)+'%');i++;next();},reduced?60:700);})();}
+function openEvidence(r,tr){$$('.grid tbody tr.sel').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel');const missing=r[6]==='—';
+ S.stack=[{crumb:'#'+r[0],title:`Attendance <span class="mono">#${r[0]}</span> <span class="sev ${r[8]}"><i></i>${r[8]}</span>`,html:`<div class="evid">
+ <div class="expire"><span>evidence from run <span class="mono">#128</span></span><span class="bar"><i></i></span><span>expires in <span class="mono">6h 12m</span></span></div>
+ <div class="idblock"><span class="k">Attendance</span><span class="v copy">${r[0]}</span><span class="k">Guid</span><span class="v copy">${r[1]}0c4e-91ab</span><span class="k">Company</span><span class="v">234474 · Mars Wrigley VN</span><span class="k">Date</span><span class="v">${r[2]}</span><span class="k">Van</span><span class="v">${r[3]}</span><span class="k">Rule</span><span class="v">${r[4]}</span><span class="k">Chain</span><span class="v">${syncFlow} · hop ${missing?2:3}</span></div>
+ <div class="cmp"><table><thead><tr><th>Field</th><th>fa.Attendances</th><th>${missing?'dms.SecondarySalesOrder':'dms.SecondarySalesOrder'}</th></tr></thead><tbody>
+  <tr><td>Id / FAOrderId</td><td>${r[0]}</td><td>${missing?'<span class="faint">no row</span>':'55871'}</td></tr>
+  <tr class="${missing?'':'d'}"><td>Sale value</td><td>${missing?'1,240.00':r[5]}</td><td>${missing?'<span class="faint">—</span>':r[6]}</td></tr>
+  <tr class="${missing||r[7].includes('qty')?'d':''}"><td>Units</td><td>12</td><td>${missing?'<span class="faint">—</span>':r[7].includes('qty')?'11':'12'}</td></tr>
+  <tr><td>Invoice no</td><td>INV-0091</td><td>${missing?'<span class="faint">—</span>':'INV-0091'}</td></tr>
+  <tr><td>Device time</td><td>10:12:41</td><td>${missing?'<span class="faint">—</span>':'10:12:41'}</td></tr></tbody></table></div>
+ <div class="banner ${missing?'warn':'info'}" style="margin:0">${missing?'Read: the attendance is valid and productive in FA but no DMS order carries its id. Likely an unprocessed FieldEvent or an integration retry gap.':'Read: the order exists but its value differs from the FA sale. Check the price list version used by DMS on that date.'}</div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn accent sm">Open both rows (read-only)</button><button class="btn ghost sm">Export this finding</button><button class="btn ghost sm">Create bug</button><button class="btn ghost sm">Explain</button></div>
+ <div class="idblock" style="grid-template-columns:1fr"><span class="k">If this evidence had expired</span><span style="font-size:var(--fs-sm)">Panel shows the identity block from the ledger, the source↔target grid greyed with "evidence expired · re-run to refresh", and a primary <b>Re-run this rule</b> button. Never a blank panel.</span></div></div>`,bind:el=>$$('.copy',el).forEach(c=>c.onclick=()=>toast('ok','Copied '+c.textContent))}];openPanel();}
+function syncValidations(v,m){const rules=Object.values(SYNC.flows).flatMap(f=>f.rules);
+ v.innerHTML=`<div class="inbar"><div class="seg"><button class="${syncSeg==='rules'?'on':''}" data-s="rules">Rules <span class="mono">${rules.length}</span></button><button class="${syncSeg==='issues'?'on':''}" data-s="issues">Issues <span class="mono">${SYNC.issues.filter(i=>i[6]!=='resolved').length}</span></button></div>
+ ${syncSeg==='issues'?`<div class="seg sm">${['all','critical','high','medium'].map((k,i)=>`<button class="${i?'':'on'}">${k}</button>`).join('')}</div><div class="seg sm">${['all','Missing','Mismatch','Duplicate','Aggregate'].map((k,i)=>`<button class="${i?'':'on'}">${k}</button>`).join('')}</div><div class="seg sm">${['all sources','fa','report','dms'].map((k,i)=>`<button class="${i?'':'on'}">${k}</button>`).join('')}</div>`:`<div class="input" style="min-width:220px"><input placeholder="search rules…"></div>`}
+ <span style="flex:1"></span>${syncSeg==='rules'?'<button class="btn ghost sm">Import JSON</button><button class="btn accent sm">New rule</button>':'<button class="btn ghost sm">Export</button>'}</div>
+ ${syncSeg==='rules'?`<div class="card">${rules.map(r=>`<div class="rulecard"><span class="rtype">${r.type}</span><span class="nm">${r.name}</span><div style="display:flex;gap:10px;align-items:center"><span class="sev ${r.sev}"><i></i>${r.sev}</span>${r.fails?B(r.sev==='critical'?'crit':'warn',r.fails+' fails'):B('ok','pass')}<span class="toggle on" title="enabled"></span><button class="btn ghost sm">Preview SQL</button></div><span class="meta">${r.id} · scope companyId + date · last run 14:02 · 12,480 rows</span></div>`).join('')}</div>
+ <div class="card" style="margin-top:12px"><h3>New rule = one JSON object</h3><div class="code" style="white-space:pre">{
+  "id": "f5-att-order-presence", "type": "presence", "severity": "critical", "flow": "F5",
+  "source": { "datasource": "fa",  "table": "dbo.Attendances", "validity": "IsValid = 1 AND IsVanSales = 1 AND Productive = 1", "dateColumn": "CreatedAt" },
+  "target": { "datasource": "dms", "table": "tran.SecondarySalesOrder", "validity": "CompanyId = :companyId" },
+  "join":   [ { "sourceCol": "Id", "targetCol": "FAOrderId" } ],
+  "evidenceColumns": [ "Id", "Guid", "InvoiceNo", "DeviceTime", "VanId" ]
+}</div><p class="hint">Five rule types cover every sync check: uniqueness · presence · field_match · aggregate_match · chain. The wizard previews the generated SQL and a 10-row sample before save. Rules are versioned in the pack.</p></div>`
+ :`<div class="tablewrap"><table class="grid" style="min-width:820px"><thead><tr><th>Severity</th><th>Category</th><th>Chain</th><th>Where</th><th class="num">Rows</th><th>First seen</th><th>Status</th></tr></thead><tbody>${SYNC.issues.map((i,k)=>`<tr class="reveal ${i[6]==='resolved'?'':i[0]==='critical'?'crit':i[0]==='high'?'warn':''}" style="--i:${k}"><td><span class="sev ${i[0]}"><i></i>${i[0]}</span></td><td><span class="cause ${i[1]==='Missing'||i[1]==='Duplicate'?'crit':'warn'}">${i[1]}</span></td><td class="mono">${i[2]}</td><td class="mono" style="font-size:11.5px">${i[3]}</td><td class="num">${i[4]}</td><td class="mono dim">${i[5]}</td><td><select class="sel">${['new','acknowledged','resolved'].map(s=>`<option ${s===i[6]?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join('')}</tbody></table></div><p class="hint">Flat worklist across every chain and rule. Status is workflow only; it never writes to a source. Click a row to open its failing rows in the chain view.</p>`}`;
+ $$('[data-s]',v).forEach(b=>b.onclick=()=>{syncSeg=b.dataset.s;renderPage();});
+ if(syncSeg==='issues')$$('tbody tr',v).forEach((tr,k)=>tr.onclick=e=>{if(e.target.tagName==='SELECT')return;syncFlow=SYNC.issues[k][2];nav('module','sync','flows');});}
+function modStub(v,m){v.innerHTML=`<div class="card"><h3>${TABS.find(t=>t[0]===S.tab)[1]}</h3><p class="dim">Described in <span class="mono">screens.md</span>. Same tokens, table, and panel as the tabs you have seen.</p></div>`;}
+
+/* ================= FOCUS PANEL ================= */
+const body=$('#body'),pbody=$('#pbody'),pcrumbs=$('#pcrumbs'),ptitle=$('#ptitle');
+function openPanel(){body.classList.add('panel-open');paint();}
+function paint(){const top=S.stack[S.stack.length-1];if(!top)return;const base=S.view==='module'?[COMPANY.name,MODS.find(x=>x.id===S.mod).name,TABS.find(t=>t[0]===S.tab)[1]]:[COMPANY.name];
+ pcrumbs.innerHTML=[...base,...S.stack.map(s=>s.crumb)].map((c,i,a)=>i===a.length-1?`<b>${c}</b>`:`<a data-up="${a.length-1-i}">${c}</a>`).join('<span>›</span>');
+ $$('a[data-up]',pcrumbs).forEach(a=>a.onclick=()=>{const up=+a.dataset.up;if(up>=S.stack.length){closePanel();return;}for(let k=0;k<up;k++)S.stack.pop();paint();});
+ ptitle.innerHTML=top.title;const old=$('.lvl',pbody);const nw=document.createElement('div');nw.className='lvl';nw.innerHTML=top.html;if(old){old.classList.add('out');setTimeout(()=>old.remove(),reduced?0:200);}pbody.appendChild(nw);top.bind&&top.bind(nw);}
+function openCycle(i){const c=CYCLES[i];$$('#cyclesBody tr').forEach(r=>r.classList.toggle('sel',+r.dataset.i===i));S.stack=[{crumb:'Cycle '+c.no,title:`Cycle ${c.no} ${B(c.crit?'crit':'ok',c.crit?c.n+' mismatch':'ok')}`,html:cycleHtml(c),bind:el=>$$('tr[data-p]',el).forEach(tr=>tr.onclick=()=>openProduct(c,tr.dataset.p))}];openPanel();}
+function cycleHtml(c){const rows=c.crit?[['Limca PET 150 ML','106547',12,0,5,8,7,'crit',-1],['Snickers 45g','104211',24,6,10,22,20,'crit',2],['Orbit 14g','101887',30,0,12,17,18,'crit',-1],['Twix 50g','104230',18,0,7,11,11,'ok',0],['KitKat 4F','103902',20,4,9,15,15,'ok',0]]:[['Limca PET 150 ML','106547',12,0,4,8,8,'ok',0],['Snickers 45g','104211',24,0,9,15,15,'ok',0]];
+ return `<div class="sums"><span class="chip">${c.date}</span><span class="chip">van <span class="mono">${c.van}</span></span><span class="chip">${c.start}</span><span class="chip">start <span class="mono">1,204</span></span><span class="chip">additional <span class="mono">86</span></span><span class="chip">sale <span class="mono">512</span></span><span class="chip">end <span class="mono">778</span></span><span class="chip">expected <span class="mono">778</span></span></div>
+ <div class="tablewrap"><table class="grid mini" style="min-width:0"><thead><tr><th>Product</th><th class="num">Start</th><th class="num">Add</th><th class="num">Sale</th><th class="num">End</th><th class="num">Calc</th><th>Flag</th></tr></thead><tbody>${rows.map(r=>`<tr data-p="${r[1]}" class="${r[7]==='crit'?'crit':''}"><td><div class="ent"><span class="n">${r[0]}</span><span class="m">ID ${r[1]}</span></div></td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td class="num">${r[4]}</td><td class="num">${r[5]}</td><td class="num">${r[6]}</td><td>${r[7]==='crit'?B('crit','mismatch Δ '+(r[8]>0?'+':'')+r[8]):B('ok','match')}</td></tr>`).join('')}</tbody></table></div>
+ <p class="hint">Click a product for its event trace. <span class="kbd">→</span> also works.</p><div style="margin-top:12px;display:flex;gap:8px"><button class="btn accent sm">Download this cycle</button><button class="btn ghost sm">Rerun cycle</button></div>`;}
+function openProduct(c,pid){S.stack.push({crumb:'Product '+pid,title:`Limca PET 150 ML <span class="mono dim" style="font-size:12px">${pid}</span>`,html:`<div class="sums"><span class="chip">cycle <span class="mono">${c.no}</span></span><span class="chip">batch <span class="mono">—</span></span><span class="chip">std factor <span class="mono">12</span></span></div>
+ <div class="trace"><div class="tev"><div>StockofDayStart <span class="m">#77120931</span></div><div class="m">12 units · VanDayStocks #4471203 · approved</div><span class="t">08:41</span></div>
+ <div class="tev sale"><div>Invoice <span class="m">INV-0091</span> · Sharma General Store</div><div class="m">2 units · attendance #90211 · outlet ID 5560213</div><span class="t">10:12</span></div>
+ <div class="tev sale"><div>Invoice <span class="m">INV-0094</span> · Anand Kirana</div><div class="m">3 units · attendance #90218 · outlet ID 5560877</div><span class="t">12:47</span></div>
+ <div class="tev end"><div>StockofDayEnd <span class="m">#77129884</span></div><div class="m">8 units · Complete · isCarryForward = 1 · approved</div><span class="t">18:05</span></div></div>
+ <div class="diff"><span class="k">expected end</span><span class="k">actual end</span><span class="k">Δ</span><span class="mono">12 + 0 − 5 = <b>7</b></span><span class="mono">8</span><span class="del">+1</span></div>
+ <p class="hint">Read: one more unit on the van than the sales explain. Either a sale event is unprocessed (FieldEvents.IsProcessed = 0) or the day-end count is wrong.</p>
+ <div style="margin-top:12px;display:flex;gap:8px"><button class="btn accent sm">Open in DB (read-only)</button><button class="btn ghost sm">Create bug</button><button class="btn ghost sm">Explain</button></div>`});paint();}
+function back(){if(!S.stack.length)return;S.stack.pop();if(!S.stack.length)closePanel();else paint();}
+function closePanel(silent){S.stack=[];body.classList.remove('panel-open');$$('.grid tbody tr.sel').forEach(r=>r.classList.remove('sel'));setTimeout(()=>{pbody.innerHTML='';},silent||reduced?0:400);}
+$('#pback').onclick=back;$('#pclose').onclick=()=>closePanel();
+
+/* ================= helpers ================= */
+function countUp(){$$('[data-count]').forEach(el=>{const v=+el.dataset.count;if(reduced){el.textContent=v;return;}const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/600),e=1-Math.pow(1-p,3);el.textContent=Math.round(v*e);if(p<1)requestAnimationFrame(f);})(t0);});}
+function strip(el){if(!el)return;const vs='ok ok ok ok warn ok ok ok crit ok ok ok ok ok ok warn ok ok ok ok ok ok ok ok crit ok ok ok ok crit'.split(' ');el.innerHTML=vs.map((v,i)=>`<i class="${v}${i===29?' last':''}" title="#${99+i} · ${v}"></i>`).join('');}
+function toast(kind,text,action,fn){const t=document.createElement('div');t.className='toast';t.innerHTML=`<i class="ic" style="background:var(--${kind})"></i><span>${text}</span>${action?`<a>${action}</a>`:''}`;if(action)$('a',t).onclick=()=>{fn&&fn();t.remove();};$('#toasts').appendChild(t);setTimeout(()=>{t.style.transition='opacity 160ms';t.style.opacity=0;setTimeout(()=>t.remove(),180);},action?7000:4500);}
+
+/* ================= PALETTE ================= */
+const scrim=$('#scrim'),palIn=$('#palIn'),palList=$('#palList');
+const PAL=[{g:'Actions',items:[['▶','Run all · Mars Wrigley VN','⌘↵',()=>{nav('company');setTimeout(()=>$('#runBtn').click(),150);}],['▶','Run app.day-cycle','flow',()=>{nav('module','van','flows');setTimeout(()=>$('#flowRun').click(),200);}],['＋','New flow from record','',()=>nav('module','van','flows')]]},
+ {g:'Modules',items:MODS.map(m=>['▣',m.name,summary(m),()=>nav('module',m.id,'overview')])},
+ {g:'Endpoints',items:[['POST','day/begin','3 cases · 2 flows',()=>nav('module','van','apis')],['GET','journey/employeeRoutesV2','no tests',()=>nav('module','van','apis')],['POST','api/vansales/registry','changed · no tests',()=>nav('module','van','apis')]]},
+ {g:'Companies',items:[['◎','Mars Wrigley VN','234474',()=>nav('company')],['◎','Big Tree Zambia','193008',()=>toast('ok','Scope changed to Big Tree Zambia · 193008')]]}];
+function renderPal(q){q=(q||'').toLowerCase();let groups=PAL.map(g=>({g:g.g,items:g.items.filter(it=>!q||(it[1]+' '+it[2]).toLowerCase().includes(q))})).filter(g=>g.items.length);
+ if(/^\d+$/.test(q))groups.sort((a,b)=>(b.g==='Companies')-(a.g==='Companies'));else if(q.includes('/'))groups.sort((a,b)=>(b.g==='Endpoints')-(a.g==='Endpoints'));else if(q.startsWith('run'))groups.sort((a,b)=>(b.g==='Actions')-(a.g==='Actions'));
+ palList.innerHTML=groups.map(g=>`<div class="grp">${g.g}</div>`+g.items.map(it=>`<div class="it"><span class="${/^(GET|POST)$/.test(it[0])?'method '+it[0].toLowerCase():''}">${it[0]}</span><span class="${g.g==='Endpoints'?'mono':''}">${it[1]}</span><span class="meta">${it[2]}</span></div>`).join('')).join('')||'<div class="grp">No matches</div>';
+ const its=$$('.it',palList);its.forEach((el,i)=>{el.classList.toggle('on',i===0);el.onclick=()=>{closePal();groups.flatMap(g=>g.items)[i][3]();};});}
+function openPal(){scrim.classList.add('open');palIn.value='';renderPal('');palIn.focus();}function closePal(){scrim.classList.remove('open');}
+palIn.oninput=()=>renderPal(palIn.value);scrim.onclick=e=>{if(e.target===scrim)closePal();};
+document.addEventListener('keydown',e=>{const meta=e.metaKey||e.ctrlKey;
+ if(meta&&e.key.toLowerCase()==='k'){e.preventDefault();scrim.classList.contains('open')?closePal():openPal();return;}
+ if(meta&&e.key==='.'){e.preventDefault();$('#themeBtn').click();return;}
+ if(meta&&e.key==='Enter'){e.preventDefault();const b=$('#runBtn');b&&b.click();return;}
+ if(e.key==='Escape'){if(scrim.classList.contains('open'))closePal();else if($('#scen').classList.contains('open'))$('#scen').classList.remove('open');else if(S.stack.length)back();return;}
+ if(scrim.classList.contains('open')){const its=$$('.it',palList),cur=its.findIndex(i=>i.classList.contains('on'));if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const n=(cur+(e.key==='ArrowDown'?1:-1)+its.length)%its.length;its.forEach((i,k)=>i.classList.toggle('on',k===n));}else if(e.key==='Enter'){its[cur]&&its[cur].click();}return;}
+ if(e.target.matches('input,[contenteditable]'))return;
+ if(/^[1-9]$/.test(e.key)&&S.view==='module'){const t=TABS[+e.key-1];if(t){S.tab=t[0];closePanel(true);renderPage();}}
+ if(e.key==='ArrowRight'&&S.stack.length===1){const el=$('.lvl tr[data-p]',pbody);el&&el.click();}
+ if(e.key==='['){$('#shell').classList.toggle('mini');}
+});
+
+/* ================= SCENARIOS ================= */
+const scen=$('#scen'),narr=$('#narr');let playing=false;
+const SCEN=[
+ {who:'V',cls:'v',title:'Validator: which cycle broke?',sub:'company → red cell → cycle → product trace',steps:[
+  ['Start at the company. The matrix shows every module × testing type.',()=>nav('company')],
+  ['Van Sales · Validations is red. Click the cell.',()=>spot($('.cell[data-mod=van][data-t=validations]'))],
+  ['That opens exactly that tab, already scoped to Mars · 234474.',()=>nav('module','van','validations')],
+  ['Issue rows are tinted. Open Cycle 14.',()=>{spot($('#cyclesBody tr[data-i="1"]'));}],
+  ['Cycle detail pulls into focus. The red product is the mismatch.',()=>openCycle(1)],
+  ['One more click: the full event trace with Δ. Share this link.',()=>openProduct(CYCLES[1],'106547')]]},
+ {who:'T',cls:'',title:'Tester: try a new API right now',sub:'module → APIs → workbench → Send → save as case',steps:[
+  ['Open the module from the drawer.',()=>nav('module','van','overview')],
+  ['APIs tab is the catalog. Filters show what has no tests.',()=>nav('module','van','apis')],
+  ['Click day/begin. The workbench opens with auth and body pre-filled from context.',()=>{const tr=$('.grid tbody tr[data-i="2"]');tr&&tr.click();}],
+  ['Send. One click, no token copying.',()=>{const b=$('#wbSend');b&&b.click();}],
+  ['Save the response as a case, or let Generate cases draft the negative ones.',()=>spot($('.wb .btn.accent'))]]},
+ {who:'C',cls:'c',title:'Contributor: watch a flow run and fail',sub:'flows → run → cascade stops at the broken step',steps:[
+  ['Flows are the app\'s real sequence, DB check included.',()=>nav('module','van','flows')],
+  ['Run it. Steps light up in order; the data line carries the light.',()=>$('#flowRun').click()],
+  ['Step 3 fails: card expands with response and assertion diff. Nothing after it runs.',()=>{}, 4200],
+  ['Fix, rerun, publish. Validators only ever see published flows.',()=>spot($('#flowRun'))]]},
+ {who:'V',cls:'v',title:'Release: is the whole company green?',sub:'company → Run all → matrix fills → compare tenants',steps:[
+  ['Company page. Run all runs every module\'s published smoke and validations.',()=>nav('company')],
+  ['Cells go live one by one; the aperture ring closes when the verdict is final.',()=>$('#runBtn').click(), 3600],
+  ['Compare tenants: same modules, six tenants, one grid.',()=>{S.tenantView=true;renderPage();}],
+  ['A red cell in one tenant only is a tenant-specific bug. Click it.',()=>spot($('.cell.crit'))]]},
+ {who:'V',cls:'v',title:'Data sync: where did the rows fall out?',sub:'flow map → chain hops → failing rows → evidence',steps:[
+  ['The sync module opens on a map: rows enter at FA and travel to Report, DMS, Unify.',()=>nav('module','sync','overview')],
+  ['FA → DMS is red with 378 fails. Click the edge.',()=>spot($('.fmap .edge.crit'))],
+  ['The chain view: 12,480 rows in, 365 lost at the order hop, 13 more at the invoice hop.',()=>{syncFlow='F5';nav('module','sync','flows');}],
+  ['Run the chain: bars fill hop by hop.',()=>$('#flowRun').click(),3000],
+  ['Below: the rules of this chain with plain causes, then the failing rows with source vs target.',()=>spot($('.grid tbody tr[data-i="0"]'))],
+  ['Open a row: identity block, field-by-field diff, copy ids, export, and how long the evidence lives.',()=>{const tr=$('.grid tbody tr[data-i="2"]');tr&&tr.click();}],
+  ['Issues tab is the flat worklist across all chains, with workflow status.',()=>{syncSeg='issues';nav('module','sync','validations');}]]},
+ {who:'A',cls:'a',title:'Agent or keyboard: ⌘K does everything',sub:'digits → company, / → endpoint, run → flows',steps:[
+  ['Open the palette anywhere.',()=>openPal()],
+  ['Type an id: companies jump to the top.',()=>{palIn.value='2344';renderPal('2344');}],
+  ['Type a path: endpoints jump to the top.',()=>{palIn.value='day/';renderPal('day/');}],
+  ['Type run: flows and suites. MCP exposes the same verbs to Claude.',()=>{palIn.value='run';renderPal('run');}],
+  ['Enter runs it in the current context.',()=>{closePal();nav('module','van','flows');setTimeout(()=>$('#flowRun').click(),300);}]]}];
+$('#scenList').innerHTML=SCEN.map((s,i)=>`<div class="si" data-i="${i}"><span class="who ${s.cls}">${s.who}</span><b>${s.title}</b><span>${s.sub}</span><span class="go">▶</span></div>`).join('');
+$$('.si').forEach(el=>el.onclick=()=>play(SCEN[+el.dataset.i]));
+$('#scenBtn').onclick=()=>scen.classList.toggle('open');$('#scenClose').onclick=()=>scen.classList.remove('open');$('#narrStop').onclick=()=>{playing=false;narr.classList.remove('open');};
+function spot(el){if(!el)return;el.classList.remove('spot');void el.offsetWidth;el.classList.add('spot');el.scrollIntoView&&el.scrollIntoView({block:'center',behavior:reduced?'auto':'smooth'});}
+async function play(s){if(playing)return;playing=true;scen.classList.remove('open');S.tenantView=false;narr.classList.add('open');
+ for(let i=0;i<s.steps.length&&playing;i++){const [text,fn,wait]=s.steps[i];$('.st',narr).textContent=`${i+1}/${s.steps.length}`;$('#narrText').textContent=text;await sleep(500);if(!playing)break;try{fn();}catch(e){}await sleep(wait||2600);}
+ playing=false;narr.classList.remove('open');}
+
+/* boot: deep link like #/module/sync/flows works */
+bootFromHash();
+})();
+</script>
+</body>
+</html>
