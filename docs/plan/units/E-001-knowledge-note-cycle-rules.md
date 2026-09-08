@@ -42,3 +42,6 @@ No pack files, no schema, no code. Do not restate the whole artifact-tool spec; 
 ## Progress
 2026-09-09 04:44 · explore · findings: docs/knowledge does not exist; six rules already in .claude/rules/packs.md; ADR-0010 pack-local knowledge is separate; 1 non-blocking question: flat path vs memory-scribe <area>/<slug> convention → adopting docs/knowledge/van-sales/cycle-rules.md
 2026-09-09 04:44 · isolate · worktree /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/E-001-knowledge-cycle-rules
+2026-09-09 04:46 · build · gate --fast green at fd7a1ad (pre-commit hook); red.log, green.log, check-docs.log saved
+2026-09-09 04:49 · verify · evidence complete: summary.json (3/3 pass), full gate green, red.log + dod1-recheck.log
+2026-09-09 04:49 · review · spec-checker pass; adr-reviewer pass (1 note → harness fix: .falens-unit gitignored on main)

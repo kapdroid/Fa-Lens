@@ -1,0 +1,7 @@
+# DoD-1 recheck · 2026-09-09 04:47 · fd7a1ad
+$ test -f docs/knowledge/van-sales/cycle-rules.md && grep -c -E "PureDayStart|Partial|Additional|sales window|violation|warning" docs/knowledge/van-sales/cycle-rules.md
+10
+exit=0
+$ grep -c "^Source:" docs/knowledge/van-sales/cycle-rules.md
+1
+exit=0

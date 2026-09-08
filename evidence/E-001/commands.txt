@@ -1,0 +1,6 @@
+git rev-parse HEAD
+test -f docs/knowledge/van-sales/cycle-rules.md && grep -c -E "PureDayStart|Partial|Additional|sales window|violation|warning" docs/knowledge/van-sales/cycle-rules.md
+grep -c "^Source:" docs/knowledge/van-sales/cycle-rules.md
+node tool/check-docs.mjs
+bash tool/gate.sh --fast
+bash tool/gate.sh
