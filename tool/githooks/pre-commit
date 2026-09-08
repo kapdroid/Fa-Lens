@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Runs the fast gate. Installed via tool/setup.sh (git config core.hooksPath tool/githooks).
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+exec "$ROOT/tool/gate.sh" --fast

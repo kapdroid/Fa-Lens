@@ -1,0 +1,20 @@
+{
+  "$comment": "Frontmatter schema for docs/plan/units/*.md. Flat keys only (see tool/lib/frontmatter.mjs). Validated by tool/check-units.mjs.",
+  "required": ["id", "title", "status", "tier", "kind", "allowed_files", "adrs", "dod"],
+  "properties": {
+    "id":            { "type": "string", "pattern": "^[UE]-\\d{3}$", "$comment": "U = real unit, E = harness eval unit" },
+    "title":         { "type": "string" },
+    "status":        { "type": "string", "enum": ["draft", "ready", "in_progress", "review", "done", "blocked"] },
+    "tier":          { "type": "integer", "enum": [1, 2, 3], "$comment": "1 docs/pure code: PR only · 2 service/UI: plan approval + PR · 3 adapters/auth/sources: plan approval + mandatory reviewers + PR + human beta run" },
+    "kind":          { "type": "string", "enum": ["docs", "kernel", "service", "ui", "adapter", "pack", "infra", "harness"] },
+    "depends_on":    { "type": "array" },
+    "allowed_files": { "type": "array", "minItems": 1, "$comment": "repo-relative paths or globs the unit may touch; anything else is a gate failure" },
+    "adrs":          { "type": "array", "minItems": 1, "$comment": "ADR ids the reviewer checks against, e.g. ADR-0005" },
+    "design":        { "type": "array", "$comment": "docs/design sections a UI unit implements, e.g. components.md#Table" },
+    "dod":           { "type": "array", "minItems": 1, "$comment": "machine-checkable Definition of Done items; each must name a command or a test" },
+    "evidence":      { "type": "array", "$comment": "expected artifacts under evidence/<id>/" },
+    "estimate":      { "type": "string", "$comment": "S (≤ 1 session) · M (1 session) · L (split it)" },
+    "owner":         { "type": "string" }
+  },
+  "x-required-headings": ["## Scope", "## Out of scope", "## Plan", "## Verification", "## Progress"]
+}

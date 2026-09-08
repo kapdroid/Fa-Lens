@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Terminus rule: nothing pushes main. Unit branches (unit/U-xxx) may be pushed for PRs.
+set -euo pipefail
+MAIN="${FALENS_MAIN:-main}"
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [[ "$remote_ref" == "refs/heads/$MAIN" ]]; then
+    echo "pre-push: refusing to push $MAIN. Open a PR from a unit/ branch; a human merges." >&2
+    exit 1
+  fi
+  if [[ "$remote_ref" != refs/heads/unit/* && "$remote_ref" != refs/heads/chore/* && "$remote_ref" != refs/heads/docs/* ]]; then
+    echo "pre-push: branch must be unit/U-xxx, chore/*, or docs/* (got ${remote_ref#refs/heads/})" >&2
+    exit 1
+  fi
+done
+exit 0
