@@ -1,7 +1,7 @@
 ---
 id: E-002
 title: Gate fails on evidence folders that belong to no unit
-status: in_progress
+status: review
 tier: 1
 kind: harness
 depends_on: []
@@ -43,3 +43,5 @@ No changes to the schema, no new gate stages beyond the existing `units` stage, 
 2026-09-09 04:53 · build · gate --fast green at 4902b92; red.log shows test failing before, test.log passing after
 2026-09-09 04:56 · verify · evidence complete: summary.json 3/3 pass, full gate green
 2026-09-09 04:56 · review · spec-checker pass; adr-reviewer pass with 1 should (wire tool/test into gate.sh) → answered: gate.sh is outside allowed_files and the unit's Out of scope forbids new gate stages; follow-up: wire tool/test/*.test.mjs into tool/gate.sh as stage tool-tests (kind harness, tier 1)
+2026-09-09 · memory · wrote docs/knowledge/harness/tool-tests-zero-dependency.md (+ docs/knowledge/README.md index, folder did not exist in this worktree); no ADR (no decision moved beyond ADR-0011); follow-up unit already exists on main as docs/plan/units/U-001-gate-runs-tool-tests.md, not duplicated
+2026-09-09 · pr · dry-run rendered at evidence/E-002/pr-body.md; push + PR awaiting owner approval
