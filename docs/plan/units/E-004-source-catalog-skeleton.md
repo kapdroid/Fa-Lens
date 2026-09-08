@@ -48,3 +48,5 @@ follow-up: confirm real Report and DMS per-tenant replica hostnames before any a
 ## Progress
 2026-09-09 05:08 · explore · findings: packs/ absent; frontmatter.mjs cannot parse nested YAML → decision: purpose-built 2-space indent YAML-subset parser inside check-catalog.mjs; gate stage must go in the unconditional block; .claude/rules/packs.md says 'no server names in a pack' → _sources is the ADR-0013 exception, documented in packs/_sources/README.md (rule file outside allowed_files → follow-up); tenant keys general,mars,colpal,haldiram,slmg,bdf come from the artifact-tool TENANTS map; Report/DMS hostnames are placeholders (non-blocking, structural validation only)
 2026-09-09 05:08 · isolate · worktree /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/E-004-source-catalog
+2026-09-09 05:09 · plan · spec-checker run 1 fail (step 3 lacked app_api/dashboard_api) → plan fixed; rerun pending
+2026-09-09 05:10 · plan · spec-checker run 2 pass. CHECKPOINT: tier 3 — plan needs human approval before build; adapter-safety-reviewer + fresh-eyes mandatory later. Resume with /build E-004.
