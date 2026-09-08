@@ -17,7 +17,7 @@ Memory         unit ## Progress · evidence/<id>/ · ADRs · docs/knowledge · a
 A unit is the only shape of work. `docs/plan/units/U-xxx-slug.md` with frontmatter validated by `tool/check-units.mjs` against `docs/plan/unit.schema.json`:
 
 - `tier` decides human involvement: **1** docs and pure code → PR only · **2** service and UI → plan approval + PR · **3** adapters, auth, anything touching sources → plan approval + mandatory reviewers + PR + a human runs it once on beta.
-- `allowed_files` is enforced by the `post-edit` hook: an edit outside it is rejected with a message to write the need into Progress and stop.
+- `allowed_files` is enforced by the `post-edit` hook: an edit outside it is rejected with a message to write the need into Progress and stop. Always allowed in addition: the unit file itself, `evidence/<id>/**`, and the memory layer (`docs/knowledge/**`, new ADR files) that the loop writes in state 8.
 - `dod` items must name a command or a test. "Works correctly" is not a DoD item; `vitest packages/kernel/test/verdict.test.ts passes and fails when the rollup line is reverted` is.
 - `status` moves `draft → ready → in_progress → review → done` (or `blocked`). Only a human sets `ready`.
 - `E-xxx` units are harness evals: small real tasks that prove the loop itself works (see §7).

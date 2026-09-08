@@ -15,7 +15,7 @@ For each ADR, check the diff against its **Decision** and **How we verify** sect
 - Boundary direction from `docs/architecture.md` §2 (kernel imports nothing; api never imports adapters; packs contain no code).
 - Test changes: any deleted, skipped, loosened, or rewritten assertion, and any test whose expected values were changed to match new output. Report these even when they look intentional.
 - Gate or hook configuration changes (`tool/gate.sh`, `tool/githooks/*`, `.claude/settings.json`, `.claude/hooks/*`): report any that weaken a check.
-- Files changed outside the unit's `allowed_files`.
+- Files changed outside the unit's `allowed_files` (the unit file, `evidence/<id>/**`, `docs/knowledge/**`, and new ADR files are always allowed; the loop writes them).
 - New TODO/FIXME without a unit id.
 
 Return exactly this JSON and nothing else:
