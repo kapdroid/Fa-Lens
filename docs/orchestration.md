@@ -7,7 +7,7 @@ This is the operating manual for building FA Lens with Claude Code sessions (and
 ```
 Constitution   AGENTS.md (canonical, short) ← CLAUDE.md imports it · .claude/rules/*.md load by path
 Spec           docs/plan/units/U-xxx.md — scope · out of scope · tier · allowed_files · adrs · dod · progress
-Loop           /build U-xxx — a state machine; scripts for deterministic steps, the model for the open ones
+Loop           /build U-xxx — a state machine (intake → explore → isolate → plan → build → verify → review → PR → memory); scripts for deterministic steps, the model for the open ones
 Gates          tool/gate.sh (same everywhere) · Claude hooks (.claude/settings.json) · git hooks · reviewer agents
 Memory         unit ## Progress · evidence/<id>/ · ADRs · docs/knowledge · auto-memory
 ```
@@ -30,8 +30,8 @@ Create one with `/unit "<one-line outcome>"`; it interviews for the missing fact
 |---|---|---|---|---|---|
 | 0 | Intake | script `intake.mjs` | unit id given | frontmatter valid, status `ready`, deps `done` | stop, report |
 | 1 | Explore | `explorer` agent (read-only) | intake ok | ≤ 1 page findings appended to Progress; open questions listed | blocking question → stop for human |
-| 2 | Plan | builder (main session) + `spec-checker` agent | explore done | plan in the unit file: tests first, files ⊆ allowed_files, every DoD item covered; spec-checker `pass` | tier 2/3: human approves before state 3 |
-| 3 | Isolate | script `wt.sh add` | plan approved | worktree on `unit/U-xxx` from fresh main; `.falens-unit` written | |
+| 2 | Isolate | script `wt.sh add` | explore done, no blocking question | worktree on `unit/U-xxx` from fresh main; `.falens-unit` written; the main checkout is never edited | |
+| 3 | Plan | builder (main session) + `spec-checker` agent | worktree ready | plan written into the unit file **in the worktree**: tests first, files ⊆ allowed_files, every DoD item covered; spec-checker `pass`; plan committed | tier 2/3: human approves before state 4 |
 | 4 | Build | builder | worktree ready | failing tests written and seen failing; implementation; `tool/gate.sh --fast` green; commits `U-xxx: …` | gate red twice → stop |
 | 5 | Verify | script `verify.sh` + `evidence-collector` agent | fast gate green | full gate green; unit DoD commands run; outputs in `evidence/U-xxx/`; UI units: Playwright scenario + screenshots | any DoD item without evidence → back to 4, max once |
 | 6 | Review | `adr-reviewer` · `design-reviewer` (ui) · `adapter-safety-reviewer` (tier 3), in parallel; then `fresh-eyes` (tier 3) | evidence complete | all verdict files `pass` | ≤ 2 fix rounds, then stop for human |

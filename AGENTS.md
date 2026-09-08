@@ -11,7 +11,7 @@ Evidence over assertion. "Tests green at `<sha>`, log at `evidence/U-012/gate.lo
 ## How work happens
 - Work is done in **units** (`docs/plan/units/U-xxx.md`): one unit = one worktree = one branch `unit/U-xxx` = one PR. Never edit in the main checkout; `tool/wt.sh add U-xxx <slug>` creates the worktree.
 - The unit's frontmatter is the contract: `allowed_files` is the only place you may change; `dod` is the only definition of done; `adrs` name what the reviewer checks. If the work needs something outside that, stop and report; do not widen scope.
-- Start a unit with `/build U-xxx`. It runs the state machine (intake → explore → plan → isolate → build → verify → review → PR → memory) and stops at the defined checkpoints. Tier 2 and 3 units need plan approval from a human before code.
+- Start a unit with `/build U-xxx`. It runs the state machine (intake → explore → isolate → plan → build → verify → review → PR → memory) and stops at the defined checkpoints. Tier 2 and 3 units need plan approval from a human before code.
 - Tests first: write the failing test, then the code. A test that would not fail without the change proves nothing.
 - `tool/gate.sh` is the gate, identical locally, in hooks, and in CI. Green gate at the PR head SHA is required, never sufficient: the unit's own DoD items also need evidence in `evidence/U-xxx/`.
 - A human merges. Nothing pushes `main` (pre-push hook enforces). PRs come from `unit/`, `chore/`, or `docs/` branches.

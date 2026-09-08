@@ -1,6 +1,6 @@
 ---
 name: build
-description: Runs one FA Lens work unit end to end through the build loop (intake → explore → plan → isolate → build → verify → review → PR → memory) with checkpoints, evidence files, and stop conditions. Use when a human says "build U-012", "/build E-001", or asks to implement a unit from docs/plan/units.
+description: Runs one FA Lens work unit end to end through the build loop (intake → explore → isolate → plan → build → verify → review → PR → memory) with checkpoints, evidence files, and stop conditions. Use when a human says "build U-012", "/build E-001", or asks to implement a unit from docs/plan/units.
 disable-model-invocation: true
 argument-hint: <unit-id>
 ---
@@ -33,21 +33,21 @@ bash "${CLAUDE_SKILL_DIR}/scripts/progress.sh" <id> explore "findings recorded; 
 
 Stop condition: any question marked **blocking**. Write it into Progress and end your turn with the question.
 
-## Plan (state 2)
-
-Write the `## Plan` section of the unit file: numbered steps, tests first, then implementation, then evidence. Every DoD item maps to at least one step. Only files inside `allowed_files`. Keep it to what the unit asks; the right amount of complexity is the minimum needed.
-
-Then launch the `spec-checker` agent with the unit file. On `fail`, fix the plan and run it once more. A second `fail` is a stop condition.
-
-Checkpoint: for **tier 2 and 3**, end your turn here with the plan summarized in five lines and ask the human to approve. For tier 1, continue.
-
-## Isolate (state 3)
+## Isolate (state 2)
 
 ```bash
 WT=$(bash tool/wt.sh add <id> <slug>) && cd "$WT" && echo "<id>" > .falens-unit && bash "${CLAUDE_SKILL_DIR}/scripts/progress.sh" <id> isolate "worktree $WT"
 ```
 
-All further work happens in `$WT`. Tell the user the path once.
+All further work, including writing the plan into the unit file, happens in `$WT`; the main checkout stays untouched. Tell the user the path once.
+
+## Plan (state 3)
+
+Write the `## Plan` section of the unit file: numbered steps, tests first, then implementation, then evidence. Every DoD item maps to at least one step. Only files inside `allowed_files`. Keep it to what the unit asks; the right amount of complexity is the minimum needed.
+
+Then launch the `spec-checker` agent with the unit file. On `fail`, fix the plan and run it once more. A second `fail` is a stop condition.
+
+Checkpoint: for **tier 2 and 3**, commit the plan (`<id>: plan`) and end your turn here with the plan summarized in five lines and ask the human to approve. For tier 1, commit the plan and continue.
 
 ## Build (state 4)
 

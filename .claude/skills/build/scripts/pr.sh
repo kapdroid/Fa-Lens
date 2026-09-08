@@ -7,7 +7,7 @@ ID="${1:?unit id}"; DRY="${2:-}"
 ROOT="$(git rev-parse --show-toplevel)"; cd "$ROOT"
 BR="$(git rev-parse --abbrev-ref HEAD)"
 [[ "$BR" == unit/* ]] || { echo "pr: current branch is $BR; PRs open only from unit/ branches" >&2; exit 1; }
-[[ -z "$(git status --porcelain)" ]] || { echo "pr: working tree is dirty; commit or drop changes first" >&2; exit 1; }
+[[ -z "$(git status --porcelain | grep -v '^?? .falens-unit$')" ]] || { echo "pr: working tree is dirty; commit or drop changes first" >&2; exit 1; }
 [[ "$DRY" == "--dry-run" ]] || gh auth status >/dev/null 2>&1 || { echo "pr: gh is not authenticated; a human must run gh auth login" >&2; exit 1; }
 FILE="$(ls docs/plan/units/"$ID"*.md | head -1)"
 TITLE="$ID: $(grep -m1 '^title:' "$FILE" | cut -d' ' -f2-)"
