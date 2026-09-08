@@ -1,0 +1,7 @@
+# green run · 2026-09-09 04:53
+ok   clean tree: check-units exits 0
+ok   orphan evidence dir: check-units exits 1 and names it
+ok   cleanup: evidence/X-999 removed
+
+all passing
+exit=0
