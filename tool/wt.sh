@@ -3,7 +3,7 @@
 #   tool/wt.sh add U-012 mssql-guard   → ../Fa-Lens.worktrees/U-012-mssql-guard on branch unit/U-012 (from freshest main)
 #   tool/wt.sh path U-012              → prints the worktree path (exit 1 if none)
 #   tool/wt.sh list                     → all unit worktrees with branch, dirty flag, merged flag, age
-#   tool/wt.sh gc                       → removes worktrees whose branch is merged into main AND tree is clean
+#   tool/wt.sh gc [--all]               → removes worktrees whose branch is merged into main AND tree is clean (empty fresh ones only with --all)
 #   tool/wt.sh remove U-012 [--force]   → removes one (refuses if dirty unless --force)
 set -euo pipefail
 
@@ -38,8 +38,8 @@ cmd_add() {
   # derive ports from unit number so parallel worktrees never collide
   local n="${id#*-}"; n=$((10#$n))
   printf 'FALENS_UNIT=%s\nAPI_PORT=%d\nWEB_PORT=%d\n' "$id" $((3000 + n)) $((5100 + n)) > "$dir/.env.unit"
-  # shared evidence folder
-  mkdir -p "$ROOT/evidence"; ln -sfn "$ROOT/evidence" "$dir/evidence"
+  # evidence/ is tracked and travels with the PR (no symlink; each unit commits evidence/<id>/)
+  mkdir -p "$dir/evidence"
   echo "$dir"
 }
 
@@ -53,7 +53,9 @@ cmd_list() {
     local name; name="$(basename "$d")"
     local br; br="$(git -C "$d" rev-parse --abbrev-ref HEAD 2>/dev/null || echo '?')"
     local dirty="no"; [[ -n "$(git -C "$d" status --porcelain 2>/dev/null)" ]] && dirty="YES"
-    local merged="no"; git -C "$ROOT" merge-base --is-ancestor "$br" "$MAIN_BRANCH" 2>/dev/null && merged="yes"
+    local merged="no"
+    if [[ "$(git -C "$d" rev-parse HEAD)" == "$(git -C "$ROOT" rev-parse "$MAIN_BRANCH")" ]]; then merged="empty"
+    elif git -C "$ROOT" merge-base --is-ancestor "$br" "$MAIN_BRANCH" 2>/dev/null; then merged="yes"; fi
     local age; age="$(( ( $(date +%s) - $(stat -f %m "$d") ) / 86400 ))d"
     printf '%-22s %-14s %-6s %-7s %s\n' "$name" "$br" "$dirty" "$merged" "$age"
   done
@@ -75,6 +77,8 @@ cmd_gc() {
     [[ -d "$d" ]] || continue
     local br; br="$(git -C "$d" rev-parse --abbrev-ref HEAD 2>/dev/null || echo '')"
     [[ -n "$br" ]] || continue
+    # skip empty worktrees (no commits yet): they are fresh, not finished. `gc --all` removes them too.
+    if [[ "${1:-}" != "--all" && "$(git -C "$d" rev-parse HEAD)" == "$(git -C "$ROOT" rev-parse "$MAIN_BRANCH")" ]]; then continue; fi
     if git -C "$ROOT" merge-base --is-ancestor "$br" "$MAIN_BRANCH" 2>/dev/null && [[ -z "$(git -C "$d" status --porcelain)" ]]; then
       git -C "$ROOT" worktree remove "$d" && git -C "$ROOT" branch -d "$br" >/dev/null 2>&1 || true
       echo "gc: removed $(basename "$d")"; n=$((n+1))
@@ -89,6 +93,6 @@ case "${1:-}" in
   path) shift; cmd_path "$@";;
   list) cmd_list;;
   remove) shift; cmd_remove "$@";;
-  gc) cmd_gc;;
+  gc) shift; cmd_gc "$@";;
   *) sed -n '2,8p' "$0"; exit 1;;
 esac

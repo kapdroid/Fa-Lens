@@ -13,7 +13,7 @@ design: []
 dod:
   - "pnpm gate green at PR head"
   - "vitest packages/service/test/runs/coalesce.test.ts fails without the change and passes with it"
-  - "evidence/U-000/coalesce.log shows 500 concurrent POST /runs → 1 execution"
+  - "evidence/U-000/coalesce.log exists and shows 500 concurrent POST /runs → 1 execution"
 evidence: [coalesce.log]
 estimate: M
 owner:
