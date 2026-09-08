@@ -15,6 +15,11 @@ Grading follows Anthropic's evals guidance: grade the end state; a task two expe
 <!-- results:start -->
 | Date | Unit | Harness verdict | SHA | Note |
 |---|---|---|---|---|
+| 2026-09-09 | E-001 | pass (after 3 harness fixes) | 334daba | tier 1 docs unit ran intake→memory; PR step in --dry-run (push awaits owner). Harness defects found and fixed on main: plan was written in main checkout (Isolate now precedes Plan, enforced by check-harness); .falens-unit marker was committed (gitignored; pr.sh tolerates it); memory-scribe writes under docs/knowledge were outside allowed_files (memory layer now always allowed). Agents were seeded general-purpose subagents (native invocation needs a new session). |
+| 2026-09-09 | E-002 | pass | 4902b92 | tool change with red→green zero-dep test (red.log at c03cc63, test.log after); orphan evidence dir now fails check-units; adr-reviewer pass with 1 should → answered (gate.sh outside allowed_files) and captured as follow-up unit U-001. PR step in --dry-run. |
+| 2026-09-09 | E-003 | stopped at checkpoint (expected) | — | tier 2: intake, explore, isolate, plan, spec-checker ran; stopped for human plan approval as designed. Resume with /build E-003 after approval. |
+| 2026-09-09 | E-004 | not run | — | tier 3; intake confirms mandatory checkpoints (plan approval, adapter-safety-reviewer, fresh-eyes). Needs a human at the plan checkpoint. |
+| 2026-09-09 | E-005 | blocked (expected) | — | intake refuses: dependency E-002 is not done (its PR is not merged). Proves the dependency gate. |
 <!-- results:end -->
 
 Known limitation on first run (2026-09-09): agents in `.claude/agents/` and skills in `.claude/skills/` become natively invocable in the **next** Claude Code session after they are created. The first eval pass therefore drives the state machine manually and seeds general-purpose subagents with the agent files' content; native invocation is verified in the following session and recorded here.
