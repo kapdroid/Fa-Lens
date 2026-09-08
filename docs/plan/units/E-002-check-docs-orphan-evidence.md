@@ -40,3 +40,6 @@ No changes to the schema, no new gate stages beyond the existing `units` stage, 
 ## Progress
 2026-09-09 04:52 · explore · findings: check-units resolves root from import.meta.url; ids Set exists (line 44) → reuse for orphan check; evidence/ has only .gitkeep; no tool/test yet; 2 non-blocking questions (pattern check, .gitkeep filter) → decided: skip non-dirs, report 'evidence/<name>: no unit'
 2026-09-09 04:52 · isolate · worktree /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/E-002-orphan-evidence-check
+2026-09-09 04:53 · build · gate --fast green at 4902b92; red.log shows test failing before, test.log passing after
+2026-09-09 04:56 · verify · evidence complete: summary.json 3/3 pass, full gate green
+2026-09-09 04:56 · review · spec-checker pass; adr-reviewer pass with 1 should (wire tool/test into gate.sh) → answered: gate.sh is outside allowed_files and the unit's Out of scope forbids new gate stages; follow-up: wire tool/test/*.test.mjs into tool/gate.sh as stage tool-tests (kind harness, tier 1)
