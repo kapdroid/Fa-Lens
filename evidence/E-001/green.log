@@ -1,0 +1,11 @@
+# green check · 2026-09-09 04:46
+$ grep -c -E "PureDayStart|Partial|Additional|sales window|violation|warning" docs/knowledge/van-sales/cycle-rules.md
+10
+exit=0
+$ distinct rule keywords present:
+  ok  PureDayStart
+  ok  Partial
+  ok  Additional
+  ok  sales window
+  ok  violation
+  ok  warning
