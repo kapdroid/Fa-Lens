@@ -27,8 +27,9 @@ FA Lens is a module-centric testing and validation platform for FieldAssist: API
                    └────────────────────┘ └────────────────┘ └────────┬────────┘
                                                                       │ read-only, budgeted
                      ┌────────────────────────────────────────────────▼──────────────────┐
-                     │ Sources: FA txn (mssql ×6 tenants) · FA master · Report · DMS (pg)│
-                     │          Unify (clickhouse) · HTTP APIs (app, dashboard)          │
+                     │ Sources (read replicas only, all tenant-wise): FA txn · FA master  │
+                     │ · Report (mssql) · DMS (pg) · Unify (clickhouse, v1: coming soon)  │
+                     │ · HTTP APIs (app, dashboard)                                       │
                      └───────────────────────────────────────────────────────────────────┘
 ```
 

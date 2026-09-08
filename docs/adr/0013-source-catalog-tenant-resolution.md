@@ -8,7 +8,13 @@ One company's data lives across FA transaction DBs (six tenant servers, same sch
 
 ## Decision
 
-A **source catalog** (`packs/_sources/catalog.yaml`, admin-owned, in git, no secrets) declares each logical source: dialect, database (per tenant or default), **tenant → server map**, a `vault://` credential reference, the **scope column map** (which column is the company id, which is the date), and **budgets** (ADR-0005). Flows reference sources only by logical name (`fa_txn`, `fa_master`, `report`, `dms`, `unify`, plus HTTP bases `app_api`, `dashboard_api`). At run time the worker resolves `(source, env, tenant)` → server + database + credential, and injects `company` and date predicates using the scope map. Environments (`beta`, `prod`) have their own catalog overlays; production overlays contain read-only credentials only. Replicas are preferred whenever the catalog lists one. Adding a database is a catalog entry plus a vault secret; no code.
+A **source catalog** (`packs/_sources/catalog.yaml`, admin-owned, in git, no secrets) declares each logical source: dialect, database (per tenant or default), **tenant → server map**, a `vault://` credential reference, the **scope column map** (which column is the company id, which is the date), and **budgets** (ADR-0005). Flows reference sources only by logical name (`fa_txn`, `fa_master`, `report`, `dms`, `unify`, plus HTTP bases `app_api`, `dashboard_api`). At run time the worker resolves `(source, env, tenant)` → server + database + credential, and injects `company` and date predicates using the scope map. Environments (`beta`, `prod`) have their own catalog overlays; production overlays contain read-only credentials only. Adding a database is a catalog entry plus a vault secret; no code.
+
+**Infra facts confirmed by the user (2026-09-09), baked into the v1 catalog:**
+- **Every source is tenant-wise:** FA transaction, FA master, **Report, and DMS all have separate servers per tenant**. The catalog therefore requires a full `tenant → server` map for every source; a `default` server is allowed only for sources explicitly marked `shared: true` (none in v1).
+- **Read-only logins already exist** for all sources; v1 uses them as-is via `vault://` references. No new logins are a prerequisite.
+- **Read replicas exist for all sources** (readable connection strings are available). The v1 catalog points **only at replicas**; primaries are not listed at all, so the run engine cannot reach a primary even by mistake. Replica lag is surfaced on results as part of the "data as of" line.
+- **Unify (ClickHouse) is not connected in v1.** It appears in the catalog as `status: coming-soon` so the flow map and matrix render it as such; the adapter and contract tests still ship so enabling it is a catalog change.
 
 ## Alternatives considered
 
