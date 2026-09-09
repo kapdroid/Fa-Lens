@@ -40,6 +40,8 @@ cmd_add() {
   printf 'FALENS_UNIT=%s\nAPI_PORT=%d\nWEB_PORT=%d\n' "$id" $((3000 + n)) $((5100 + n)) > "$dir/.env.unit"
   # evidence/ is tracked and travels with the PR (no symlink; each unit commits evidence/<id>/)
   mkdir -p "$dir/evidence"
+  # once the workspace exists, the gate needs node_modules in every worktree (pre-commit runs typecheck/lint)
+  if [[ -f "$dir/package.json" ]]; then (cd "$dir" && pnpm install --frozen-lockfile --silent >/dev/null 2>&1) || echo "wt: pnpm install failed in $dir; run it by hand before committing" >&2; fi
   echo "$dir"
 }
 

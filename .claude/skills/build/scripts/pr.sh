@@ -24,7 +24,7 @@ BODY="$(mktemp)"
   echo
   echo "## Definition of Done (evidence-backed)"
   if [[ -f "$SUMMARY" ]]; then
-    jq -r '.items[] | "- [" + (if .status=="pass" then "x" else " " end) + "] " + .dod + " — `" + (.evidence // "no evidence") + "` (" + .status + ")"' "$SUMMARY"
+    jq -r '.items[] | "- [" + (if .status=="pass" then "x" else " " end) + "] " + .dod + " — `" + ((.evidence // "no evidence") | if type=="array" then join(", ") else . end) + "` (" + .status + ")"' "$SUMMARY"
     echo "- [$( [[ "$(jq -r .gate "$SUMMARY")" == "green" ]] && echo x || echo ' ')] tool/gate.sh at \`$(jq -r .sha "$SUMMARY")\` — \`evidence/$ID/gate.log\`"
   else
     echo "- [ ] evidence/$ID/summary.json missing — run the evidence-collector"
