@@ -1,16 +1,20 @@
 import { afterAll, beforeAll, expect, test } from 'vitest';
 import type { Harness } from './harness.ts';
 import { startControlPlane } from './harness.ts';
-import { runsRepo } from '../../src/index.ts';
 import { runLock } from '../../src/lock/lock.ts';
+import type { TxClient } from '../../src/lock/lock.ts';
 
 let h: Harness;
 beforeAll(async () => { h = await startControlPlane(); });
 afterAll(async () => { await h?.stop(); });
 
-const newRun = (scopeHash: string) => async () => {
-  const run = await runsRepo(h.pool, '234474').create({ targetKind: 'flow', targetId: 'app.day-cycle', scopeHash });
-  return run.id;
+// The insert runs on the transaction that holds the gate, which is what makes the decision and the row atomic.
+const newRun = (scopeHash: string) => async (tx: TxClient) => {
+  const { rows } = await tx.query(
+    "INSERT INTO runs (company_id, target_kind, target_id, scope_hash) VALUES ($1, 'flow', 'app.day-cycle', $2) RETURNING id",
+    ['234474', scopeHash],
+  );
+  return String(rows[0]?.['id']);
 };
 
 test('two callers for one scope produce one run: the second joins the first', async () => {

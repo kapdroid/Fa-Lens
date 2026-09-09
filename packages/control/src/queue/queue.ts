@@ -8,6 +8,9 @@ export const DEFAULT_EXPIRE_SECONDS = 15 * 60;
 /** A failed job comes back after this long unless the sender asks for something else. */
 export const DEFAULT_RETRY_DELAY_SECONDS = 30;
 
+/** How many times a failed job comes back before it is left alone for a person to look at. */
+export const DEFAULT_RETRY_LIMIT = 3;
+
 export interface Job<T> { id: string; data: T }
 
 /** Retry and expiry belong to the job, not to the worker that happens to pick it up. */
@@ -37,7 +40,10 @@ export function pgQueue(connectionString: string): QueueStarter {
       const queues = new Set<string>();
       const ensureQueue = async (name: string): Promise<void> => {
         if (queues.has(name)) return;
-        try { await boss.createQueue(name); } catch { /* already there */ }
+        try { await boss.createQueue(name); } catch (e) {
+          // Only "it is already there" is expected; anything else is a real failure worth surfacing now.
+          if (!/already exists|duplicate key/i.test((e as Error).message)) throw e;
+        }
         queues.add(name);
       };
       return {
@@ -45,7 +51,7 @@ export function pgQueue(connectionString: string): QueueStarter {
           await ensureQueue(name);
           return boss.send(name, data as object, {
             expireInSeconds: options.expireInSeconds ?? DEFAULT_EXPIRE_SECONDS,
-            retryLimit: options.retryLimit ?? 3,
+            retryLimit: options.retryLimit ?? DEFAULT_RETRY_LIMIT,
             retryDelay: options.retryDelaySeconds ?? DEFAULT_RETRY_DELAY_SECONDS,
           });
         },

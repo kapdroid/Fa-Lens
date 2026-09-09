@@ -1,0 +1,50 @@
+{
+  "unit": "U-011",
+  "sha": "cfa1014cbef894857cdfff0decf0e6ada110abba",
+  "items": [
+    {
+      "dod": "two concurrent lock.acquire(scopeHash) calls in the integration test yield one holder and one joined result carrying the holder's runId (packages/control/test/integration/lock.test.ts fails without the advisory lock)",
+      "command": "pnpm exec vitest run --root . --project integration packages/control/test/integration/lock.test.ts",
+      "evidence": "evidence/U-011/lock.log",
+      "status": "pass"
+    },
+    {
+      "dod": "vitest packages/control/test/integration/bus.test.ts passes: a message published on the Bus from one connection reaches a subscriber on a second connection within one second",
+      "command": "pnpm exec vitest run --root . --project integration packages/control/test/integration/bus.test.ts",
+      "evidence": "evidence/U-011/bus.log",
+      "status": "pass"
+    },
+    {
+      "dod": "vitest packages/control/test/integration/queue.test.ts passes: a queued job whose handler crashes is delivered again after its expiry, and a completed job is not",
+      "command": "pnpm exec vitest run --root . --project integration packages/control/test/integration/queue.test.ts",
+      "evidence": "evidence/U-011/queue.log",
+      "status": "pass"
+    },
+    {
+      "dod": "cache.get after the ttl returns a miss and before it returns the value; the UNLOGGED table and the in-memory front agree (packages/control/test/integration/cache.test.ts)",
+      "command": "pnpm exec vitest run --root . --project integration packages/control/test/integration/cache.test.ts",
+      "evidence": "evidence/U-011/cache.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/U-011/gate-fast-rerun.log",
+      "status": "pass"
+    },
+    {
+      "dod": "Verification: pnpm -s test:integration --filter @falens/control (whole container-backed suite, 24 tests)",
+      "command": "pnpm --filter @falens/control test:integration",
+      "evidence": "evidence/U-011/integration-rerun.log",
+      "status": "pass"
+    },
+    {
+      "dod": "unit project stays green and Docker-free alongside the integration seams",
+      "command": "pnpm -s test",
+      "evidence": "evidence/U-011/unit-test.log",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "missing": []
+}

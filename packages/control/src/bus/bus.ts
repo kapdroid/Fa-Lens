@@ -18,6 +18,7 @@ function channelIdentifier(channel: string): string {
 
 export function pgBus(connectionString: string): Bus {
   let client: Client | undefined;
+  let closed = false;
   const handlers = new Map<string, ((payload: unknown) => void)[]>();
 
   const connect = async (): Promise<Client> => {
@@ -30,10 +31,21 @@ export function pgBus(connectionString: string): Bus {
       try { payload = message.payload === undefined ? undefined : JSON.parse(message.payload); } catch { payload = message.payload; }
       for (const handler of list) handler(payload);
     });
-    // A dropped connection loses nothing durable: resubscribe and let clients re-fetch.
-    c.on('error', () => { client = undefined; });
+    // A dropped connection loses nothing durable, but a listener that stays deaf does: reconnect and
+    // listen again on every channel that still has a handler. Clients re-fetch what they missed.
+    c.on('error', () => { if (client === c) { client = undefined; void relisten(); } });
     client = c;
+    for (const channel of handlers.keys()) await c.query(`LISTEN ${channelIdentifier(channel)}`);
     return c;
+  };
+
+  const relisten = async (attempt = 1): Promise<void> => {
+    if (closed || handlers.size === 0) return;
+    try { await connect(); } catch {
+      if (attempt >= 10) return;
+      await new Promise(resolve => setTimeout(resolve, Math.min(100 * attempt, 1000)));
+      await relisten(attempt + 1);
+    }
   };
 
   return {
@@ -51,6 +63,7 @@ export function pgBus(connectionString: string): Bus {
       await c.query(`LISTEN ${channelIdentifier(channel)}`);
     },
     async close() {
+      closed = true;
       const c = client;
       client = undefined;
       handlers.clear();

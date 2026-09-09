@@ -3,6 +3,11 @@
 // and a crashed worker leaves a row to sweep rather than a lock to reclaim.
 import type { Pool } from 'pg';
 
+/** The narrow slice of a database client the caller needs; kept structural so the seam does not name a driver. */
+export interface TxClient {
+  query: (sql: string, params?: unknown[]) => Promise<{ rows: Record<string, unknown>[] }>;
+}
+
 export interface Acquired {
   /** True when an equivalent run was already in flight and this caller joined it. */
   joined: boolean;
@@ -10,8 +15,9 @@ export interface Acquired {
 }
 
 export interface Lock {
-  acquire: (scopeHash: string, createRun: () => Promise<string>) => Promise<Acquired>;
-  lockKey: (scopeHash: string) => bigint;
+  /** `createRun` runs inside the same transaction that holds the gate, so the run row — and later its job —
+   *  commit together with the decision to start it (ADR-0004, "transactional enqueue"). */
+  acquire: (scopeHash: string, createRun: (tx: TxClient) => Promise<string>) => Promise<Acquired>;
 }
 
 /** A 64-bit advisory key from the scope hash. A collision costs a moment of serialisation, never a wrong answer:
@@ -29,7 +35,6 @@ const ACTIVE = ['queued', 'running'];
 
 export function runLock(pool: Pool): Lock {
   return {
-    lockKey,
     async acquire(scopeHash, createRun) {
       const client = await pool.connect();
       try {
@@ -45,7 +50,7 @@ export function runLock(pool: Pool): Lock {
           await client.query('COMMIT');
           return { joined: true, runId: existing };
         }
-        const runId = await createRun();
+        const runId = await createRun(client as unknown as TxClient);
         await client.query('COMMIT');
         return { joined: false, runId };
       } catch (e) {

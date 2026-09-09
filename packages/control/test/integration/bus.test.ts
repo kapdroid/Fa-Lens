@@ -35,3 +35,20 @@ test('a payload beyond the notify limit is refused, because events are pointers 
   await expect(publisher.publish('run:3', { blob: 'x'.repeat(9000) })).rejects.toThrow(/8 ?KB|too large/i);
   await publisher.close();
 });
+
+test('a subscriber whose connection is dropped hears the next message after reconnecting', async () => {
+  const publisher = pgBus(h.url);
+  const subscriber = pgBus(h.url);
+  const seen: unknown[] = [];
+  await subscriber.subscribe('run:99', p => { seen.push(p); });
+  await publisher.publish('run:99', { seq: 1 });
+  await new Promise(resolve => setTimeout(resolve, 300));
+  expect(seen).toHaveLength(1);
+
+  await h.pool.query('SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = current_database() AND pid <> pg_backend_pid()');
+  await new Promise(resolve => setTimeout(resolve, 1200));
+  await publisher.publish('run:99', { seq: 2 });
+  await new Promise(resolve => setTimeout(resolve, 600));
+  expect(seen).toEqual([{ seq: 1 }, { seq: 2 }]);
+  await publisher.close(); await subscriber.close();
+}, 30_000);
