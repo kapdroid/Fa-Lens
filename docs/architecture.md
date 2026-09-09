@@ -50,7 +50,7 @@ FA Lens is a module-centric testing and validation platform for FieldAssist: API
 
 | Package | Role | Depends on |
 |---|---|---|
-| `@falens/kernel` | pure domain: flow, step, scope, verdict, rules, fingerprint diff, pack schema + validator | nothing |
+| `@falens/kernel` | pure domain: flow, step, scope, verdict, rules, fingerprint diff, pack schema + validator | nothing (pure libraries only, ADR-0015) |
 | `@falens/adapters` | `http`, `mssql`, `postgres`, `clickhouse` behind one `Adapter` interface; budgets, breaker, read-only guard | kernel |
 | `@falens/control` | Postgres control plane: Drizzle schema + migrations, repositories, `Queue` (pg-boss), `Lock` (advisory), `Bus` (LISTEN/NOTIFY), `Cache` (UNLOGGED table + memory) | kernel |
 | `@falens/service` | use-cases: catalog, flows, runs, results, suggestions, auth/rbac; Zod contracts | kernel, control, adapters (workers only) |
@@ -62,7 +62,7 @@ FA Lens is a module-centric testing and validation platform for FieldAssist: API
 | `@falens/ui` | primitives + patterns from `docs/design/components.md`, tokens | nothing (tokens.css) |
 | `packs/*` | YAML/JSON packs: `_sources/catalog.yaml`, `van-sales/`, `fa-dms-sync/`, … | kernel schema (validation only) |
 
-Dependency direction is one-way, top of the table never imports bottom-up. `tool/check-boundaries` enforces it in CI (ADR-0011).
+Dependency direction is one-way, top of the table never imports bottom-up. `tool/check-boundaries.mjs` enforces it in CI (ADR-0011); it is plain Node, not TypeScript, because the gate runs on a fresh clone before `pnpm install`.
 
 ---
 
