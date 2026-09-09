@@ -1,7 +1,7 @@
 ---
 id: U-007
 title: Kernel pack schema and validator with content hash
-status: draft
+status: ready
 tier: 1
 kind: kernel
 depends_on: [U-006]
@@ -10,11 +10,11 @@ allowed_files:
   - packages/kernel/src/index.ts
   - packages/kernel/test/pack/**
   - packages/kernel/package.json
-adrs: [ADR-0010, ADR-0003, ADR-0013]
+adrs: [ADR-0010, ADR-0003, ADR-0013, ADR-0015]
 design: []
 dod:
   - "`vitest packages/kernel/test/pack` fails without the validator and passes with it: the valid fixture pack is accepted, and each invalid fixture (missing variable, unreachable flow step, unknown rule type, credential value instead of a vault reference, server name inside a module pack) is rejected with a message naming the JSON path"
-  - "`packages/kernel/package.json` declares only ajv, ajv-formats, and yaml as dependencies, and `node tool/check-boundaries.mjs` exits 0"
+  - "`packages/kernel/package.json` declares only the ADR-0015 libraries (ajv, ajv-formats, yaml, jsonpath-plus) as dependencies, a test packages/kernel/test/pack/deps.test.ts fails when another key appears, and `node tool/check-boundaries.mjs` exits 0"
   - "`hashPack()` returns the same hash for the same pack content published twice and a different hash when one byte changes (test in packages/kernel/test/pack/hash.test.ts)"
   - "bash tool/gate.sh --fast is green"
 evidence: [test.log, gate.log]
@@ -38,3 +38,5 @@ No registry tables or publish use-case (U-010, service units). No SQL generation
 - `bash tool/gate.sh --fast` → `evidence/U-007/gate.log`
 
 ## Progress
+2026-09-09 15:57 · ready · set by /build on the owner's instruction (PR #16 merged); flip lives in the unit branch so it cannot collide with the unit PR
+2026-09-09 15:58 · intake · brief ok; status ready set in this branch on the owner's instruction (PR #16 merged). Kernel dependency conflict (ADR-0001 zero deps vs ADR-0003 JSON Schema + JSONPath in the kernel) resolved by proposing ADR-0015 (pure, I/O-free libraries: ajv, ajv-formats, yaml, jsonpath-plus) in this branch; the owner accepts it by merging, or says no and U-007 hand-rolls instead

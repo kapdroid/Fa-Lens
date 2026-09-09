@@ -20,3 +20,4 @@ Template: **Context** (the forces) · **Decision** (one paragraph, present tense
 | [0012](0012-ai-suggestion-boundary.md) | AI proposes; humans accept; runs are deterministic | accepted |
 | [0013](0013-source-catalog-tenant-resolution.md) | Source catalog and tenant resolution | accepted |
 | [0014](0014-source-load-strategy.md) | Source load strategy: budgets, aggregate-first, windows, shadow index | accepted |
+| [0015](0015-kernel-pure-library-dependencies.md) | Kernel may depend on pure, I/O-free libraries (ajv, yaml, jsonpath-plus) | proposed |
