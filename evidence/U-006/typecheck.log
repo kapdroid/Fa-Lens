@@ -1,0 +1,34 @@
+# 2026-09-09 15:47 · 6c28ddc · pnpm -s typecheck
+$ turbo run typecheck
+• turbo 2.10.12
+
+   • Packages in scope: @falens/adapters, @falens/api, @falens/cli, @falens/control, @falens/kernel, @falens/mcp, @falens/packs, @falens/service, @falens/ui, @falens/web, @falens/worker
+   • Running typecheck in 11 packages
+   • Remote caching disabled, using shared worktree cache
+
+@falens/ui:typecheck: cache hit, replaying logs e2e434b01d74c54d
+@falens/kernel:typecheck: cache hit, replaying logs a39cea17a2a1a383
+@falens/ui:typecheck: $ tsc -p tsconfig.json
+@falens/kernel:typecheck: $ tsc -p tsconfig.json
+@falens/adapters:typecheck: cache hit, replaying logs 3a3526488e401fec
+@falens/adapters:typecheck: $ tsc -p tsconfig.json
+@falens/control:typecheck: cache hit, replaying logs c17a201946b922d6
+@falens/control:typecheck: $ tsc -p tsconfig.json
+@falens/service:typecheck: cache hit, replaying logs 3437f26fafa93a25
+@falens/service:typecheck: $ tsc -p tsconfig.json
+@falens/worker:typecheck: cache hit, replaying logs 8b3b730686c29af3
+@falens/api:typecheck: cache hit, replaying logs 6c7776870924362a
+@falens/api:typecheck: $ tsc -p tsconfig.json
+@falens/worker:typecheck: $ tsc -p tsconfig.json
+@falens/mcp:typecheck: cache hit, replaying logs f902b87ffc160944
+@falens/mcp:typecheck: $ tsc -p tsconfig.json
+@falens/cli:typecheck: cache hit, replaying logs 48effdd44debc8e9
+@falens/web:typecheck: cache hit, replaying logs a1825c2d8ed4829c
+@falens/cli:typecheck: $ tsc -p tsconfig.json
+@falens/web:typecheck: $ tsc -p tsconfig.json
+
+ Tasks:    10 successful, 10 total
+Cached:    10 cached, 10 total
+  Time:    27ms >>> FULL TURBO
+
+exit=0

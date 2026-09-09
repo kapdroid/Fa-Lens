@@ -1,19 +1,39 @@
-# 2026-09-09 15:44 · pnpm install --frozen-lockfile on node v24.14.1, pnpm 11.21.0
-[ERR_PNPM_IGNORED_BUILDS] Ignored build scripts: esbuild@0.28.2
+# 2026-09-09 15:46 · 6c28ddc · pnpm install --frozen-lockfile on node v24.14.1, pnpm 11.21.0
+Scope: all 12 workspace projects
+✓ Lockfile passes supply-chain policies (verified 2m ago)
+Lockfile is up to date, resolution step is skipped
+Already up to date
 
-Run "pnpm approve-builds" to pick which dependencies should be allowed to run scripts.
+Done in 287ms using pnpm v11.21.0
 exit=0
 --- pnpm -r ls --depth -1
 falens@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold (PRIVATE)
+
 @falens/adapters@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold/packages/adapters (PRIVATE)
+
 @falens/api@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold/packages/api (PRIVATE)
+
 @falens/cli@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold/packages/cli (PRIVATE)
+
 @falens/control@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold/packages/control (PRIVATE)
+
 @falens/kernel@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold/packages/kernel (PRIVATE)
+
 @falens/mcp@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold/packages/mcp (PRIVATE)
+
 @falens/service@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold/packages/service (PRIVATE)
+
 @falens/ui@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold/packages/ui (PRIVATE)
+
 @falens/web@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold/packages/web (PRIVATE)
+
 @falens/worker@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold/packages/worker (PRIVATE)
+
 @falens/packs@0.0.0 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-006-monorepo-scaffold/packs (PRIVATE)
 workspace packages: 11
+# 2026-09-09 15:48 · 6e82f79 · pnpm install --frozen-lockfile after the allowBuilds fix
+Scope: all 12 workspace projects
+Already up to date
+Done in 151ms using pnpm v11.21.0
+exit=0
+11

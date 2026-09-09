@@ -1,4 +1,4 @@
-# 2026-09-09 15:47 · 6c28ddc · bash tool/gate.sh (full)
+# 2026-09-09 15:47 · 6c28ddc · bash tool/gate.sh --fast
 ▸ docs                        ok
 ▸ knowledge-index             ok
 ▸ knowledge-index-selftest    ok
@@ -18,8 +18,8 @@
 ▸ lint                        ok
 ▸ boundaries                  ok
 ▸ contract                    ok
-▸ unit-tests                  ok
-▸ integration-tests           ok
-▸ e2e                         ok
-gate: GREEN (22 stages)
+▸ unit-tests                  skipped (--fast)
+▸ integration-tests           skipped (--fast)
+▸ e2e                         skipped (--fast)
+gate: GREEN (19 stages)
 exit=0
