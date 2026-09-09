@@ -59,7 +59,7 @@ Rules for all agents: fresh context, narrow rubric, no `Agent` tool (no spawning
 
 - `.claude/settings.json`: `SessionStart` prints branch, active unit, last Progress line, worktree count. `PreToolUse(Bash)` denies pushes to main, force pushes, commits on main outside worktrees, destructive resets, and shell writes to source databases. `PostToolUse(Edit|Write)` checks syntax/schema of the edited file and rejects edits outside `allowed_files`.
 - Git hooks (`tool/githooks`, installed by `tool/setup.sh`): `pre-commit` runs `tool/gate.sh --fast`; `pre-push` refuses `main` and non-`unit/`, `chore/`, `docs/` branches.
-- `tool/gate.sh`: docs, units, whitespace, secrets, prototype parse, tokens sync, shell syntax; once `package.json` exists: typecheck, lint, boundaries, contract snapshot, unit, integration, e2e. Stages skip loudly, never silently.
+- `tool/gate.sh`: docs, units, harness, catalog (+ selftest), evals ledger (selftest + rendered table up to date), whitespace, secrets, prototype parse, tokens sync, shell syntax, tool tests (`tool/test/*.test.mjs`); once `package.json` exists: typecheck, lint, boundaries, contract snapshot, unit, integration, e2e. Stages skip loudly, never silently.
 - Project default permission mode is `plan`.
 - Two human-only escapes exist for bootstrapping a repository, never for unit work: `FALENS_ALLOW_MAIN_COMMIT=1` (commit on main in the root checkout) and `FALENS_BOOTSTRAP_MAIN=1` (the first push of `main` to an empty remote; the pre-push hook refuses it once the remote has a main).
 

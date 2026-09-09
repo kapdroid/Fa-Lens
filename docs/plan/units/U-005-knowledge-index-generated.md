@@ -1,7 +1,7 @@
 ---
 id: U-005
 title: Generate the docs/knowledge index instead of hand-editing it
-status: draft
+status: ready
 tier: 1
 kind: harness
 depends_on: []
@@ -38,3 +38,4 @@ No changes to note format beyond requiring a first-line `# ` heading; no changes
 - temporarily break the index by hand, gate red; regenerate, gate green → `evidence/U-005/gate.log`
 
 ## Progress
+2026-09-09 11:53 · ready · set by /build on the owner's instruction (U-001 merged, so tool/gate.sh is free)
