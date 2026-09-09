@@ -1,0 +1,32 @@
+{
+  "unit": "U-003",
+  "sha": "cca0aa2c5056821eaab4b406c31b6f5def9bca9d",
+  "items": [
+    {
+      "dod": "`.claude/rules/packs.md` states the `packs/_sources/**` exception to 'no server names in a pack' explicitly, citing ADR-0013 (server names yes, credentials never)",
+      "command": "grep -n 'packs/_sources/\\*\\*.*ADR-0013' .claude/rules/packs.md",
+      "evidence": "evidence/U-003/verify-content-check.log",
+      "status": "pass"
+    },
+    {
+      "dod": "node tool/check-docs.mjs passes",
+      "command": "node tool/check-docs.mjs",
+      "evidence": "evidence/U-003/check-docs-verify.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/U-003/gate-fast-verify.log",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "missing": [],
+  "notes": [
+    "Pre-existing red.log (line 9 exception sentence absent, checked against commit 3b615d0) and green.log (grep showing packs/_sources/** and ADR-0013 in one line) were carried over from the build state and re-confirmed in this session via verify-content-check.log.",
+    "Full bash tool/gate.sh (not just --fast) also run per verification rubric and saved to evidence/U-003/gate.log; green (10 stages).",
+    "No changes made to .claude/rules/packs.md or the unit file during this verification pass (git status confirms no diff to packs.md).",
+    "Not a UI unit; no Playwright scenario or screenshots applicable."
+  ]
+}
