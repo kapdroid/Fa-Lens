@@ -1,7 +1,7 @@
 ---
 id: U-009
 title: Kernel declarative rules to SQL text, fingerprint diff, cause vocabulary, and date windows
-status: in_progress
+status: review
 tier: 1
 kind: kernel
 depends_on: [U-007]
@@ -49,3 +49,4 @@ No database calls (U-013). No shadow index (v1.5). No UI. The van-sales rules th
 2026-09-09 16:59 · isolate · worktree /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-009-kernel-rules-sql
 2026-09-09 17:04 · build · gate --fast green at 7be9c1a; red.log shows compileRule/classify missing before, 21 rules tests and 55 kernel tests green after. Two design points the tests forced: a repeated key is read as duplicate before the two sides are compared for agreement, because a duplicate is a defect even when both sides repeat it; and bucketFingerprint takes an explicit identity column set (defaulting to the bucket keys) since a bucket legitimately holds many rows, so duplicates can only be judged against what should be unique. follow-up: rules carry company_column and date_column with defaults CompanyId and CreatedOn; ruleSchema in packages/kernel/src/pack/schemas accepts them as additional properties but does not name them (that file is outside this unit) — a later unit should name them
 2026-09-09 17:10 · review · adr-reviewer pass (1 should, 2 notes), all addressed in round 1. The should was a real latent bug it caught by reading the code rather than the tests: a presence rule with no keys sent '*' through the identifier quoter and compiled SELECT [], COUNT(*) ... GROUP BY [] — shaped like a read, so guardOk accepted it, but broken SQL no fixture exercised. A keyless presence rule now compiles a plain COUNT(*). Rule.type is narrowed to RULE_TYPES. Recording the deviation the reviewer asked for: custom-check compiles to no statement and a problem rather than carrying a referenced statement through, because a pack cannot carry SQL (ADR-0010) and no registry of named checks exists yet; the unit that needs the first one builds it
+2026-09-09 17:10 · pr · https://github.com/kapdroid/Fa-Lens/pull/21
