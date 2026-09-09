@@ -1,0 +1,3 @@
+# 2026-09-09 19:27 · the repository as it stands, with manifests and tests now read
+check-boundaries: OK (10 packages in the table)
+exit=0

@@ -1,0 +1,11 @@
+# 2026-09-09 19:27 · b57bcd1 · the new selftest cases run against the checker as it was before this unit
+ok   clean packages produce no problems (third-party and node: imports ignored)
+ok   api → adapters is flagged with file and line, even as a type import
+ok   worker → kernel via dynamic import is flagged; worker → adapters and service are allowed
+ok   web may import only @falens/api; web → control is flagged
+ok   kernel importing another @falens package is flagged
+FAIL a manifest edge is flagged even when no source file imports it
+ok   third-party dependencies are not the boundary checker's business
+FAIL a forbidden import under test/ is flagged, because a test is code too
+ok   a package missing from the table is flagged
+check-boundaries selftest: 2 failing
