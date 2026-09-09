@@ -1,0 +1,15 @@
+# 2026-09-09 11:32 · e528a0c2532326c7eb9032686f1b8347cc02114f · unit/U-001 · full gate: bash tool/gate.sh
+▸ docs                        ok
+▸ units                       ok
+▸ harness                     ok
+▸ catalog                     ok
+▸ catalog-selftest            ok
+▸ whitespace                  ok
+▸ no-secrets                  ok
+▸ prototype-parses            ok
+▸ tokens-in-sync              ok
+▸ shell-scripts               ok
+▸ tool-tests                  ok
+▸ typecheck/lint/tests        skipped (no package.json yet)
+gate: GREEN (11 stages)
+exit=0

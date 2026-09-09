@@ -1,0 +1,26 @@
+{
+  "unit": "U-001",
+  "sha": "e528a0c2532326c7eb9032686f1b8347cc02114f",
+  "items": [
+    {
+      "dod": "bash tool/gate.sh --fast prints a stage line for tool-tests and runs every tool/test/*.test.mjs",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/U-001/dod1-fast-green.log",
+      "status": "pass"
+    },
+    {
+      "dod": "a deliberately failing test under tool/test/ turns the gate red (evidence/U-001/red.log), removing it turns it green",
+      "command": "cat > tool/test/zz-fails.test.mjs (prints FAIL and exits 1); bash tool/gate.sh --fast; rm tool/test/zz-fails.test.mjs; bash tool/gate.sh --fast",
+      "evidence": "evidence/U-001/red.log, evidence/U-001/dod2-green-after-removal.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh",
+      "evidence": "evidence/U-001/gate.log",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "missing": []
+}

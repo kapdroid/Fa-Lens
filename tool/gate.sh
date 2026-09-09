@@ -21,6 +21,11 @@ run "no-secrets"      bash -c '! git grep -nE "(password|secret|connection ?stri
 run "prototype-parses" node -e "const fs=require('fs');const s=fs.readFileSync('docs/design/prototype/index.html','utf8');const js=s.slice(s.indexOf('<script>')+8,s.lastIndexOf('</script>'));new Function(js);"
 run "tokens-in-sync"  bash -c 'test ! -f packages/ui/tokens.css || diff -q docs/design/tokens.css packages/ui/tokens.css'
 run "shell-scripts"   bash -c 'for f in tool/*.sh tool/githooks/*; do bash -n "$f" || exit 1; done'
+if compgen -G "tool/test/*.test.mjs" >/dev/null; then
+  run "tool-tests"      bash -c 'for f in tool/test/*.test.mjs; do node "$f" || { echo "tool-tests: $f failed"; exit 1; }; done'
+else
+  skip "tool-tests" "no tool/test/*.test.mjs yet"
+fi
 
 if [[ -f package.json ]]; then
   run "typecheck"  pnpm -s typecheck
