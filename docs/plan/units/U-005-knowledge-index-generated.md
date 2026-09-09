@@ -1,7 +1,7 @@
 ---
 id: U-005
 title: Generate the docs/knowledge index instead of hand-editing it
-status: in_progress
+status: review
 tier: 1
 kind: harness
 depends_on: []
@@ -49,3 +49,4 @@ No changes to note format beyond requiring a first-line `# ` heading; no changes
 2026-09-09 11:57 · build · gate --fast green at 9ba2a78; red.log 5 failing before, selftest.log 6 ok after; idempotent.diff empty; gate-red.log shows knowledge-index FAIL with a hand-broken index; two previously un-indexed notes now listed. Gotcha: the plan's example link text tripped check-docs (broken link) and blocked the plan commit until reworded. follow-up: hand-written index hooks were replaced by first headings; if a hook mattered, a docs unit moves it into that note's heading
 2026-09-09 11:59 · verify · evidence complete: summary.json 4/4 pass at f9695cf, full gate green (13 stages)
 2026-09-09 12:01 · review · adr-reviewer pass (2 notes: hook loss already a follow-up; --fast log added as gate-fast.log)
+2026-09-09 12:01 · pr · https://github.com/kapdroid/Fa-Lens/pull/13
