@@ -94,4 +94,4 @@ Blocking question · dependency not done · edit needed outside `allowed_files` 
 
 ## Budget
 
-At most 6 agent launches and 2 fix rounds per unit. Reaching either is a stop, not a retry.
+At most 6 agent launches for tier 1 and 2, 8 for tier 3 (its mandatory reviewers and fresh-eyes already take six), and 2 fix rounds per unit. Reaching either is a stop, not a retry.
