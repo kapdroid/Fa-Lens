@@ -56,6 +56,12 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 - [The kernel stays pure by taking the executor as a callback and asserting latency from its reported duration, never a clock](kernel/kernel-purity-executor-callback-and-reported-duration.md)
 - [Verdict severity order is `none < skipped < ok < warn < error < fail`, and counts tally direct children only](kernel/verdict-severity-order-and-count-tally.md)
 
+### service
+
+- [A layering rule holds only where something checks it, and the boundary checker does not read manifests or tests](service/a-layering-rule-holds-only-where-something-checks-it.md)
+- [A registry that claims to be the only place a verb can be declared must prove it at run time, not just at compile time](service/a-registry-that-claims-exclusivity-must-be-checked-not-declared.md)
+- [A schema that validates a field the handler ignores promises more than the code does](service/a-schema-that-validates-a-field-the-handler-ignores-is-a-false-promise.md)
+
 ### sources
 
 - [Catalog server names come from artifact tools, not from a confirmed replica list](sources/catalog-server-names-unconfirmed.md)
