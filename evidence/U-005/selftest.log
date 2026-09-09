@@ -1,4 +1,3 @@
-# 2026-09-09 11:57 · after implementation
 ok   generate lists every note under a ### area heading, areas and files sorted, title = first heading
 ok   prose outside the markers is byte-identical and the file ends with one newline
 ok   running it twice changes nothing and --check agrees
@@ -7,4 +6,4 @@ ok   a note without a first-line # heading fails naming the file
 ok   missing markers fail
 
 knowledge-index selftest: OK (6 checks)
-exit=0
+selftest exit=0

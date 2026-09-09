@@ -1,0 +1,11 @@
+node tool/knowledge-index.mjs selftest
+node tool/knowledge-index.mjs
+node tool/knowledge-index.mjs
+git diff --stat docs/knowledge/README.md
+node tool/knowledge-index.mjs --check
+sed -i '' '17d' docs/knowledge/README.md
+bash tool/gate.sh --fast
+git checkout -- docs/knowledge/README.md
+bash tool/gate.sh --fast
+grep -n "knowledge-index.mjs" .claude/agents/memory-scribe.md
+bash tool/gate.sh

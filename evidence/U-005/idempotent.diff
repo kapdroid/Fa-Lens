@@ -1,6 +1,9 @@
-# 2026-09-09 11:57 · generator run twice; second run:
+# 2026-09-09 11:58 · f9695cf · unit/U-005 · generator run twice
+-- run 1 --
 knowledge-index: unchanged docs/knowledge/README.md (12 notes)
-git diff --stat docs/knowledge/README.md (index vs working tree after the second run) →
-(empty = no diff)
+-- run 2 --
+knowledge-index: unchanged docs/knowledge/README.md (12 notes)
+-- git diff --stat docs/knowledge/README.md (empty = no diff) --
+-- --check --
 knowledge-index: up to date (12 notes)
---check exit=0
+check exit=0
