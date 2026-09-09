@@ -1,0 +1,7 @@
+# 2026-09-09 16:43 · tests AFTER the implementation
+ ✓ |unit| packages/kernel/test/verdict/rollup.test.ts (4 tests) 2ms
+ ✓ |unit| packages/kernel/test/scope/hash.test.ts (4 tests) 4ms
+ ✓ |unit| packages/kernel/test/verdict/error-vs-fail.test.ts (3 tests) 9ms
+ ✓ |unit| packages/kernel/test/flow/run.test.ts (8 tests) 13ms
+ Test Files  4 passed (4)
+      Tests  19 passed (19)
