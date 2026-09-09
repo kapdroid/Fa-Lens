@@ -63,7 +63,9 @@ export function checkBoundaries(rootDir) {
     if (existsSync(manifest)) {
       let pkg = {};
       try { pkg = JSON.parse(readFileSync(manifest, 'utf8')); } catch { problems.push(`${name}: package.json is not readable JSON`); }
-      for (const field of ['dependencies', 'devDependencies']) {
+      // Every field that can carry an edge, so a boundary cannot be crossed by declaring the
+      // dependency optional or peer instead.
+      for (const field of ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']) {
         for (const dep of Object.keys(pkg[field] ?? {})) {
           const m = dep.match(/^@falens\/([a-z-]+)/);
           if (!m || m[1] === name) continue;
@@ -134,6 +136,20 @@ export function selftest() {
     test('third-party dependencies are not the boundary checker\'s business', () => {
       putManifest('adapters', { '@falens/kernel': 'workspace:*', undici: '^8' }, { vitest: '^3', '@types/pg': '^8' });
       assert.deepEqual(checkBoundaries(dir).filter(x => x.startsWith('adapters')), []);
+    });
+
+    test('an edge declared optional or peer is still an edge', () => {
+      mkdirSync(join(dir, 'packages', 'mcp'), { recursive: true });
+      writeFileSync(join(dir, 'packages', 'mcp', 'package.json'), JSON.stringify({
+        name: '@falens/mcp',
+        optionalDependencies: { '@falens/control': 'workspace:*' },
+        peerDependencies: { '@falens/adapters': 'workspace:*' },
+      }));
+      const p = checkBoundaries(dir).filter(x => x.startsWith('mcp'));
+      assert.deepEqual(p, [
+        'mcp → control is not allowed (packages/mcp/package.json)',
+        'mcp → adapters is not allowed (packages/mcp/package.json)',
+      ]);
     });
 
     test('a forbidden import under test/ is flagged, because a test is code too', () => {

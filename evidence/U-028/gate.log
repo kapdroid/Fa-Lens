@@ -1,4 +1,4 @@
-# 2026-09-09 19:30 · bash tool/gate.sh --fast after review round 1
+# 2026-09-09 19:28 · c900340 · unit/U-028
 ▸ docs                        ok
 ▸ knowledge-index             ok
 ▸ knowledge-index-selftest    ok
@@ -18,8 +18,7 @@
 ▸ lint                        ok
 ▸ boundaries                  ok
 ▸ contract                    ok
-▸ unit-tests                  skipped (--fast)
-▸ integration-tests           skipped (--fast)
-▸ e2e                         skipped (--fast)
-gate: GREEN (19 stages)
-exit=0
+▸ unit-tests                  ok
+▸ integration-tests           ok
+▸ e2e                         ok
+gate: GREEN (22 stages)
