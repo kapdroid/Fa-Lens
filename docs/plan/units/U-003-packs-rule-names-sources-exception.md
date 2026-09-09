@@ -41,3 +41,4 @@ No changes to the catalog itself, no new rules, no restructuring of `packs.md` b
 2026-09-09 11:28 · intake · brief ok (status ready set in PR #8 on the owner's instruction; intake run from that branch's worktree)
 2026-09-09 11:28 · explore · findings recorded; 0 open questions. Target sentence packs.md:9; wording to echo packs/_sources/README.md:5-7 and ADR-0013 line 11; check-harness requires the paths: frontmatter untouched; check-docs does not scan .claude/rules so no links are added
 2026-09-09 11:28 · isolate · worktree /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-003-packs-sources-exception
+2026-09-09 11:30 · build · gate --fast green at 41c6aae; red.log grep exit 1 before, green.log names packs/_sources/** and ADR-0013 in one sentence
