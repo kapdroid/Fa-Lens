@@ -44,3 +44,4 @@ No scheduling, no CI wiring, no charts.
 2026-09-09 10:57 · explore · findings recorded; 2 open questions. Decided: tests-first satisfied by a selftest command inside tool/evals.mjs (precedent tool/check-catalog.mjs --selftest; tool/test/** not allowed); jsonl is seeded from the five existing rows so history is kept
 2026-09-09 10:57 · isolate · worktree /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/E-005-harness-eval-record
 2026-09-09 11:00 · build · gate --fast green at 4f85ca3; red.log 8 failing before implementation, selftest.log 8 ok after; render.diff empty on second render; record.log shows the DoD-1 line then reverted
+2026-09-09 11:02 · verify · evidence complete: summary.json 3/3 pass at c50b87f, full gate green (gate.log), selftest 8/8 re-run

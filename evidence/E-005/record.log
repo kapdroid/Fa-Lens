@@ -1,8 +1,8 @@
-# 2026-09-09 11:00 · e77c10c · node tool/evals.mjs record E-001 pass 'gate green, note present'
-evals: recorded E-001 pass (2026-09-09, e77c10c) → docs/orchestration/evals.jsonl
+# 2026-09-09 11:01 · c50b87fe60d66cfba46fcc47565ee89b9ccddd3d · node tool/evals.mjs record E-001 pass 'gate green, note present' (DoD-1 literal command, run by review agent)
+evals: recorded E-001 pass (2026-09-09, c50b87f) → docs/orchestration/evals.jsonl
 appended line:
-{"id":"E-001","verdict":"pass","note":"gate green, note present","date":"2026-09-09","sha":"e77c10c"}
+{"id":"E-001","verdict":"pass","note":"gate green, note present","date":"2026-09-09","sha":"c50b87f"}
 git diff --stat:
  docs/orchestration/evals.jsonl | 1 +
  1 file changed, 1 insertion(+)
-reverted with git checkout -- docs/orchestration/evals.jsonl so the committed ledger holds only real eval runs (this was an evidence run)
+reverted with git checkout -- docs/orchestration/evals.jsonl so the committed ledger holds only real eval runs (this was an evidence run, not a real eval)

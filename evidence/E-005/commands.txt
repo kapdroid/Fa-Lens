@@ -1,0 +1,35 @@
+cd /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/E-005-harness-eval-record
+git rev-parse HEAD
+git status --short docs/orchestration/evals.jsonl docs/orchestration/evals.md tool/evals.mjs
+
+# DoD-1: literal record command, then revert the mutation
+node tool/evals.mjs record E-001 pass 'gate green, note present'
+tail -1 docs/orchestration/evals.jsonl
+git diff --stat docs/orchestration/evals.jsonl
+git checkout -- docs/orchestration/evals.jsonl
+git status --short docs/orchestration/evals.jsonl
+# -> evidence/E-005/record.log
+
+# DoD-2: render idempotence, run twice
+node tool/evals.mjs render
+git diff --stat docs/orchestration/evals.md
+node tool/evals.mjs render
+git diff --stat docs/orchestration/evals.md
+node tool/evals.mjs render --check
+# -> evidence/E-005/render.diff
+
+# Selftest (tests-first coverage, re-run at current HEAD)
+node tool/evals.mjs selftest
+# -> evidence/E-005/selftest.log
+# note: red (pre-implementation) run was captured earlier by the build step
+# and is preserved unmodified at evidence/E-005/red.log (8 failing before
+# record/render/readLedger were implemented); not re-run here since the
+# implementation is already in place and re-running would not reproduce red.
+
+# DoD-3: full gate, both literal --fast form and the rubric's full gate
+bash tool/gate.sh --fast
+# -> evidence/E-005/gate-fast.log
+bash tool/gate.sh
+# -> evidence/E-005/gate.log
+
+git status --short
