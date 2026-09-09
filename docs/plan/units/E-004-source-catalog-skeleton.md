@@ -1,7 +1,7 @@
 ---
 id: E-004
 title: Write the v1 source catalog skeleton with tenant maps and replica-only servers
-status: in_progress
+status: review
 tier: 3
 kind: pack
 depends_on: []
@@ -55,3 +55,4 @@ follow-up: confirm real Report and DMS per-tenant replica hostnames before any a
 2026-09-09 10:10 · review · round 1: adr-reviewer pass (3 notes → wording fixed, rest deferred by design); adapter-safety-reviewer pass with 9 should → all fixed at 2c99190 (validator hardened, 4 fixtures); safety rerun + fresh-eyes next
 2026-09-09 10:18 · review · round 2: adapter-safety pass (8 should → fixed, --selftest added to gate); fresh-eyes: scope match after triage; tier-3 agent budget (8) reached → no third review round; deterministic selftest stands in for it
 2026-09-09 10:18 · review · follow-up: adapter unit's DoD must require confirm: false for every source it connects to; follow-up: gate should glob packs/_sources/catalog*.yaml once a beta overlay exists
+2026-09-09 10:18 · pr · https://github.com/kapdroid/Fa-Lens/pull/4
