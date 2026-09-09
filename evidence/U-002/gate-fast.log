@@ -1,0 +1,14 @@
+# 2026-09-09 11:37 · 8928d3c · bash tool/gate.sh --fast (literal DoD-2)
+▸ docs                        ok
+▸ units                       ok
+▸ harness                     ok
+▸ catalog                     ok
+▸ catalog-selftest            ok
+▸ whitespace                  ok
+▸ no-secrets                  ok
+▸ prototype-parses            ok
+▸ tokens-in-sync              ok
+▸ shell-scripts               ok
+▸ typecheck/lint/tests        skipped (no package.json yet)
+gate: GREEN (10 stages)
+exit=0

@@ -103,6 +103,8 @@ button,input{font:inherit;color:inherit}button{cursor:pointer;border:0;backgroun
 .dchildren.anim{animation:dopen var(--d-base) var(--e-standard)}
 @keyframes dopen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .dempty{padding:16px 8px;color:var(--text-faint);font-size:var(--fs-sm)}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--sp-3);padding:var(--sp-12) var(--card-pad);animation:reveal var(--d-base) var(--e-enter) both}.empty svg{width:var(--sp-5);height:var(--sp-5);color:var(--text-faint)}.empty p{margin:0;color:var(--text-dim);font-size:var(--fs-base);line-height:var(--lh-base);max-width:60ch}.empty .fail{color:var(--crit-text);font-size:var(--fs-sm);line-height:var(--lh-sm);max-width:60ch}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}@media (prefers-reduced-motion:reduce){.empty{animation-name:fadeIn}}
 mark.hl{background:var(--warn-soft);color:inherit;border-radius:2px;padding:0 1px}
 .userrow{display:flex;align-items:center;gap:10px;padding:8px;border-radius:var(--r-sm);cursor:pointer;margin-top:4px}
 .userrow:hover{background:var(--surface-3)}
@@ -520,7 +522,7 @@ const B=(k,t)=>`<span class="badge ${k}">${t}</span>`;
 const RING=(cls,id)=>`<div class="ring ${cls}" ${id?`id="${id}"`:''}><svg viewBox="0 0 44 44"><circle class="track" cx="22" cy="22" r="19"/><circle class="arc" cx="22" cy="22" r="19"/></svg><i class="core"></i></div>`;
 
 /* ================= STATE + ROUTER ================= */
-const S={view:'company',mod:null,tab:'overview',pins:new Set(['van']),stack:[],tenantView:false};
+const S={view:'company',mod:null,tab:'overview',pins:new Set(['van']),stack:[],tenantView:false,empty:false};
 const root=document.documentElement;
 $('#themeBtn').onclick=()=>{const cur=root.getAttribute('data-theme');const dark=cur?cur==='dark':matchMedia('(prefers-color-scheme: dark)').matches;root.setAttribute('data-theme',dark?'light':'dark');};
 /* density toggle (comfortable default, remembered per viewer) */
@@ -531,8 +533,8 @@ $('#colsBtn')&&0;
 $('#collapseBtn').onclick=()=>$('#shell').classList.toggle('mini');
 $('#drawer').addEventListener('dblclick',e=>{if(e.target.closest('.dhead'))$('#shell').classList.toggle('mini');});
 
-function nav(view,mod,tab){S.view=view;S.mod=mod||null;S.tab=tab||'overview';if(view==='module'&&mod)noteRecent(mod);closePanel(true);renderDrawer();renderPage();try{history.replaceState(null,'','#/'+[view,mod,tab].filter(Boolean).join('/'));}catch(e){}}
-function bootFromHash(){const p=(location.hash||'').replace(/^#\/?/,'').split('/').filter(Boolean);if(!p.length)return nav('company');if(p[0]==='module'&&MODS.find(m=>m.id===p[1]))return nav('module',p[1],p[2]||'overview');nav(p[0]);}
+function nav(view,mod,tab){S.view=view;S.mod=mod||null;S.tab=tab||'overview';if(view==='module'&&mod)noteRecent(mod);closePanel(true);renderDrawer();renderPage();try{history.replaceState(null,'','#/'+[view,mod,tab].filter(Boolean).join('/')+(view==='module'&&S.empty?'/empty':''));}catch(e){}}
+function bootFromHash(){const p=(location.hash||'').replace(/^#\/?/,'').split('/').filter(Boolean);if(!p.length)return nav('company');if(p[0]==='module'&&MODS.find(m=>m.id===p[1])){S.empty=p[3]==='empty';return nav('module',p[1],p[2]||'overview');}nav(p[0]);}
 
 /* ================= DRAWER: reusable NavTree ================= */
 const COMPANIES=[{name:'Mars Wrigley VN',id:'234474',tenant:'Mars'},{name:'Big Tree Zambia',id:'193008',tenant:'General'},{name:'Bisleri - LIVE',id:'244531',tenant:'General'},{name:'HCCB Prod',id:'193054',tenant:'General'}];
@@ -678,11 +680,11 @@ function renderModule(ph,c){const m=MODS.find(x=>x.id===S.mod);const cnt={apis:(
  <div class="right"><button class="btn ghost sm">Share</button><button class="btn primary" id="runBtn"><span class="spin"></span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg><span class="lbl">${runLabel}</span></button></div></div>
  <p class="lead">${m.sync?'Rows compared between FA, Report, and DMS for this company and month. Missing rows, mismatches, duplicates, and aggregate gaps, with the evidence for each.':`${m.name} APIs, test cases, automated flows, and data validations for Mars Wrigley VN on Beta, scoped to August 2026.`}</p>
  <nav class="tabs" id="tabs">${TABS.map(t=>`<button class="tab ${S.tab===t[0]?'active':''}" data-tab="${t[0]}"><i class="dot ${(m[t[0]]||{}).v||''}" style="${m[t[0]]?'':'display:none'}"></i>${t[1]}${cnt[t[0]]?`<span class="n">${cnt[t[0]]}</span>`:''}</button>`).join('')}<span class="ink" id="ink"></span></nav>`;
- $$('.tab').forEach(t=>t.onclick=()=>{S.tab=t.dataset.tab;closePanel(true);renderModule(ph,c);renderDrawer();try{history.replaceState(null,'','#/module/'+m.id+'/'+S.tab);}catch(e){}});
+ $$('.tab').forEach(t=>t.onclick=()=>{S.tab=t.dataset.tab;closePanel(true);renderModule(ph,c);renderDrawer();try{history.replaceState(null,'','#/module/'+m.id+'/'+S.tab+(S.empty?'/empty':''));}catch(e){}});
  requestAnimationFrame(()=>{const t=$('.tab.active');if(t){$('#ink').style.left=t.offsetLeft+'px';$('#ink').style.width=t.offsetWidth+'px';}});
  c.innerHTML='';const v=document.createElement('section');v.className='view active';c.appendChild(v);
  const table=m.sync?{overview:syncOverview,flows:syncFlows,validations:syncValidations}:{overview:modOverview,apis:modApis,cases:modCases,flows:modFlows,validations:modValidations,load:modLoad};
- (table[S.tab]||modStub)(v,m);bindNav();
+ (S.empty?emptyState:(table[S.tab]||modStub))(v,m);bindNav();
  const rb=$('#runBtn');if(S.tab==='flows')rb.onclick=()=>$('#flowRun')&&$('#flowRun').click();else if(S.tab==='validations')rb.onclick=runValidation;else rb.onclick=()=>genericRun(rb,m);}
 function genericRun(b,m){if(b.classList.contains('loading'))return;b.classList.add('loading');const l=$('.lbl',b),t=l.textContent;l.textContent='Running';const ring=$('#ring');if(ring)ring.className='ring running';setTimeout(()=>{b.classList.remove('loading');l.textContent=t;if(ring)ring.className='ring done '+(m.health==='none'?'ok':m.health);countUp();toast(m.health==='crit'?'crit':'ok',`${m.name} · run finished`,'Open',()=>nav('module',m.id,'runs'));},reduced?200:2000);}
 function modOverview(v,m){const isVan=m.id==='van';
@@ -838,6 +840,22 @@ function syncValidations(v,m){const rules=Object.values(SYNC.flows).flatMap(f=>f
  :`<div class="tablewrap"><table class="grid" style="min-width:820px"><thead><tr><th>Severity</th><th>Category</th><th>Chain</th><th>Where</th><th class="num">Rows</th><th>First seen</th><th>Status</th></tr></thead><tbody>${SYNC.issues.map((i,k)=>`<tr class="reveal ${i[6]==='resolved'?'':i[0]==='critical'?'crit':i[0]==='high'?'warn':''}" style="--i:${k}"><td><span class="sev ${i[0]}"><i></i>${i[0]}</span></td><td><span class="cause ${i[1]==='Missing'||i[1]==='Duplicate'?'crit':'warn'}">${i[1]}</span></td><td class="mono">${i[2]}</td><td class="mono" style="font-size:11.5px">${i[3]}</td><td class="num">${i[4]}</td><td class="mono dim">${i[5]}</td><td><select class="sel">${['new','acknowledged','resolved'].map(s=>`<option ${s===i[6]?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join('')}</tbody></table></div><p class="hint">Flat worklist across every chain and rule. Status is workflow only; it never writes to a source. Click a row to open its failing rows in the chain view.</p>`}`;
  $$('[data-s]',v).forEach(b=>b.onclick=()=>{syncSeg=b.dataset.s;renderPage();});
  if(syncSeg==='issues')$$('tbody tr',v).forEach((tr,k)=>tr.onclick=e=>{if(e.target.tagName==='SELECT')return;syncFlow=SYNC.issues[k][2];nav('module','sync','flows');});}
+/* EmptyState (components.md): copy verbatim from screens.md → Module page → Empty states per tab. One sentence + one action.
+   The button is `accent` on every tab because the module header already carries the screen's one primary (runBtn). */
+const EMPTY={
+ overview:{s:'No runs yet for Van Sales in Mars · 234474. Run the smoke flow to get a first verdict.',a:'Run smoke flow'},
+ apis:{s:'No endpoints in the catalog for this module yet. Import a Postman collection or an OpenAPI spec to fill it.',a:'Import collection'},
+ cases:{s:'No cases yet. Generate from the catalog or save one from the workbench.',a:'Generate cases'},
+ flows:{s:"No flows in Van Sales. Start from the app's real sequence.",a:'New flow: App day cycle'},
+ validations:{s:'No validation has run for this scope yet. Choose a validation and a date range to run one.',a:'Run cycle reconciliation'},
+ load:{s:'No load tests yet. Export a k6 script from any flow or endpoint to start one.',a:'Export k6 script'},
+ runs:{s:'Nothing has run in this scope yet. Results appear here the moment a run finishes.',a:'Run smoke flow'},
+ data:{s:'No test users or fixtures for this tenant yet. Add a test user to run write flows on the sandbox company.',a:'Add test user'},
+ knowledge:{s:'No notes for this module yet. Sync the ADO knowledge base or write the first gotcha.',a:'Sync from ADO'}};
+const EMPTY_SYNC={flows:{s:'No chains defined for this company yet.',a:'New chain'}};
+function emptyState(v,m){const e=(m.sync&&EMPTY_SYNC[S.tab])||EMPTY[S.tab];const sentence=m.id==='van'?e.s:e.s.replace('Van Sales',m.name);
+ v.innerHTML=`<div class="card"><h3>${TABS.find(t=>t[0]===S.tab)[1]}</h3><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3" aria-hidden="true"><circle cx="12" cy="12" r="8"/></svg><p>${sentence}</p><button class="btn accent" id="emptyCta"><span class="spin"></span><span class="lbl">${e.a}</span></button></div></div>`;
+ const b=$('#emptyCta');if(b)b.onclick=ev=>{if(b.classList.contains('loading'))return;const old=$('.fail',v);old&&old.remove();b.classList.add('loading');setTimeout(()=>{b.classList.remove('loading');if(ev.shiftKey)b.insertAdjacentHTML('afterend',`<div class="fail">${e.a} failed: the service did not answer in time. Retry, or narrow the scope and try again.</div>`);else toast('ok',`${e.a} · queued (prototype)`);},600);};}
 function modStub(v,m){v.innerHTML=`<div class="card"><h3>${TABS.find(t=>t[0]===S.tab)[1]}</h3><p class="dim">Described in <span class="mono">screens.md</span>. Same tokens, table, and panel as the tabs you have seen.</p></div>`;}
 
 /* ================= FOCUS PANEL ================= */
@@ -896,6 +914,18 @@ document.addEventListener('keydown',e=>{const meta=e.metaKey||e.ctrlKey;
 /* ================= SCENARIOS ================= */
 const scen=$('#scen'),narr=$('#narr');let playing=false;
 const SCEN=[
+ {who:'D',cls:'',title:'Designer: every tab, no data yet',sub:'the nine empty states · one sentence, one action (components.md → EmptyState)',steps:[
+  ['A module with nothing in it yet. Overview names the scope so it does not read as a loading failure.',()=>{S.empty=true;nav('module','van','overview');}],
+  ['APIs: import a collection to fill the catalog.',()=>{S.empty=true;nav('module','van','apis');}],
+  ['Cases: generate from the catalog.',()=>{S.empty=true;nav('module','van','cases');}],
+  ['Flows: start from the app\'s real sequence.',()=>{S.empty=true;nav('module','van','flows');}],
+  ['Validations: choose one and a date range.',()=>{S.empty=true;nav('module','van','validations');}],
+  ['Load: export a k6 script.',()=>{S.empty=true;nav('module','van','load');}],
+  ['Runs: results appear the moment a run finishes.',()=>{S.empty=true;nav('module','van','runs');}],
+  ['Data: add a test user for the sandbox company.',()=>{S.empty=true;nav('module','van','data');}],
+  ['Knowledge: sync from ADO or write the first gotcha. Every button is accent: the header already owns the primary.',()=>{S.empty=true;nav('module','van','knowledge');}],
+  ['Shift-click the action: the failed state says what happened and how to fix, still one action.',()=>{const b=$('#emptyCta');b&&b.dispatchEvent(new MouseEvent('click',{shiftKey:true,bubbles:true}));}],
+  ['Back to real data. The deep link #/module/van/apis/empty opens any tab empty.',()=>{S.empty=false;nav('module','van','overview');}]]},
  {who:'V',cls:'v',title:'Validator: which cycle broke?',sub:'company → red cell → cycle → product trace',steps:[
   ['Start at the company. The matrix shows every module × testing type.',()=>nav('company')],
   ['Van Sales · Validations is red. Click the cell.',()=>spot($('.cell[data-mod=van][data-t=validations]'))],
