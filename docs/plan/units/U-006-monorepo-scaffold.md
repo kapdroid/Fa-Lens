@@ -1,7 +1,7 @@
 ---
 id: U-006
 title: Scaffold the pnpm/Turborepo monorepo with the eleven packages, boundary check, and a real gate
-status: in_progress
+status: review
 tier: 1
 kind: infra
 depends_on: []
@@ -64,3 +64,4 @@ No real domain code (U-007 onward). No Docker or Testcontainers wiring beyond th
 2026-09-09 15:45 · build · gate --fast green at 1510917: typecheck (10 packages), lint, boundaries, contract stages run; before.log shows the old skip line; red.log 6 failing → selftest.log 6 ok; boundary-red.log exit 1 then 0; install.log lists 11 workspace packages. Gotchas: pnpm 11 reads settings from pnpm-workspace.yaml, not package.json's pnpm field (onlyBuiltDependencies for esbuild, verifyDepsBeforeRun off because its check crashed under corepack); eslint must ignore .claude/** (harness scripts are zero-dep Node, not app code). follow-up: U-007 plans ajv/yaml as kernel dependencies while ADR-0001 says the kernel has zero runtime dependencies — settle before U-007 is ready (hand-rolled validator, or parse outside the kernel)
 2026-09-09 15:48 · verify · evidence complete: summary.json 5 items pass, full gate green (22 stages). evidence-collector found pnpm-workspace.yaml carried allowBuilds.esbuild 'set this to true or false' (pnpm approve-builds placeholder written during install) → fixed to true, frozen install re-run clean
 2026-09-09 15:50 · review · adr-reviewer pass (2 notes). follow-up: ADR-0001 'How we verify' says tool/check-boundaries.ts; the file is .mjs by the zero-dependency convention — a docs unit corrects the sentence. follow-up: check-boundaries parses imports with a regex; switch to an AST walk if it misfires once real source lands
+2026-09-09 15:51 · pr · https://github.com/kapdroid/Fa-Lens/pull/16
