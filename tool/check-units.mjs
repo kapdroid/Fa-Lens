@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Work-unit gate. Every docs/plan/units/U-*.md and E-*.md must have valid frontmatter per docs/plan/unit.schema.json
 // and a body with the required headings. Also enforces: allowed_files sets of two `ready`/`in_progress` units never overlap.
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { readFrontmatter } from './lib/frontmatter.mjs';
 
@@ -43,6 +43,14 @@ for (let i = 0; i < active.length; i++) for (let j = i + 1; j < active.length; j
 
 // dependency existence
 const ids = new Set(units.map(u => u.data.id));
+
+// orphan evidence: every evidence/<name>/ directory must belong to a unit (files such as .gitkeep are ignored)
+const evidenceDir = join(root, 'evidence');
+if (existsSync(evidenceDir)) {
+  for (const e of readdirSync(evidenceDir, { withFileTypes: true })) {
+    if (e.isDirectory() && !ids.has(e.name)) problems.push(`evidence/${e.name}: no unit ${e.name} found (orphan evidence directory)`);
+  }
+}
 for (const u of units) for (const d of (u.data.depends_on || [])) if (!ids.has(d)) problems.push(`${u.f}: depends_on unknown unit ${d}`);
 
 if (problems.length) { console.error('check-units: FAIL'); for (const p of problems) console.error(' - ' + p); process.exit(1); }

@@ -1,0 +1,32 @@
+{
+  "unit": "E-003",
+  "sha": "1f9acb7027f70dfcfb8f2edac40113e93b918970",
+  "items": [
+    {
+      "dod": "docs/design/screens.md lists, for each of the nine module tabs, an empty-state sentence and its primary action, in a single table",
+      "command": "grep -c '^| \\(Overview\\|APIs\\|Cases\\|Flows\\|Validations\\|Load\\|Runs\\|Data\\|Knowledge\\) |' docs/design/screens.md",
+      "evidence": "evidence/E-003/green.log",
+      "status": "pass"
+    },
+    {
+      "dod": "docs/design/components.md gains an 'EmptyState' component entry with anatomy, tokens, and the rule 'one sentence + one action'",
+      "command": "grep -c '^## EmptyState' docs/design/components.md; grep -n -i 'anatomy|tokens|one sentence + one action' (section extract)",
+      "evidence": "evidence/E-003/green.log",
+      "status": "pass"
+    },
+    {
+      "dod": "node tool/check-docs.mjs passes",
+      "command": "node tool/check-docs.mjs",
+      "evidence": "evidence/E-003/check-docs-verify.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/E-003/gate-fast-verify.log",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "missing": ["design-review.json"]
+}
