@@ -1,7 +1,7 @@
 ---
 id: U-001
 title: Gate runs the zero-dependency tool tests as a stage
-status: in_progress
+status: review
 tier: 1
 kind: harness
 depends_on: [E-002]
@@ -42,3 +42,4 @@ No new tests, no package.json, no CI wiring.
 2026-09-09 11:31 · build · gate --fast green at 222a08d; before.log green-with-failing-test (the gap), red.log RED via tool-tests naming zz-fails, gate.log green with stage ok, skip.log 'skipped (no tool/test/*.test.mjs yet)'. follow-up: docs/orchestration.md §5 gate stage list omits tool-tests (outside allowed_files). follow-up: wire node tool/evals.mjs selftest and render --check into the gate (E-005 follow-up, not this unit's one stage)
 2026-09-09 11:33 · verify · evidence complete: summary.json 3/3 pass at e528a0c, full gate green (gate.log)
 2026-09-09 11:35 · review · adr-reviewer pass (2 notes: ADR-0011 static list does not name tool tests — elaboration, no fix; docs/orchestration.md §5 stage list stale — already a follow-up line above)
+2026-09-09 11:35 · pr · https://github.com/kapdroid/Fa-Lens/pull/10
