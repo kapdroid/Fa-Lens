@@ -47,3 +47,4 @@ No pack files, no schema, no code. Do not restate the whole artifact-tool spec; 
 2026-09-09 04:49 · review · spec-checker pass; adr-reviewer pass (1 note → harness fix: .falens-unit gitignored on main)
 2026-09-09 · pr · dry-run rendered at evidence/E-001/pr-body.md; push + PR awaiting owner approval
 2026-09-09 · memory · docs/knowledge/harness/build-skill-isolate-before-plan.md added (two harness defects found by this unit, already fixed on main at 94e190c: isolate-before-plan ordering, .falens-unit gitignore); no ADR (no decision moved — ADR-0010 unaffected); no follow-up unit drafts needed
+2026-09-09 09:56 · pr · https://github.com/kapdroid/Fa-Lens/pull/1
