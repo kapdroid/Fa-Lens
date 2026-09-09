@@ -12,6 +12,8 @@ run() { local name="$1"; shift; stages=$((stages+1)); printf '▸ %-28s' "$name"
 skip() { printf '▸ %-28s%s\n' "$1" "skipped ($2)"; }
 
 run "docs"            node tool/check-docs.mjs
+run "knowledge-index" node tool/knowledge-index.mjs --check
+run "knowledge-index-selftest" node tool/knowledge-index.mjs selftest
 run "units"           node tool/check-units.mjs
 run "harness"         node tool/check-harness.mjs
 run "catalog"         node tool/check-catalog.mjs

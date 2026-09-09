@@ -1,0 +1,18 @@
+# 2026-09-09 11:58 · index broken by hand (one row deleted): bash tool/gate.sh --fast
+▸ docs                        ok
+▸ knowledge-index             FAIL
+    knowledge-index: docs/knowledge/README.md index is stale — run node tool/knowledge-index.mjs
+▸ knowledge-index-selftest    ok
+▸ units                       ok
+▸ harness                     ok
+▸ catalog                     ok
+▸ catalog-selftest            ok
+▸ whitespace                  ok
+▸ no-secrets                  ok
+▸ prototype-parses            ok
+▸ tokens-in-sync              ok
+▸ shell-scripts               ok
+▸ tool-tests                  ok
+▸ typecheck/lint/tests        skipped (no package.json yet)
+gate: RED
+exit=1

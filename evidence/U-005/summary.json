@@ -1,0 +1,38 @@
+{
+  "unit": "U-005",
+  "sha": "f9695cfc6a520850be9a324baa2acb29be259a0a",
+  "items": [
+    {
+      "dod": "node tool/knowledge-index.mjs writes the index section of docs/knowledge/README.md between two marker comments from the files on disk; running it twice produces no diff",
+      "command": "node tool/knowledge-index.mjs; node tool/knowledge-index.mjs; git diff --stat docs/knowledge/README.md; node tool/knowledge-index.mjs --check",
+      "evidence": "evidence/U-005/idempotent.diff",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast fails when the committed index differs from the generated one (stage knowledge-index)",
+      "command": "sed -i '' '17d' docs/knowledge/README.md; bash tool/gate.sh --fast; git checkout -- docs/knowledge/README.md; bash tool/gate.sh --fast",
+      "evidence": "evidence/U-005/gate-red.log",
+      "status": "pass"
+    },
+    {
+      "dod": ".claude/agents/memory-scribe.md tells the agent to run the generator instead of editing the index by hand",
+      "command": "grep -n \"knowledge-index.mjs\" .claude/agents/memory-scribe.md",
+      "evidence": "evidence/U-005/memory-scribe-grep.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh",
+      "evidence": "evidence/U-005/gate.log",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "missing": [],
+  "notes": [
+    "selftest.log also re-run and captured (evidence/U-005/selftest.log): 'node tool/knowledge-index.mjs selftest' green, 6 checks OK.",
+    "Prior red.log (selftest failing before implementation, captured earlier at commit 9b01b48/9ba2a78) preserved from an earlier session's evidence and not overwritten in this run; see evidence/U-005/red.log.",
+    "docs/knowledge/README.md was temporarily broken (row 17 deleted) to produce the gate-red.log evidence, then restored via 'git checkout -- docs/knowledge/README.md'; git status confirms the file is back to the committed state.",
+    "Final saved gate.log is from a full 'bash tool/gate.sh' run (not --fast) per instructions to run the full gate last; both --fast and full runs were green in this session."
+  ]
+}
