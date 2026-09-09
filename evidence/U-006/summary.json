@@ -12,7 +12,7 @@
     {
       "dod": "pnpm -s typecheck, pnpm -s lint, pnpm -s test each exit 0, and bash tool/gate.sh --fast runs typecheck and lint instead of printing the skip line",
       "command": "pnpm -s typecheck; pnpm -s lint; pnpm -s test; bash tool/gate.sh --fast",
-      "evidence": ["evidence/U-006/typecheck.log", "evidence/U-006/lint.log", "evidence/U-006/test.log", "evidence/U-006/gate-fast.log"],
+      "evidence": "evidence/U-006/typecheck.log, evidence/U-006/lint.log, evidence/U-006/test.log, evidence/U-006/gate-fast.log",
       "status": "pass"
     },
     {
