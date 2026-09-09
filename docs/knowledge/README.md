@@ -14,7 +14,11 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 <!-- index:start -->
 ### control
 
+- [A seam meant to be swapped later must not expose the current implementation's concepts](control/a-swappable-seam-must-not-leak-its-implementation.md)
 - [Evidence expires by dropping a monthly partition, never by deleting rows](control/evidence-expires-by-dropping-a-partition-never-deleting-rows.md)
+- [A Bus that reconnects but forgets to re-LISTEN goes silently deaf](control/listen-notify-reconnect-must-re-issue-listen.md)
+- [Work that must be atomic with a lock has to run on the lock's own transaction](control/lock-scoped-work-must-share-the-lock-transaction.md)
+- [Run coalescing: the lock is a short gate, the runs row is the durable state](control/run-coalescing-lock-is-a-gate-not-a-lease.md)
 - [Tenant isolation is a property of the repository factory, not of the caller](control/tenant-isolation-is-a-property-of-the-repository-factory.md)
 
 ### design
