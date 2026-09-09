@@ -1,0 +1,14 @@
+# 2026-09-09 16:04 · 9681eeb · pnpm -s vitest run packages/kernel/test/pack BEFORE the implementation
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |unit| packages/kernel/test/pack/deps.test.ts > packages/kernel/package.json declares only the ADR-0015 libraries
+AssertionError: expected [] to deeply equal ArrayContaining{…}
+ FAIL  |unit| packages/kernel/test/pack/hash.test.ts > hashPack is stable for the same content parsed twice
+TypeError: (0 , parsePack) is not a function
+ FAIL  |unit| packages/kernel/test/pack/hash.test.ts > hashPack changes when one byte of a flow changes
+TypeError: (0 , parsePack) is not a function
+ FAIL  |unit| packages/kernel/test/pack/hash.test.ts > hashPack ignores key order in YAML documents
+TypeError: (0 , parsePack) is not a function
+ FAIL  |unit| packages/kernel/test/pack/validate.test.ts > validatePack > the valid fixture pack is accepted with no problems
+TypeError: (0 , parsePack) is not a function
+ FAIL  |unit| packages/kernel/test/pack/validate.test.ts > validatePack > an undeclared {{variable}} is rejected at the step that uses it
+exit=1

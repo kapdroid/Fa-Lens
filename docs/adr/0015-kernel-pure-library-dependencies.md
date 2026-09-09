@@ -20,7 +20,7 @@ The kernel may depend on libraries that are **pure**: no network, no file system
 
 - `packages/kernel/package.json` lists exactly the four libraries; `tool/check-boundaries.mjs` continues to forbid any `@falens/*` import in the kernel, and a gate stage (added with the next kernel unit) fails when the kernel's dependency list grows beyond this ADR's rows.
 - Bundle size of the browser preview grows by the four libraries; acceptable.
-- Flow and pack schemas stay JSON Schema files under `packages/kernel/src/**/*.schema.json`, reviewable in PRs.
+- Flow and pack schemas stay JSON Schema documents (draft-07 objects under `packages/kernel/src/pack/schemas/`), reviewable in PRs.
 
 ## How we verify
 
