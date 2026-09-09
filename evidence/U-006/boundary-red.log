@@ -1,0 +1,7 @@
+# 2026-09-09 15:44 · temporary packages/kernel/src/zz-bad-import.ts imports @falens/adapters
+check-boundaries: FAIL
+ - kernel → adapters is not allowed (packages/kernel/src/zz-bad-import.ts:1)
+exit=1
+--- file removed
+check-boundaries: OK (10 packages in the table)
+exit=0
