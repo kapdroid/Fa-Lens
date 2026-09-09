@@ -1,10 +1,18 @@
-# 2026-09-09 18:37 · pnpm -s vitest run packages/adapters/test after the implementation
+ DEPRECATED  The workspace file is deprecated and will be removed in the next major. Please, use the `test.projects` field in the root config file instead.
+
+ RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-012-http-adapter
+
  ✓ |unit| packages/adapters/test/smoke.test.ts (1 test) 1ms
- ✓ |unit| packages/adapters/test/http/allowlist.test.ts (4 tests) 17ms
- ✓ |unit| packages/adapters/test/http/redaction.test.ts (3 tests) 20ms
+ ✓ |unit| packages/adapters/test/http/allowlist.test.ts (4 tests) 19ms
+ ✓ |unit| packages/adapters/test/http/redaction.test.ts (3 tests) 17ms
  ✓ |unit| packages/adapters/test/http/breaker.test.ts (3 tests) 397ms
-   ✓ after the cooldown it half-opens, tries once, and closes when the source answers  359ms
- ✓ |unit| packages/adapters/test/http/budget.test.ts (4 tests) 1116ms
-   ✓ a hundred parallel steps never put more than the budget on the wire at once  1078ms
+   ✓ after the cooldown it half-opens, tries once, and closes when the source answers  361ms
+ ✓ |unit| packages/adapters/test/http/budget.test.ts (4 tests) 1101ms
+   ✓ a hundred parallel steps never put more than the budget on the wire at once  1070ms
+
  Test Files  5 passed (5)
       Tests  15 passed (15)
+   Start at  18:39:36
+   Duration  1.43s (transform 92ms, setup 0ms, collect 479ms, tests 1.54s, environment 1ms, prepare 268ms)
+
+exit:0

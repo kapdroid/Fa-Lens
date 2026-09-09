@@ -1,0 +1,12 @@
+ DEPRECATED  The workspace file is deprecated and will be removed in the next major. Please, use the `test.projects` field in the root config file instead.
+
+ RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-012-http-adapter
+
+ ✓ |unit| packages/adapters/test/http/allowlist.test.ts (4 tests) 13ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  18:39:43
+   Duration  245ms (transform 23ms, setup 0ms, collect 55ms, tests 13ms, environment 0ms, prepare 42ms)
+
+exit:0
