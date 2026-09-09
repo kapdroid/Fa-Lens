@@ -38,7 +38,7 @@ Create one with `/unit "<one-line outcome>"`; it interviews for the missing fact
 | 7 | PR | script `pr.sh` | reviews pass | branch pushed, PR opened from template with evidence links; never merges | |
 | 8 | Memory | `memory-scribe` agent | PR open | Progress closed with PR link, status `review`; knowledge/ADR updates in the same PR | |
 
-Budget per unit: at most 6 agent calls and 2 fix rounds. Exceeding either is a stop, not a retry. Every state writes its result to the unit file or `evidence/`, so a new session resumes from the last Progress line.
+Budget per unit: at most 6 review/exploration agent calls (tier 1–2) or 8 (tier 3), and 2 fix rounds; evidence-collector and memory-scribe are loop steps outside the count. When a review rerun would exceed the budget, add a deterministic check to the gate instead and record it. Exceeding either is a stop, not a retry. Every state writes its result to the unit file or `evidence/`, so a new session resumes from the last Progress line.
 
 ## 4. Agents (`.claude/agents/`)
 
