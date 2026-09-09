@@ -1,0 +1,21 @@
+# Local control plane. `docker compose up -d postgres` then `pnpm migrate` (docs/architecture.md §3).
+# No source database is ever run here: sources are read replicas that already exist.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: falens
+      POSTGRES_PASSWORD: falens
+      POSTGRES_DB: falens
+    ports:
+      - "5432:5432"
+    volumes:
+      - falens-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U falens"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  falens-postgres:
