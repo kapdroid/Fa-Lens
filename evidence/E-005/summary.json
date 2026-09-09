@@ -1,0 +1,38 @@
+{
+  "unit": "E-005",
+  "sha": "c50b87fe60d66cfba46fcc47565ee89b9ccddd3d",
+  "items": [
+    {
+      "dod": "node tool/evals.mjs record E-001 pass 'gate green, note present' appends a JSON line with id, verdict, note, date, sha to docs/orchestration/evals.jsonl",
+      "command": "node tool/evals.mjs record E-001 pass 'gate green, note present'; tail -1 docs/orchestration/evals.jsonl; git diff --stat docs/orchestration/evals.jsonl; git checkout -- docs/orchestration/evals.jsonl",
+      "evidence": "evidence/E-005/record.log",
+      "status": "pass"
+    },
+    {
+      "dod": "node tool/evals.mjs render regenerates the results table in docs/orchestration/evals.md from the jsonl (idempotent: running twice produces no diff)",
+      "command": "node tool/evals.mjs render; git diff --stat docs/orchestration/evals.md; node tool/evals.mjs render; git diff --stat docs/orchestration/evals.md; node tool/evals.mjs render --check",
+      "evidence": "evidence/E-005/render.diff",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/E-005/gate-fast.log",
+      "status": "pass"
+    },
+    {
+      "dod": "tests-first: selftest command covers record/render behavior, bad inputs, and idempotence (red before implementation, green after)",
+      "command": "node tool/evals.mjs selftest",
+      "evidence": "evidence/E-005/selftest.log (green, re-run at current HEAD); evidence/E-005/red.log (8 failing, captured during build before record/render/readLedger were implemented, not re-run here since re-running post-implementation would not reproduce red)",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "gate_full_log": "evidence/E-005/gate.log",
+  "missing": [],
+  "notes": [
+    "DoD-1's literal command mutates the committed ledger docs/orchestration/evals.jsonl; ran it, captured the appended line and git diff --stat, then reverted with 'git checkout -- docs/orchestration/evals.jsonl' so the committed ledger keeps only real eval runs (git status confirms clean after revert).",
+    "docs/orchestration/evals.md was already committed with its rendered table; both render runs in this session reported 'unchanged' and git diff --stat was empty after each, proving idempotence without needing to touch the file.",
+    "Verification's named command is 'bash tool/gate.sh --fast'; the review rubric additionally requires a full 'bash tool/gate.sh' run, which is also green and saved separately at evidence/E-005/gate.log (gate-fast.log holds the literal DoD-3 command)."
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "verdict": "pass",
+  "items": [],
+  "test_changes": [],
+  "outside_allowed": [],
+  "summary": "tool/evals.mjs implements record/render with a red-then-green selftest (precedent tool/check-catalog.mjs --selftest, permissible since tool/test/** is outside allowed_files), evals.jsonl/evals.md changes match the plan's DoD literally, all evidence files corroborate the claims, gate is green, and no files outside allowed_files, boundary violations, weakened gates, or unlabeled TODOs were introduced."
+}

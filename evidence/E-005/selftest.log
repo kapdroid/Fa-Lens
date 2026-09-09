@@ -1,0 +1,12 @@
+# 2026-09-09 11:01 · c50b87fe60d66cfba46fcc47565ee89b9ccddd3d · node tool/evals.mjs selftest (re-run by review agent, current HEAD)
+ok   record appends one JSON line with id, verdict, note, date, sha in that order
+ok   record defaults the date to today and keeps ledger order
+ok   record rejects a bad verdict, a bad id, an empty note; nothing is written
+ok   render writes the table between the markers and leaves the prose byte-identical
+ok   render twice changes nothing (idempotent) and --check agrees
+ok   render --check reports a stale table without writing
+ok   render names a malformed jsonl line
+ok   render fails when a marker is missing
+
+evals selftest: OK (8 checks)
+exit=0

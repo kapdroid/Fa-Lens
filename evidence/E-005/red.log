@@ -1,0 +1,20 @@
+# 2026-09-09 10:59 · 8c325db · node tool/evals.mjs selftest BEFORE record/readLedger/render are implemented (stub bodies throw 'not implemented')
+FAIL record appends one JSON line with id, verdict, note, date, sha in that order
+     not implemented
+FAIL record defaults the date to today and keeps ledger order
+     not implemented
+FAIL record rejects a bad verdict, a bad id, an empty note; nothing is written
+     The input did not match the regular expression /verdict must be one of/. Input:
+FAIL render writes the table between the markers and leaves the prose byte-identical
+     not implemented
+FAIL render twice changes nothing (idempotent) and --check agrees
+     not implemented
+FAIL render --check reports a stale table without writing
+     not implemented
+FAIL render names a malformed jsonl line
+     The input did not match the regular expression /evals\.jsonl line 4: not JSON/. Input:
+FAIL render fails when a marker is missing
+     The input did not match the regular expression /markers/. Input:
+
+evals selftest: 8 failing
+exit=1

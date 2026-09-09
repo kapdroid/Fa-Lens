@@ -1,0 +1,10 @@
+# 2026-09-09 11:01 · c50b87fe60d66cfba46fcc47565ee89b9ccddd3d · idempotence check: render run twice
+-- first render --
+evals: unchanged docs/orchestration/evals.md (5 rows)
+git diff --stat after first render:
+-- second render --
+evals: unchanged docs/orchestration/evals.md (5 rows)
+git diff --stat after second render (should be empty):
+-- render --check (should also report unchanged, exit 0) --
+evals: docs/orchestration/evals.md is up to date (5 rows)
+render --check exit=0
