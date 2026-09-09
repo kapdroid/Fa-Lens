@@ -46,3 +46,4 @@ No changes to the catalog itself, no new rules, no restructuring of `packs.md` b
 2026-09-09 11:33 · verify · evidence complete: summary.json 3/3 pass at cca0aa2, full gate green (gate.log)
 2026-09-09 11:35 · review · adr-reviewer pass (0 items)
 2026-09-09 11:35 · pr · https://github.com/kapdroid/Fa-Lens/pull/9
+2026-09-09 11:36 · memory · knowledge note docs/knowledge/harness/red-check-must-fail-for-the-right-reason.md (+ README index); no ADR; no new units
