@@ -3,7 +3,7 @@
 import type { AnySchema } from 'ajv';
 
 export const LOGICAL_SOURCES = ['fa_txn', 'fa_master', 'report', 'dms', 'unify'] as const;
-export const RULE_TYPES = ['uniqueness', 'presence', 'field_match', 'aggregate_match', 'chain', 'custom_check'] as const;
+export const RULE_TYPES = ['uniqueness', 'presence', 'field_match', 'aggregate_match', 'chain', 'custom-check'] as const;
 export const STEP_KINDS = ['request', 'query', 'validate', 'wait', 'group', 'script'] as const;
 export const CASE_KINDS = ['happy', 'negative', 'security', 'boundary', 'manual'] as const;
 

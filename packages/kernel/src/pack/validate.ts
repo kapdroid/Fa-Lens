@@ -73,7 +73,7 @@ function reachabilityProblems(file: PackFile): Problem[] {
     if (!step || typeof step !== 'object') return;
     const s = step as Record<string, unknown>;
     for (const need of Array.isArray(s['needs']) ? s['needs'] as unknown[] : []) {
-      if (typeof need === 'string' && !seen.has(need)) problems.push({ path: `${file.path}#${pointer}`, message: `unreachable: needs '${need}', which is not an earlier step of this flow` });
+      if (typeof need === 'string' && !seen.has(need)) problems.push({ path: `${file.path}#${pointer}`, message: `unreachable: needs '${need}', which is not an earlier step of this flow, so it can never run` });
     }
     if (typeof s['id'] === 'string') seen.add(s['id']);
     if (Array.isArray(s['steps'])) s['steps'].forEach((child, i) => visit(child, `${pointer}/steps/${i}`));
