@@ -14,7 +14,13 @@ const dir = join(root, 'docs/plan/units');
 const file = readdirSync(dir).find(f => f.startsWith(id));
 if (!file) { console.error(`no unit file for ${id}`); process.exit(1); }
 const { data } = readFrontmatter(join(dir, file));
-const always = [`docs/plan/units/${file}`, `evidence/${id}/**`, 'docs/knowledge/**', 'docs/adr/*.md', 'docs/adr/README.md']; // memory layer written by the loop (evidence, memory-scribe)
+// Always allowed besides allowed_files: the unit's own file, its evidence, the memory layer the loop
+// writes in state 8, and the two files pnpm rewrites by itself whenever a unit adds a dependency.
+const always = [
+  `docs/plan/units/${file}`, `evidence/${id}/**`,
+  'docs/knowledge/**', 'docs/adr/*.md', 'docs/adr/README.md',
+  'pnpm-lock.yaml', 'pnpm-workspace.yaml',
+];
 const globs = [...(data.allowed_files || []), ...always];
 
 export function globToRegExp(g) {
