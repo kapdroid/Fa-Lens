@@ -21,3 +21,4 @@ Template: **Context** (the forces) · **Decision** (one paragraph, present tense
 | [0013](0013-source-catalog-tenant-resolution.md) | Source catalog and tenant resolution | accepted |
 | [0014](0014-source-load-strategy.md) | Source load strategy: budgets, aggregate-first, windows, shadow index | accepted |
 | [0015](0015-kernel-pure-library-dependencies.md) | Kernel may depend on pure, I/O-free libraries (ajv, yaml, jsonpath-plus) | accepted |
+| [0016](0016-run-coalescing-lock-is-short.md) | Run coalescing: a short advisory lock, with the runs row as the durable state | proposed |
