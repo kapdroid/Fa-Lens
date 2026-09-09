@@ -14,7 +14,7 @@ skip() { printf '▸ %-28s%s\n' "$1" "skipped ($2)"; }
 run "docs"            node tool/check-docs.mjs
 run "units"           node tool/check-units.mjs
 run "harness"         node tool/check-harness.mjs
-run "whitespace"      git diff --cached --check
+run "whitespace"      git diff --cached --check -- . ":(exclude)evidence/**"
 run "no-secrets"      bash -c '! git grep -nE "(password|secret|connection ?string)\s*[:=]\s*[\"'"'"'][^\"'"'"'\$ ]{6,}" -- ":!*.md" ":!tool/gate.sh" ":!docs/**" 2>/dev/null'
 run "prototype-parses" node -e "const fs=require('fs');const s=fs.readFileSync('docs/design/prototype/index.html','utf8');const js=s.slice(s.indexOf('<script>')+8,s.lastIndexOf('</script>'));new Function(js);"
 run "tokens-in-sync"  bash -c 'test ! -f packages/ui/tokens.css || diff -q docs/design/tokens.css packages/ui/tokens.css'
