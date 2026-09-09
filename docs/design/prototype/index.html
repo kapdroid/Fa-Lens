@@ -103,7 +103,7 @@ button,input{font:inherit;color:inherit}button{cursor:pointer;border:0;backgroun
 .dchildren.anim{animation:dopen var(--d-base) var(--e-standard)}
 @keyframes dopen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 .dempty{padding:16px 8px;color:var(--text-faint);font-size:var(--fs-sm)}
-.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--sp-3);padding:var(--sp-12) var(--card-pad);animation:reveal var(--d-base) var(--e-enter) both}.empty svg{width:var(--sp-5);height:var(--sp-5);color:var(--text-faint)}.empty p{margin:0;color:var(--text-dim);font-size:var(--fs-base);line-height:var(--lh-base);max-width:60ch}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--sp-3);padding:var(--sp-12) var(--card-pad);animation:reveal var(--d-base) var(--e-enter) both}.empty svg{width:var(--sp-5);height:var(--sp-5);color:var(--text-faint)}.empty p{margin:0;color:var(--text-dim);font-size:var(--fs-base);line-height:var(--lh-base);max-width:60ch}.empty .fail{color:var(--crit-text);font-size:var(--fs-sm);line-height:var(--lh-sm);max-width:60ch}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}@media (prefers-reduced-motion:reduce){.empty{animation-name:fadeIn}}
 mark.hl{background:var(--warn-soft);color:inherit;border-radius:2px;padding:0 1px}
 .userrow{display:flex;align-items:center;gap:10px;padding:8px;border-radius:var(--r-sm);cursor:pointer;margin-top:4px}
@@ -677,7 +677,7 @@ function renderModule(ph,c){const m=MODS.find(x=>x.id===S.mod);const cnt={apis:(
  const runLabel={overview:`Run ${m.name} smoke`,apis:'Run all cases',cases:'Run selected',flows:'Run flow',validations:'Run',load:'Run load test',runs:'Compare',data:'Save',knowledge:'Sync from ADO'}[S.tab];
  ph.innerHTML=`<div class="crumbs"><a data-nav="company">${COMPANY.name}</a><span class="mono">${COMPANY.id}</span><span>›</span><a data-nav="module:${m.id}:overview">${m.name}</a><span>›</span><b>${TABS.find(t=>t[0]===S.tab)[1]}</b></div>
  <div class="mhead"><h1>${m.name}</h1><div class="health">${B(m.health==='none'?'none':m.health,summary(m))}<span>last run <span class="mono">14:02</span> · <span class="mono">${m.id==='van'?'12,480':'2,310'}</span> rows</span></div>
- <div class="right"><button class="btn ghost sm" id="emptyBtn" title="Prototype: preview this tab with no data">${S.empty?'Show data':'Show empty state'}</button><button class="btn ghost sm">Share</button><button class="btn primary" id="runBtn"><span class="spin"></span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg><span class="lbl">${runLabel}</span></button></div></div>
+ <div class="right"><button class="btn ghost sm">Share</button><button class="btn primary" id="runBtn"><span class="spin"></span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg><span class="lbl">${runLabel}</span></button></div></div>
  <p class="lead">${m.sync?'Rows compared between FA, Report, and DMS for this company and month. Missing rows, mismatches, duplicates, and aggregate gaps, with the evidence for each.':`${m.name} APIs, test cases, automated flows, and data validations for Mars Wrigley VN on Beta, scoped to August 2026.`}</p>
  <nav class="tabs" id="tabs">${TABS.map(t=>`<button class="tab ${S.tab===t[0]?'active':''}" data-tab="${t[0]}"><i class="dot ${(m[t[0]]||{}).v||''}" style="${m[t[0]]?'':'display:none'}"></i>${t[1]}${cnt[t[0]]?`<span class="n">${cnt[t[0]]}</span>`:''}</button>`).join('')}<span class="ink" id="ink"></span></nav>`;
  $$('.tab').forEach(t=>t.onclick=()=>{S.tab=t.dataset.tab;closePanel(true);renderModule(ph,c);renderDrawer();try{history.replaceState(null,'','#/module/'+m.id+'/'+S.tab+(S.empty?'/empty':''));}catch(e){}});
@@ -685,7 +685,6 @@ function renderModule(ph,c){const m=MODS.find(x=>x.id===S.mod);const cnt={apis:(
  c.innerHTML='';const v=document.createElement('section');v.className='view active';c.appendChild(v);
  const table=m.sync?{overview:syncOverview,flows:syncFlows,validations:syncValidations}:{overview:modOverview,apis:modApis,cases:modCases,flows:modFlows,validations:modValidations,load:modLoad};
  (S.empty?emptyState:(table[S.tab]||modStub))(v,m);bindNav();
- const eb=$('#emptyBtn');if(eb)eb.onclick=()=>{S.empty=!S.empty;renderModule(ph,c);try{history.replaceState(null,'','#/module/'+m.id+'/'+S.tab+(S.empty?'/empty':''));}catch(e){}};
  const rb=$('#runBtn');if(S.tab==='flows')rb.onclick=()=>$('#flowRun')&&$('#flowRun').click();else if(S.tab==='validations')rb.onclick=runValidation;else rb.onclick=()=>genericRun(rb,m);}
 function genericRun(b,m){if(b.classList.contains('loading'))return;b.classList.add('loading');const l=$('.lbl',b),t=l.textContent;l.textContent='Running';const ring=$('#ring');if(ring)ring.className='ring running';setTimeout(()=>{b.classList.remove('loading');l.textContent=t;if(ring)ring.className='ring done '+(m.health==='none'?'ok':m.health);countUp();toast(m.health==='crit'?'crit':'ok',`${m.name} · run finished`,'Open',()=>nav('module',m.id,'runs'));},reduced?200:2000);}
 function modOverview(v,m){const isVan=m.id==='van';
@@ -856,7 +855,7 @@ const EMPTY={
 const EMPTY_SYNC={flows:{s:'No chains defined for this company yet.',a:'New chain'}};
 function emptyState(v,m){const e=(m.sync&&EMPTY_SYNC[S.tab])||EMPTY[S.tab];const sentence=m.id==='van'?e.s:e.s.replace('Van Sales',m.name);
  v.innerHTML=`<div class="card"><h3>${TABS.find(t=>t[0]===S.tab)[1]}</h3><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 3" aria-hidden="true"><circle cx="12" cy="12" r="8"/></svg><p>${sentence}</p><button class="btn accent" id="emptyCta"><span class="spin"></span><span class="lbl">${e.a}</span></button></div></div>`;
- const b=$('#emptyCta');if(b)b.onclick=()=>{b.classList.add('loading');setTimeout(()=>{b.classList.remove('loading');toast('ok',`${e.a} · queued (prototype)`);},600);};}
+ const b=$('#emptyCta');if(b)b.onclick=ev=>{if(b.classList.contains('loading'))return;const old=$('.fail',v);old&&old.remove();b.classList.add('loading');setTimeout(()=>{b.classList.remove('loading');if(ev.shiftKey)b.insertAdjacentHTML('afterend',`<div class="fail">${e.a} failed: the service did not answer in time. Retry, or narrow the scope and try again.</div>`);else toast('ok',`${e.a} · queued (prototype)`);},600);};}
 function modStub(v,m){v.innerHTML=`<div class="card"><h3>${TABS.find(t=>t[0]===S.tab)[1]}</h3><p class="dim">Described in <span class="mono">screens.md</span>. Same tokens, table, and panel as the tabs you have seen.</p></div>`;}
 
 /* ================= FOCUS PANEL ================= */
@@ -915,6 +914,18 @@ document.addEventListener('keydown',e=>{const meta=e.metaKey||e.ctrlKey;
 /* ================= SCENARIOS ================= */
 const scen=$('#scen'),narr=$('#narr');let playing=false;
 const SCEN=[
+ {who:'D',cls:'',title:'Designer: every tab, no data yet',sub:'the nine empty states · one sentence, one action (components.md → EmptyState)',steps:[
+  ['A module with nothing in it yet. Overview names the scope so it does not read as a loading failure.',()=>{S.empty=true;nav('module','van','overview');}],
+  ['APIs: import a collection to fill the catalog.',()=>{S.empty=true;nav('module','van','apis');}],
+  ['Cases: generate from the catalog.',()=>{S.empty=true;nav('module','van','cases');}],
+  ['Flows: start from the app\'s real sequence.',()=>{S.empty=true;nav('module','van','flows');}],
+  ['Validations: choose one and a date range.',()=>{S.empty=true;nav('module','van','validations');}],
+  ['Load: export a k6 script.',()=>{S.empty=true;nav('module','van','load');}],
+  ['Runs: results appear the moment a run finishes.',()=>{S.empty=true;nav('module','van','runs');}],
+  ['Data: add a test user for the sandbox company.',()=>{S.empty=true;nav('module','van','data');}],
+  ['Knowledge: sync from ADO or write the first gotcha. Every button is accent: the header already owns the primary.',()=>{S.empty=true;nav('module','van','knowledge');}],
+  ['Shift-click the action: the failed state says what happened and how to fix, still one action.',()=>{const b=$('#emptyCta');b&&b.dispatchEvent(new MouseEvent('click',{shiftKey:true,bubbles:true}));}],
+  ['Back to real data. The deep link #/module/van/apis/empty opens any tab empty.',()=>{S.empty=false;nav('module','van','overview');}]]},
  {who:'V',cls:'v',title:'Validator: which cycle broke?',sub:'company → red cell → cycle → product trace',steps:[
   ['Start at the company. The matrix shows every module × testing type.',()=>nav('company')],
   ['Van Sales · Validations is red. Click the cell.',()=>spot($('.cell[data-mod=van][data-t=validations]'))],
