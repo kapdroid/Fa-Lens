@@ -1,0 +1,38 @@
+{
+  "unit": "U-008",
+  "sha": "a7ea1a1668b4fcb036f0d1fbbb62f285a997242e",
+  "items": [
+    {
+      "dod": "`vitest packages/kernel/test/flow` fails without the interpreter and passes with it: a fixture flow interpolates `{{ }}` variables from context and earlier extracts, extracts with JSONPath, and evaluates status, JSONPath, and latency assertions",
+      "command": "pnpm -s vitest run packages/kernel/test/flow/run.test.ts (red run captured earlier at evidence/U-008/red.log, c3aebb0)",
+      "evidence": "evidence/U-008/flow-run.log",
+      "status": "pass"
+    },
+    {
+      "dod": "a step whose executor callback throws yields verdict `error`, a failed assertion yields `fail`, and the two never merge (test packages/kernel/test/verdict/error-vs-fail.test.ts)",
+      "command": "pnpm -s vitest run packages/kernel/test/verdict/error-vs-fail.test.ts",
+      "evidence": "evidence/U-008/verdict-error-vs-fail.log",
+      "status": "pass"
+    },
+    {
+      "dod": "`rollup()` folds step → flow → testing type → module → company with worst-of severity and counts, matching the fixture expectations (test packages/kernel/test/verdict/rollup.test.ts)",
+      "command": "pnpm -s vitest run packages/kernel/test/verdict/rollup.test.ts",
+      "evidence": "evidence/U-008/verdict-rollup.log",
+      "status": "pass"
+    },
+    {
+      "dod": "`scopeHash()` is identical for the same scope with keys in a different order and differs when the date range changes (test packages/kernel/test/scope/hash.test.ts)",
+      "command": "pnpm -s vitest run packages/kernel/test/scope/hash.test.ts",
+      "evidence": "evidence/U-008/scope-hash.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh (full gate, superset of --fast; existing evidence/U-008/gate-fast.log from build step also green at 19 stages)",
+      "evidence": "evidence/U-008/gate.log",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "missing": []
+}

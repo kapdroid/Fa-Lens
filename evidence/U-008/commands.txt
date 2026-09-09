@@ -1,0 +1,6 @@
+pnpm -s vitest run packages/kernel/test/flow packages/kernel/test/verdict packages/kernel/test/scope > evidence/U-008/verify-flow-verdict-scope.log 2>&1
+pnpm -s vitest run packages/kernel/test/flow/run.test.ts > evidence/U-008/flow-run.log 2>&1
+pnpm -s vitest run packages/kernel/test/verdict/error-vs-fail.test.ts > evidence/U-008/verdict-error-vs-fail.log 2>&1
+pnpm -s vitest run packages/kernel/test/verdict/rollup.test.ts > evidence/U-008/verdict-rollup.log 2>&1
+pnpm -s vitest run packages/kernel/test/scope/hash.test.ts > evidence/U-008/scope-hash.log 2>&1
+bash tool/gate.sh > evidence/U-008/gate.log 2>&1

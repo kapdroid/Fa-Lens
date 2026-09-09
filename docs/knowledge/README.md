@@ -33,6 +33,12 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 - [A tool's own `selftest` subcommand gives red-then-green evidence when `tool/test/**` is outside the unit's allowed_files](harness/tool-selftest-when-tests-dir-not-allowed.md)
 - [Zero-dependency tests under `tool/test/` use `node:assert` and spawn the script](harness/tool-tests-zero-dependency.md)
 
+### kernel
+
+- [An assertion keyword that modifies another (`delta` on `equals`) must win the kind lookup, not lose to declaration order](kernel/assertion-keyword-that-modifies-another-must-win-kind-lookup.md)
+- [The kernel stays pure by taking the executor as a callback and asserting latency from its reported duration, never a clock](kernel/kernel-purity-executor-callback-and-reported-duration.md)
+- [Verdict severity order is `none < skipped < ok < warn < error < fail`, and counts tally direct children only](kernel/verdict-severity-order-and-count-tally.md)
+
 ### sources
 
 - [Catalog server names come from artifact tools, not from a confirmed replica list](sources/catalog-server-names-unconfirmed.md)
