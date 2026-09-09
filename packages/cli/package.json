@@ -1,0 +1,10 @@
+{
+  "name": "@falens/cli",
+  "version": "0.0.0",
+  "private": true,
+  "description": "falens binary: run, list, export, import, doctor (docs/architecture.md §2)",
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc -p tsconfig.json" },
+  "dependencies": { "@falens/service": "workspace:*", "@falens/api": "workspace:*" }
+}

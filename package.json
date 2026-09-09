@@ -1,0 +1,29 @@
+{
+  "name": "falens",
+  "private": true,
+  "version": "0.0.0",
+  "description": "FA Lens: module-centric testing and validation platform for FieldAssist (ADR-0001 monorepo)",
+  "packageManager": "pnpm@11.21.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "turbo run typecheck",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:integration": "echo 'test:integration: no suites yet (U-010 adds the control-plane project)'",
+    "test:e2e": "echo 'test:e2e: no suites yet (web units add Playwright)'",
+    "contract:check": "echo 'contract:check: no contract snapshot yet (service unit adds it)'",
+    "boundaries": "node tool/check-boundaries.mjs",
+    "gate": "bash tool/gate.sh"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.0",
+    "eslint": "^9.17.0",
+    "turbo": "^2.3.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.19.0",
+    "vitest": "^3.0.0"
+  }
+}

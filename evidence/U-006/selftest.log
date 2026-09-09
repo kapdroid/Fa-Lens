@@ -1,0 +1,10 @@
+# 2026-09-09 15:43 · after implementation
+ok   clean packages produce no problems (third-party and node: imports ignored)
+ok   api → adapters is flagged with file and line, even as a type import
+ok   worker → kernel via dynamic import is flagged; worker → adapters and service are allowed
+ok   web may import only @falens/api; web → control is flagged
+ok   kernel importing another @falens package is flagged
+ok   a package missing from the table is flagged
+
+check-boundaries selftest: OK (6 checks)
+exit=0

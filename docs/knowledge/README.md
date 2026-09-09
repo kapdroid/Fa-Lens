@@ -26,6 +26,7 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 - [Capturing light and dark screenshots with headless Chrome](harness/headless-chrome-light-and-dark-screenshots.md)
 - [Intake must accept a `depends_on` unit that is merged but still says `status: review`](harness/intake-accepts-merged-review-dependency.md)
 - [A unit's Plan must describe example links in words, not write a placeholder markdown link](harness/plan-example-links-must-be-real-or-worded-not-placeholder-markdown-links.md)
+- [`tool/pr.sh`'s body renderer needs `summary.json` `evidence` fields to be plain strings](harness/pr-sh-summary-evidence-must-be-a-string.md)
 - [A red check must fail for the reason the unit fixes](harness/red-check-must-fail-for-the-right-reason.md)
 - [A tool's own `selftest` subcommand gives red-then-green evidence when `tool/test/**` is outside the unit's allowed_files](harness/tool-selftest-when-tests-dir-not-allowed.md)
 - [Zero-dependency tests under `tool/test/` use `node:assert` and spawn the script](harness/tool-tests-zero-dependency.md)
@@ -33,6 +34,11 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 ### sources
 
 - [Catalog server names come from artifact tools, not from a confirmed replica list](sources/catalog-server-names-unconfirmed.md)
+
+### toolchain
+
+- [ESLint config must ignore `.claude/**` and `tool/**`](toolchain/eslint-must-ignore-claude-and-tool-dirs.md)
+- [pnpm 11 reads its build/dep settings from `pnpm-workspace.yaml`, not `package.json`'s `pnpm` field](toolchain/pnpm-11-reads-pnpm-workspace-yaml-not-package-json.md)
 
 ### van-sales
 

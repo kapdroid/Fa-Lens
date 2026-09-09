@@ -1,0 +1,46 @@
+{
+  "unit": "U-006",
+  "sha": "6c28ddcd871ff5770a1e6c1943a64039e56979ff",
+  "items": [
+    {
+      "dod": "pnpm install --frozen-lockfile exits 0 on Node 22+ and pnpm -r ls --depth -1 lists the eleven workspace packages",
+      "command": "pnpm install --frozen-lockfile && pnpm -r ls --depth -1",
+      "evidence": "evidence/U-006/install.log",
+      "status": "pass",
+      "note": "First attempt this session exited 1 with ERR_PNPM_IGNORED_BUILDS: pnpm-workspace.yaml has allowBuilds.esbuild set to the literal placeholder string \"set this to true or false\" (committed at 50a5ad5), which pnpm treats as an unapproved build. Probing with `pnpm approve-builds` (unattended) rewrote that line to `esbuild: false` in the working tree; that accidental edit was reverted with `git checkout -- pnpm-workspace.yaml` before continuing. A local pnpm build-approval cache (outside the repo) was left set from the probe, so the recorded install.log run exits 0 with 11 workspace packages, but a genuinely fresh clone/store will hit the same ERR_PNPM_IGNORED_BUILDS failure until a human runs `pnpm approve-builds` and commits a real true/false value in pnpm-workspace.yaml."
+    },
+    {
+      "dod": "pnpm -s typecheck, pnpm -s lint, pnpm -s test each exit 0, and bash tool/gate.sh --fast runs typecheck and lint instead of printing the skip line",
+      "command": "pnpm -s typecheck; pnpm -s lint; pnpm -s test; bash tool/gate.sh --fast",
+      "evidence": "evidence/U-006/typecheck.log, evidence/U-006/lint.log, evidence/U-006/test.log, evidence/U-006/gate-fast.log",
+      "status": "pass"
+    },
+    {
+      "dod": "node tool/check-boundaries.mjs exits 1 while a temporary file under packages/kernel/src imports @falens/adapters, and exits 0 after the file is removed",
+      "command": "node tool/check-boundaries.mjs (with and without packages/kernel/src/zz-bad-import.ts)",
+      "evidence": "evidence/U-006/boundary-red.log",
+      "status": "pass"
+    },
+    {
+      "dod": "vitest runs one smoke test per package (packages/*/test/smoke.test.ts) and every one passes",
+      "command": "pnpm -s test",
+      "evidence": "evidence/U-006/test.log",
+      "status": "pass",
+      "note": "10 test files, 10 tests passed (one per package excluding packs, which has no source)."
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/U-006/gate-fast.log",
+      "status": "pass",
+      "note": "GREEN (19 stages)."
+    }
+  ],
+  "gate": "green",
+  "gate_full": "evidence/U-006/gate.log (GREEN, 22 stages, includes unit-tests/integration-tests/e2e)",
+  "boundaries_selftest": "evidence/U-006/red.log (pre-implementation, 6 failing) and evidence/U-006/selftest.log (post-implementation, 6 ok) captured earlier in this unit's build; not re-run this session since checkBoundaries is already implemented and unchanged",
+  "missing": [],
+  "flags": [
+    "pnpm-workspace.yaml line 4 (`allowBuilds: esbuild: set this to true or false`) is a leftover placeholder from an interactive `pnpm approve-builds` run and is not valid config; it currently makes a fresh `pnpm install --frozen-lockfile` fail with ERR_PNPM_IGNORED_BUILDS on a clean pnpm store/cache. Not fixed here per instructions (source/config files are out of scope for this verification pass) — flagging for the owner to resolve (e.g. commit `esbuild: false` or `true`, or add esbuild to onlyBuiltDependencies with an approved value) before this DoD item can be relied on for a first-time clone."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@falens/api",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Hono app: REST + SSE, OIDC, rate limits; no source access (docs/architecture.md §2)",
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc -p tsconfig.json" },
+  "dependencies": { "@falens/service": "workspace:*" }
+}

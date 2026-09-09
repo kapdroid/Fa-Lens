@@ -1,0 +1,19 @@
+node -v
+pnpm -v
+git rev-parse HEAD
+git status --short
+pnpm install --frozen-lockfile > /tmp/pnpm_install_out.log 2>&1   # first attempt, exit 1: ERR_PNPM_IGNORED_BUILDS (pnpm-workspace.yaml allowBuilds.esbuild is a placeholder string)
+echo "" | pnpm approve-builds                                     # interactive probe to diagnose the failure; wrote allowBuilds.esbuild=false to pnpm-workspace.yaml
+git diff pnpm-workspace.yaml                                       # confirmed the accidental write
+git checkout -- pnpm-workspace.yaml                                 # reverted the accidental write; local pnpm build-approval state remained cached
+pnpm install --frozen-lockfile > evidence/U-006/install.log         # re-run: exit 0, 11 workspace packages
+pnpm -r ls --depth -1 >> evidence/U-006/install.log
+pnpm -s typecheck > evidence/U-006/typecheck.log
+pnpm -s lint > evidence/U-006/lint.log
+pnpm -s test > evidence/U-006/test.log
+echo "import { PACKAGE } from '@falens/adapters'; export const bad = PACKAGE;" > packages/kernel/src/zz-bad-import.ts
+node tool/check-boundaries.mjs >> evidence/U-006/boundary-red.log   # exit 1
+rm packages/kernel/src/zz-bad-import.ts
+node tool/check-boundaries.mjs >> evidence/U-006/boundary-red.log   # exit 0
+bash tool/gate.sh --fast > evidence/U-006/gate-fast.log
+bash tool/gate.sh > evidence/U-006/gate.log

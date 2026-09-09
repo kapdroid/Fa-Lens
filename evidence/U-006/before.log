@@ -1,0 +1,18 @@
+# 2026-09-09 15:43 · 0499314 · gate on the empty tree
+▸ docs                        ok
+▸ knowledge-index             ok
+▸ knowledge-index-selftest    ok
+▸ units                       ok
+▸ harness                     ok
+▸ catalog                     ok
+▸ catalog-selftest            ok
+▸ evals-selftest              ok
+▸ evals-rendered              ok
+▸ whitespace                  ok
+▸ no-secrets                  ok
+▸ prototype-parses            ok
+▸ tokens-in-sync              ok
+▸ shell-scripts               ok
+▸ tool-tests                  ok
+▸ typecheck/lint/tests        skipped (no package.json yet)
+gate: GREEN (15 stages)
