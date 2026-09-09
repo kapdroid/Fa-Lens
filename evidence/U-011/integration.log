@@ -1,0 +1,17 @@
+# 2026-09-09 18:24 · after review round 1 (transactional createRun, bus reconnect, leaner Lock seam)
+ ✓ |integration| packages/control/test/integration/cache.test.ts (4 tests) 15581ms
+   ✓ a value is readable before its ttl and a miss after it  1217ms
+ ✓ |integration| packages/control/test/integration/tenant-scope.test.ts (3 tests) 14732ms
+ ✓ |integration| packages/control/test/integration/lock.test.ts (4 tests) 16247ms
+ ✓ |integration| packages/control/test/integration/migrate.test.ts (4 tests) 15637ms
+   ✓ migrations apply from an empty database and create every table the schema declares  871ms
+ ✓ |integration| packages/control/test/integration/evidence-partitions.test.ts (4 tests) 15550ms
+ ✓ |integration| packages/control/test/integration/bus.test.ts (4 tests) 19390ms
+   ✓ a message published on one connection reaches a subscriber on another within a second  450ms
+   ✓ a subscriber hears only its own channel  428ms
+   ✓ a subscriber whose connection is dropped hears the next message after reconnecting  2141ms
+ ✓ |integration| packages/control/test/integration/queue.test.ts (2 tests) 27334ms
+   ✓ a job is delivered to its handler once  3051ms
+   ✓ a job whose handler throws is delivered again, and a completed one is not  8127ms
+ Test Files  7 passed (7)
+      Tests  25 passed (25)

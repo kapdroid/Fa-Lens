@@ -1,0 +1,13 @@
+ DEPRECATED  The workspace file is deprecated and will be removed in the next major. Please, use the `test.projects` field in the root config file instead.
+
+ RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-011-control-queue-lock-bus-cache
+
+ ✓ |integration| packages/control/test/integration/queue.test.ts (2 tests) 15117ms
+   ✓ a job is delivered to its handler once  3024ms
+   ✓ a job whose handler throws is delivered again, and a completed one is not  8017ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  18:18:14
+   Duration  15.98s (transform 29ms, setup 0ms, collect 492ms, tests 15.12s, environment 0ms, prepare 52ms)
+

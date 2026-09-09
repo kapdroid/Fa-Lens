@@ -1,0 +1,11 @@
+ DEPRECATED  The workspace file is deprecated and will be removed in the next major. Please, use the `test.projects` field in the root config file instead.
+
+ RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-011-control-queue-lock-bus-cache
+
+ ✓ |integration| packages/control/test/integration/lock.test.ts (4 tests) 2764ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  18:18:00
+   Duration  4.22s (transform 89ms, setup 0ms, collect 853ms, tests 2.76s, environment 0ms, prepare 169ms)
+

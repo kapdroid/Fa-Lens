@@ -1,0 +1,8 @@
+git rev-parse HEAD
+pnpm exec vitest run --root . --project integration packages/control/test/integration/lock.test.ts > evidence/U-011/lock.log
+pnpm exec vitest run --root . --project integration packages/control/test/integration/bus.test.ts > evidence/U-011/bus.log
+pnpm exec vitest run --root . --project integration packages/control/test/integration/queue.test.ts > evidence/U-011/queue.log
+pnpm exec vitest run --root . --project integration packages/control/test/integration/cache.test.ts > evidence/U-011/cache.log
+pnpm --filter @falens/control test:integration > evidence/U-011/integration-rerun.log
+pnpm -s test > evidence/U-011/unit-test.log
+bash tool/gate.sh --fast > evidence/U-011/gate-fast-rerun.log
