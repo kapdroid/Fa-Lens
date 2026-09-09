@@ -1,0 +1,22 @@
+# 2026-09-09 11:31 · AFTER the gate change, tool/test/zz-fails.test.mjs still present: bash tool/gate.sh --fast
+▸ docs                        ok
+▸ units                       ok
+▸ harness                     ok
+▸ catalog                     ok
+▸ catalog-selftest            ok
+▸ whitespace                  ok
+▸ no-secrets                  ok
+▸ prototype-parses            ok
+▸ tokens-in-sync              ok
+▸ shell-scripts               ok
+▸ tool-tests                  FAIL
+    ok   clean tree: check-units exits 0
+    ok   orphan evidence dir: check-units exits 1 and names it
+    ok   cleanup: evidence/X-999 removed
+    
+    all passing
+    FAIL deliberate
+    tool-tests: tool/test/zz-fails.test.mjs failed
+▸ typecheck/lint/tests        skipped (no package.json yet)
+gate: RED
+exit=1

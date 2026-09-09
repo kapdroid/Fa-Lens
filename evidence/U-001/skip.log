@@ -1,0 +1,15 @@
+# 2026-09-09 11:31 · tool/test/ emptied temporarily: bash tool/gate.sh --fast (skip path)
+▸ docs                        ok
+▸ units                       ok
+▸ harness                     ok
+▸ catalog                     ok
+▸ catalog-selftest            ok
+▸ whitespace                  ok
+▸ no-secrets                  ok
+▸ prototype-parses            ok
+▸ tokens-in-sync              ok
+▸ shell-scripts               ok
+▸ tool-tests                  skipped (no tool/test/*.test.mjs yet)
+▸ typecheck/lint/tests        skipped (no package.json yet)
+gate: GREEN (10 stages)
+exit=0
