@@ -1,0 +1,9 @@
+# 2026-09-09 17:08 · docker compose up -d postgres && pnpm -s migrate
+ Container u-010-control-plane-schema-postgres-1 Starting 
+ Container u-010-control-plane-schema-postgres-1 Started 
+$ node --experimental-strip-types src/migrations/cli.ts
+migrate: applied 0001_control_plane.sql, 0002_evidence_partitions.sql
+exit=0
+--- second run is a no-op
+migrate: already up to date
+ Network u-010-control-plane-schema_default Removed 

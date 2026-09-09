@@ -1,0 +1,6 @@
+# 2026-09-09 17:08 · pnpm -s test:integration (Testcontainers Postgres 16)
+ ✓ |integration| packages/control/test/integration/tenant-scope.test.ts (3 tests) 4462ms
+ ✓ |integration| packages/control/test/integration/evidence-partitions.test.ts (4 tests) 4553ms
+ ✓ |integration| packages/control/test/integration/migrate.test.ts (4 tests) 5191ms
+ Test Files  3 passed (3)
+      Tests  11 passed (11)
