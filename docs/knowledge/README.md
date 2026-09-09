@@ -10,4 +10,6 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 
 ## Index
 
+- [van-sales/cycle-rules.md](van-sales/cycle-rules.md) — the six locked Van Sales cycle and mapping rules from the artifact tools.
+- [harness/build-skill-isolate-before-plan.md](harness/build-skill-isolate-before-plan.md) — why `/build` isolates into a worktree before writing the plan, and why `.falens-unit` is gitignored.
 - [harness/tool-tests-zero-dependency.md](harness/tool-tests-zero-dependency.md) — zero-dependency tests under `tool/test/` use `node:assert` and spawn the script under test; temp fixtures under `evidence/` must be cleaned up in `finally`.

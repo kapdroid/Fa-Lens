@@ -25,7 +25,7 @@ If the brief above says `INTAKE FAILED`, stop and report the reason. Otherwise n
 
 ## Explore (state 1)
 
-Launch the `explorer` agent with the unit file and the repository root. While it runs, do nothing else that would need its answer. When it returns, append its findings to the unit's `## Progress` via:
+Launch the `explorer` agent with the absolute path of the unit file and the repository root. While it runs, do nothing else that would need its answer. When it returns, append its findings to the unit's `## Progress` via:
 
 ```bash
 bash "${CLAUDE_SKILL_DIR}/scripts/progress.sh" <id> explore "findings recorded; N open questions"
@@ -45,7 +45,7 @@ All further work, including writing the plan into the unit file, happens in `$WT
 
 Write the `## Plan` section of the unit file: numbered steps, tests first, then implementation, then evidence. Every DoD item maps to at least one step. Only files inside `allowed_files`. Keep it to what the unit asks; the right amount of complexity is the minimum needed.
 
-Then launch the `spec-checker` agent with the unit file. On `fail`, fix the plan and run it once more. A second `fail` is a stop condition.
+Then launch the `spec-checker` agent with the **absolute path** of the unit file inside `$WT` (not the main checkout's copy). On `fail`, fix the plan and run it once more. A second `fail` is a stop condition.
 
 Checkpoint: for **tier 2 and 3**, commit the plan (`<id>: plan`) and end your turn here with the plan summarized in five lines and ask the human to approve. For tier 1, commit the plan and continue.
 

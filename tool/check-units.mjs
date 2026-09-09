@@ -19,6 +19,7 @@ for (const f of readdirSync(dir).filter(f => /^[UE]-\d{3}.*\.md$/.test(f)).sort(
   for (const [key, spec] of Object.entries(schema.properties)) {
     if (!(key in data)) continue;
     const v = data[key];
+    if (Array.isArray(v) && v.length === 0 && spec.type !== 'array') continue; // `owner:` left blank parses as [] → treat as unset
     if (spec.type === 'array' && !Array.isArray(v)) problems.push(`${f}: "${key}" must be a list`);
     if (spec.type === 'string' && typeof v !== 'string') problems.push(`${f}: "${key}" must be a string`);
     if (spec.type === 'integer' && !Number.isInteger(v)) problems.push(`${f}: "${key}" must be an integer`);
