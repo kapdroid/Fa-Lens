@@ -1,7 +1,7 @@
 ---
 id: U-010
 title: Control plane schema, migrations, and tenant-scoped repositories on Postgres 16
-status: in_progress
+status: review
 tier: 2
 kind: service
 depends_on: [U-006]
@@ -62,3 +62,4 @@ No queue, lock, bus, or cache implementations (U-011). No use-cases or API (serv
 2026-09-09 17:11 · build · note for whoever runs the full gate next: tool/gate.sh without --fast now runs the integration project, so it needs Docker; --fast still skips it and stays the pre-commit gate
 2026-09-09 17:11 · build · second contract correction: pnpm wrote allowBuilds placeholders ('set this to true or false') into pnpm-workspace.yaml when testcontainers pulled ssh2, cpu-features and protobufjs, which breaks a fresh frozen install — the same defect U-006 hit with esbuild. All three set to false, which is what the green integration run already proved is enough, and pnpm-workspace.yaml added to allowed_files as a pnpm-managed side effect of adding a dependency. follow-up (harness): tool/check-allowed.mjs should always allow pnpm-lock.yaml and pnpm-workspace.yaml, since any unit that adds a dependency touches both
 2026-09-09 17:19 · review · adr-reviewer pass (4 should, 3 notes), all addressed in round 1. Two were defects the evidence caught rather than opinions: the DoD's literal command could never pass because pnpm --filter runs a package script from the package directory while the vitest workspace lives at the repository root (the package script now passes --root ../..), and the documented docker compose plus migrate sequence failed once on a cold container (the CLI now waits for the database). Two were ADR drift: mcp_tokens carried a companies column although ADR-0008 keeps the allow-list inside scope, and Drizzle was a dependency used only for types while ADR-0004 names 'Drizzle ORM with migrations' — the repositories now query through the builder, with raw SQL only for partition DDL. follow-up: the drift test compares table names only; comparing information_schema.columns against the Drizzle definitions would catch a renamed column
+2026-09-09 17:20 · pr · https://github.com/kapdroid/Fa-Lens/pull/22
