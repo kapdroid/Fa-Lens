@@ -1,0 +1,138 @@
+# FA Lens source catalog (ADR-0013). Admin-owned. Logical source names only; flows never see servers.
+# Rules enforced by tool/check-catalog.mjs: every source is tenant-wise (no "default"), replicas only,
+# credentials are vault:// references, budgets present, Unify is coming-soon in v1.
+# Hosts marked confirm: true are placeholders until the owner confirms the replica hostnames.
+version: 1
+tenants: [general, mars, colpal, haldiram, slmg, bdf]
+
+sources:
+  fa_txn:
+    kind: sql
+    dialect: mssql
+    database: FA_Transactions
+    replica: true
+    credential: vault://fa-txn-readonly
+    scope:
+      company: CompanyId
+      date: CreatedAt
+    limits:
+      rows: 50000
+      timeoutMs: 30000
+      concurrency: 4
+      interactiveMaxDays: 31
+    servers:
+      general: transaction-db
+      mars: mars-transaction-db
+      colpal: colpal-transaction-db
+      haldiram: haldiram-transaction-db
+      slmg: slmg-transaction-db
+      bdf: bdf-transaction-db
+
+  fa_master:
+    kind: sql
+    dialect: mssql
+    replica: true
+    credential: vault://fa-master-readonly
+    scope:
+      company: Company
+      date: CreatedAt
+    limits:
+      rows: 50000
+      timeoutMs: 30000
+      concurrency: 4
+      interactiveMaxDays: 31
+    servers:
+      general: master-db
+      mars: mars-master-db
+      colpal: colpal-master-db
+      haldiram: haldiram-master-db
+      slmg: slmg-master-db
+      bdf: bdf-master-db
+    database:
+      general: Masters_GT_Replica
+      mars: F2KLocationsNetworkV3
+      colpal: F2KLocationsNetworkV3
+      haldiram: F2KLocationsNetworkV3
+      slmg: F2KLocationsNetworkV3
+      bdf: F2KLocationsNetworkV3
+
+  report:
+    kind: sql
+    dialect: mssql
+    database: FA_Reports
+    replica: true
+    confirm: true
+    credential: vault://report-readonly
+    scope:
+      company: CompanyId
+      date: CreatedAt
+    limits:
+      rows: 50000
+      timeoutMs: 30000
+      concurrency: 4
+      interactiveMaxDays: 31
+    servers:
+      general: report-general
+      mars: report-mars
+      colpal: report-colpal
+      haldiram: report-haldiram
+      slmg: report-slmg
+      bdf: report-bdf
+
+  dms:
+    kind: sql
+    dialect: postgres
+    database: dms_pg_prod
+    replica: true
+    confirm: true
+    credential: vault://dms-readonly
+    scope:
+      company: company_id
+      date: created_at
+    limits:
+      rows: 50000
+      timeoutMs: 30000
+      concurrency: 4
+      interactiveMaxDays: 31
+    servers:
+      general: dms-general
+      mars: dms-mars
+      colpal: dms-colpal
+      haldiram: dms-haldiram
+      slmg: dms-slmg
+      bdf: dms-bdf
+
+  unify:
+    kind: sql
+    dialect: clickhouse
+    status: coming-soon
+
+  app_api:
+    kind: http
+    confirm: true
+    credential: vault://app-api-agent-token
+    limits:
+      timeoutMs: 15000
+      concurrency: 4
+    baseUrl:
+      general: https://app-api-general.fieldassist.example
+      mars: https://app-api-mars.fieldassist.example
+      colpal: https://app-api-colpal.fieldassist.example
+      haldiram: https://app-api-haldiram.fieldassist.example
+      slmg: https://app-api-slmg.fieldassist.example
+      bdf: https://app-api-bdf.fieldassist.example
+
+  dashboard_api:
+    kind: http
+    confirm: true
+    credential: vault://dashboard-api-agent-token
+    limits:
+      timeoutMs: 15000
+      concurrency: 4
+    baseUrl:
+      general: https://dashboard-api-general.fieldassist.example
+      mars: https://dashboard-api-mars.fieldassist.example
+      colpal: https://dashboard-api-colpal.fieldassist.example
+      haldiram: https://dashboard-api-haldiram.fieldassist.example
+      slmg: https://dashboard-api-slmg.fieldassist.example
+      bdf: https://dashboard-api-bdf.fieldassist.example
