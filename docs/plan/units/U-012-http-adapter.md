@@ -1,7 +1,7 @@
 ---
 id: U-012
 title: Adapter interface and the http adapter with budgets, breaker, and an allow-list
-status: in_progress
+status: review
 tier: 3
 kind: adapter
 depends_on: [U-006]
@@ -55,3 +55,4 @@ No SQL adapters (U-013 brings mssql and postgres, and needs U-004's confirmed ho
 2026-09-09 18:54 · review · adapter-safety-reviewer FAILED round 1 on a real security defect and passed round 2. The block: the host guard compared only the host, so an https source could be called over plain http and the caller's bearer token would go out in the clear — refuse now compares origins, refuses userinfo and a non-special scheme, and allows plain http only on loopback and only when a caller opts in, with a ten-row table test. Round 1 also fixed: redirects (private undici Agent, 3xx refused), queued steps reaching an opened breaker, a failed half-open trial not re-opening, driver messages carrying urls into logs, an unguarded health, budget keys taken from a display name rather than the origin, rows counted only at the top level, and an abandoned generator leaving the source working. Round 2 fixed four more: a catalog listing POST could make the adapter write (now refused unless the source is marked sandbox, architecture §8), a forwarded Host header could route the call and its credential elsewhere, and neither a cancelled run nor a misconfigured redirect may mark a healthy source down. adr-reviewer passed with two should items, both answered: the follow-ups it asked for are now units U-026 and U-027
 2026-09-09 18:57 · review · fresh-eyes scope match yes. It caught that the per-suite evidence predated the review fixes, so the collector re-ran everything at head: 39 tests, gate green. Deviations it named and I accept: the plan's src/http/log.ts became report() inside the adapter; countRows shortens the parsed body in place when the row cap bites, which is what truncated reports; health answers not-ok rather than sending a HEAD a catalog entry does not list. It also names the consequence of merging this before U-027: the van-sales POST steps stay refused until a sandbox source exists, which is the intended order
 2026-09-09 18:57 · verify · evidence refreshed at head: summary.json all pass except the tier-3 beta run, which stays unverifiable because this session has no beta access
+2026-09-09 18:57 · pr · https://github.com/kapdroid/Fa-Lens/pull/25
