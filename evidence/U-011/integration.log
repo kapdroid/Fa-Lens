@@ -1,0 +1,16 @@
+# 2026-09-09 18:16 · pnpm --filter @falens/control test:integration
+ ✓ |integration| packages/control/test/integration/tenant-scope.test.ts (3 tests) 3174ms
+ ✓ |integration| packages/control/test/integration/migrate.test.ts (4 tests) 3335ms
+   ✓ migrations apply from an empty database and create every table the schema declares  371ms
+ ✓ |integration| packages/control/test/integration/lock.test.ts (4 tests) 3306ms
+ ✓ |integration| packages/control/test/integration/evidence-partitions.test.ts (4 tests) 3592ms
+ ✓ |integration| packages/control/test/integration/cache.test.ts (4 tests) 4654ms
+   ✓ a value is readable before its ttl and a miss after it  1208ms
+ ✓ |integration| packages/control/test/integration/bus.test.ts (3 tests) 4850ms
+   ✓ a message published on one connection reaches a subscriber on another within a second  431ms
+   ✓ a subscriber hears only its own channel  442ms
+ ✓ |integration| packages/control/test/integration/queue.test.ts (2 tests) 15777ms
+   ✓ a job is delivered to its handler once  3022ms
+   ✓ a job whose handler throws is delivered again, and a completed one is not  8013ms
+ Test Files  7 passed (7)
+      Tests  24 passed (24)

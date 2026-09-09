@@ -2,7 +2,7 @@
   "name": "@falens/control",
   "version": "0.0.0",
   "private": true,
-  "description": "Postgres control plane: schema, repositories, Queue, Lock, Bus, Cache (docs/architecture.md \u00a72)",
+  "description": "Postgres control plane: schema, repositories, Queue, Lock, Bus, Cache (docs/architecture.md §2)",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
@@ -15,7 +15,8 @@
   "dependencies": {
     "@falens/kernel": "workspace:*",
     "drizzle-orm": "^0.45.2",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "pg-boss": "^12.30.0"
   },
   "devDependencies": {
     "@testcontainers/postgresql": "^12.1.0",

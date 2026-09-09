@@ -1,0 +1,7 @@
+# 2026-09-09 18:13 · 0e15863 · the four seam tests before the seams exist
+Error: Cannot find module '../../src/bus/bus.ts' imported from '/Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-011-control-queue-lock-bus-cache/packages/control/test/integration/bus.test.ts'
+Caused by: Error: Failed to load url ../../src/bus/bus.ts (resolved id: ../../src/bus/bus.ts) in /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-011-control-queue-lock-bus-cache/packages/control/test/integration/bus.test.ts. Does the file exist?
+Error: Cannot find module '../../src/cache/cache.ts' imported from '/Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-011-control-queue-lock-bus-cache/packages/control/test/integration/cache.test.ts'
+Caused by: Error: Failed to load url ../../src/cache/cache.ts (resolved id: ../../src/cache/cache.ts) in /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-011-control-queue-lock-bus-cache/packages/control/test/integration/cache.test.ts. Does the file exist?
+Error: Cannot find module '../../src/lock/lock.ts' imported from '/Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-011-control-queue-lock-bus-cache/packages/control/test/integration/lock.test.ts'
+Caused by: Error: Failed to load url ../../src/lock/lock.ts (resolved id: ../../src/lock/lock.ts) in /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-011-control-queue-lock-bus-cache/packages/control/test/integration/lock.test.ts. Does the file exist?
