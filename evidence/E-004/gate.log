@@ -1,11 +1,13 @@
+# 2026-09-09 10:18 · b20f85f · unit/E-004
 ▸ docs                        ok
 ▸ units                       ok
 ▸ harness                     ok
 ▸ catalog                     ok
+▸ catalog-selftest            ok
 ▸ whitespace                  ok
 ▸ no-secrets                  ok
 ▸ prototype-parses            ok
 ▸ tokens-in-sync              ok
 ▸ shell-scripts               ok
 ▸ typecheck/lint/tests        skipped (no package.json yet)
-gate: GREEN (9 stages)
+gate: GREEN (10 stages)

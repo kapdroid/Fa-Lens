@@ -11,3 +11,10 @@ grep -ni 'primary' packs/_sources/catalog.yaml
 node tool/check-catalog.mjs --file evidence/E-004/broken.yaml
 bash tool/gate.sh --fast | grep '▸ catalog'
 bash tool/gate.sh
+
+# regenerated at HEAD after round-2 hardening
+node tool/check-catalog.mjs
+node tool/check-catalog.mjs --selftest
+node tool/check-catalog.mjs --file evidence/E-004/broken*.yaml
+bash tool/gate.sh --fast
+bash tool/gate.sh
