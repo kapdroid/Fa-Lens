@@ -1,7 +1,7 @@
 ---
 id: U-002
 title: Render the nine per-tab empty states in the prototype
-status: draft
+status: ready
 tier: 2
 kind: ui
 depends_on: [E-003]
@@ -35,3 +35,4 @@ No changes to `screens.md` or `components.md` (copy and component spec are settl
 
 ## Progress
 2026-09-09 · draft · created as a follow-up from E-003 (docs/plan/units/E-003-design-contract-empty-state-copy.md), which specified the copy but explicitly left prototype rendering out of scope.
+2026-09-09 11:26 · ready · set by /build on the owner's instruction (2026-09-09)

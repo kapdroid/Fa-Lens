@@ -1,7 +1,7 @@
 ---
 id: U-003
 title: packs.md rule names the _sources exception
-status: draft
+status: ready
 tier: 1
 kind: docs
 depends_on: []
@@ -36,3 +36,4 @@ No changes to the catalog itself, no new rules, no restructuring of `packs.md` b
 
 ## Progress
 2026-09-09 10:18 · draft · created by memory-scribe from E-004's follow-up: "`.claude/rules/packs.md` should name the `packs/_sources/**` exception explicitly (outside allowed_files here)."
+2026-09-09 11:26 · ready · set by /build on the owner's instruction (2026-09-09)

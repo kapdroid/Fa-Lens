@@ -1,7 +1,7 @@
 ---
 id: U-001
 title: Gate runs the zero-dependency tool tests as a stage
-status: draft
+status: ready
 tier: 1
 kind: harness
 depends_on: [E-002]
@@ -33,3 +33,4 @@ No new tests, no package.json, no CI wiring.
 - add a temporary failing test file, run the gate (red), remove it, run again (green); logs under evidence/U-001/
 
 ## Progress
+2026-09-09 11:26 · ready · set by /build on the owner's instruction (2026-09-09)
