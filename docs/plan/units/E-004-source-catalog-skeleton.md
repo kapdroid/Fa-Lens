@@ -53,3 +53,4 @@ follow-up: confirm real Report and DMS per-tenant replica hostnames before any a
 2026-09-09 10:00 · plan · human approved the plan (owner: 'baki chije bhi complete karo 1,2,3') → building
 2026-09-09 10:02 · build · gate --fast green at e4dc61c incl. catalog stage; red.log → catalog-check.log (OK 7 sources; broken copy exit 1 with 4 findings)
 2026-09-09 10:09 · review · round 1: adr-reviewer pass (3 notes → wording fixed, rest deferred by design); adapter-safety-reviewer pass with 9 should → all fixed at  (validator hardened, 4 fixtures); rerun + fresh-eyes next
+2026-09-09 10:10 · review · round 1: adr-reviewer pass (3 notes → wording fixed, rest deferred by design); adapter-safety-reviewer pass with 9 should → all fixed at 2c99190 (validator hardened, 4 fixtures); safety rerun + fresh-eyes next
