@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { runFlow, toFlow } from '../../src/index.ts';
 import type { ExecuteRequest, ExecuteResult } from '../../src/index.ts';
-import { context, dayCycle, flowDoc, withScriptStep, withUnknownVariable, withWaitAndGroup } from './fixtures.ts';
+import { context, dayCycle, flowDoc, withContainsAndDelta, withScriptStep, withUnknownVariable, withWaitAndGroup } from './fixtures.ts';
 
 const flowOf = (yaml: string) => {
   const { flow, problems } = toFlow(flowDoc(yaml));
@@ -72,6 +72,24 @@ describe('runFlow', () => {
     expect(Date.now() - started).toBeLessThan(1000);
     expect(verdict.steps.find(s => s.id === 'settle')?.severity).toBe('ok');
     expect(seen.map(r => r.stepId)).toEqual(['one', 'two']);
+  });
+
+  test('contains and delta hold when the value is present and inside the tolerance', async () => {
+    const execute = async (): Promise<ExecuteResult> => ({ body: { codes: ['VAN-1', 'VAN-7'], total: 101 }, durationMs: 5 });
+    const verdict = await runFlow(flowOf(withContainsAndDelta), context, execute);
+    expect(verdict.severity).toBe('ok');
+    expect(verdict.steps[0]?.assertions.map(a => a.kind)).toEqual(['contains', 'delta']);
+  });
+
+  test('contains fails when the value is absent and delta fails just outside the tolerance', async () => {
+    const execute = async (): Promise<ExecuteResult> => ({ body: { codes: ['VAN-1'], total: 103 }, durationMs: 5 });
+    const verdict = await runFlow(flowOf(withContainsAndDelta), context, execute);
+    expect(verdict.steps[0]?.severity).toBe('fail');
+    const [contains, delta] = verdict.steps[0]?.assertions ?? [];
+    expect(contains?.ok).toBe(false);
+    expect(contains?.message).toMatch(/VAN-7/);
+    expect(delta?.ok).toBe(false);
+    expect(delta?.message).toMatch(/103.*2.*100|further than/);
   });
 
   test('a script step is refused with an error verdict that names the sandbox unit', async () => {

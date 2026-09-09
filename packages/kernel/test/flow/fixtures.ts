@@ -81,6 +81,44 @@ export const withScriptStep = ['$schemaVersion: 1', 'id: app.script', 'steps:', 
 
 export const withUnknownVariable = ['$schemaVersion: 1', 'id: app.unknown', 'steps:', '  - id: go', '    kind: request', '    method: GET', '    url: "{{app_api}}/{{nowhere}}"', ''].join('\n');
 
+export const withContainsAndDelta = [
+  '$schemaVersion: 1',
+  'id: app.tolerances',
+  'variables:',
+  '  expectedTotal: 100',
+  'steps:',
+  '  - id: totals',
+  '    kind: query',
+  '    source: dms',
+  '    sql: SELECT total, code FROM VanStock',
+  '    assert:',
+  '      - path: $.codes',
+  '        contains: VAN-7',
+  '      - path: $.total',
+  '        equals: 100',
+  '        delta: 2',
+  '',
+].join('\n');
+
+export const twoIndependentSteps = [
+  '$schemaVersion: 1',
+  'id: app.independent',
+  'steps:',
+  '  - id: failing',
+  '    kind: request',
+  '    method: GET',
+  '    url: "{{app_api}}/a"',
+  '    assert:',
+  '      - status: 200',
+  '  - id: erroring',
+  '    kind: request',
+  '    method: GET',
+  '    url: "{{app_api}}/b"',
+  '    assert:',
+  '      - status: 200',
+  '',
+].join('\n');
+
 export const context = {
   scope: { env: 'beta', tenant: 'mars', company: '234474', user: 'DSR-1', dateFrom: '2026-08-01', dateTo: '2026-08-31' },
   variables: { employeeCode: 'EMP-001' },

@@ -20,6 +20,7 @@ export interface Assertion {
 export interface Step {
   id: string;
   kind: StepKind;
+  name?: string;
   needs: string[];
   method?: string;
   url?: string;
@@ -38,6 +39,9 @@ export interface Step {
 export interface Flow {
   id: string;
   name?: string;
+  description?: string;
+  /** Flow-level variables; the interpreter puts them under the pack's variables in the resolution bag. */
+  variables: Record<string, unknown>;
   steps: Step[];
 }
 
@@ -47,7 +51,8 @@ const num = (v: unknown): number | undefined => (typeof v === 'number' ? v : und
 function toAssertion(raw: unknown, path: string, problems: Problem[]): Assertion | null {
   if (!raw || typeof raw !== 'object') { problems.push({ path, message: 'assertion must be a map' }); return null; }
   const o = raw as Record<string, unknown>;
-  const kind = ASSERT_KINDS.find(k => k in o);
+  // `delta` is a tolerance on `equals`, so it wins over the plain equality when both are present.
+  const kind = 'delta' in o ? 'delta' : ASSERT_KINDS.find(k => k in o);
   if (!kind) { problems.push({ path, message: `assertion needs one of ${ASSERT_KINDS.join(', ')}` }); return null; }
   const a: Assertion = { kind, expected: kind === 'delta' ? o['equals'] : o[kind] };
   const p = str(o['path']); if (p !== undefined) a.path = p;
@@ -63,6 +68,7 @@ function toStep(raw: unknown, path: string, problems: Problem[]): Step | null {
   if (!id || !kind) { problems.push({ path, message: 'step needs an id and a kind' }); return null; }
   const step: Step = { id, kind: kind as StepKind, needs: [], extract: {}, assert: [], steps: [] };
   for (const n of Array.isArray(o['needs']) ? o['needs'] : []) { const s = str(n); if (s) step.needs.push(s); }
+  const name = str(o['name']); if (name !== undefined) step.name = name;
   const method = str(o['method']); if (method !== undefined) step.method = method;
   const url = str(o['url']); if (url !== undefined) step.url = url;
   const source = str(o['source']); if (source !== undefined) step.source = source;
@@ -97,7 +103,9 @@ export function toFlow(doc: unknown): { flow: Flow | null; problems: Problem[] }
   const rawSteps = Array.isArray(o['steps']) ? o['steps'] : [];
   rawSteps.forEach((s, i) => { const parsed = toStep(s, `/steps/${i}`, problems); if (parsed) steps.push(parsed); });
   if (!id) return { flow: null, problems };
-  const flow: Flow = { id, steps };
+  const variables = o['variables'];
+  const flow: Flow = { id, steps, variables: variables && typeof variables === 'object' && !Array.isArray(variables) ? { ...(variables as Record<string, unknown>) } : {} };
   const name = str(o['name']); if (name !== undefined) flow.name = name;
+  const description = str(o['description']); if (description !== undefined) flow.description = description;
   return { flow, problems };
 }

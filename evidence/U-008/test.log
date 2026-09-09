@@ -1,7 +1,11 @@
-# 2026-09-09 16:43 · tests AFTER the implementation
+# 2026-09-09 16:49 · after review round 1 (contains/delta covered, delta precedence fixed)
+ ✓ |unit| packages/kernel/test/pack/deps.test.ts (1 test) 1ms
+ ✓ |unit| packages/kernel/test/smoke.test.ts (1 test) 1ms
  ✓ |unit| packages/kernel/test/verdict/rollup.test.ts (4 tests) 2ms
  ✓ |unit| packages/kernel/test/scope/hash.test.ts (4 tests) 4ms
- ✓ |unit| packages/kernel/test/verdict/error-vs-fail.test.ts (3 tests) 9ms
- ✓ |unit| packages/kernel/test/flow/run.test.ts (8 tests) 13ms
- Test Files  4 passed (4)
-      Tests  19 passed (19)
+ ✓ |unit| packages/kernel/test/verdict/error-vs-fail.test.ts (4 tests) 23ms
+ ✓ |unit| packages/kernel/test/flow/run.test.ts (10 tests) 34ms
+ ✓ |unit| packages/kernel/test/pack/hash.test.ts (3 tests) 36ms
+ ✓ |unit| packages/kernel/test/pack/validate.test.ts (7 tests) 56ms
+ Test Files  8 passed (8)
+      Tests  34 passed (34)

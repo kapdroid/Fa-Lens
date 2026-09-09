@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest';
 import { runFlow, toFlow } from '../../src/index.ts';
 import type { ExecuteRequest, ExecuteResult } from '../../src/index.ts';
-import { context, dayCycle, flowDoc } from '../flow/fixtures.ts';
+import { context, dayCycle, flowDoc, twoIndependentSteps } from '../flow/fixtures.ts';
 
 const flow = () => {
   const { flow: f } = toFlow(flowDoc(dayCycle));
@@ -24,7 +24,7 @@ test('a failed assertion yields fail, never error', async () => {
   expect(verdict.severity).toBe('fail');
 });
 
-test('a flow with one of each keeps both counts and reports fail as the worse of the two', async () => {
+test('an errored step and the steps it blocks are counted separately, and the flow reads error', async () => {
   const execute = async (req: ExecuteRequest): Promise<ExecuteResult> => {
     if (req.stepId === 'login') return { status: 200, body: { data: { token: 'tok-a', cycleNo: 3 } }, durationMs: 5 };
     if (req.stepId === 'day-begin') throw new Error('source down');
@@ -34,4 +34,17 @@ test('a flow with one of each keeps both counts and reports fail as the worse of
   expect(verdict.counts.error).toBe(1);
   expect(verdict.counts.skipped).toBe(1);
   expect(verdict.severity).toBe('error');
+});
+
+test('a flow with one failing and one erroring step keeps both counts and reads fail, the worse of the two', async () => {
+  const { flow: f } = toFlow(flowDoc(twoIndependentSteps));
+  if (!f) throw new Error('no flow');
+  const execute = async (req: ExecuteRequest): Promise<ExecuteResult> => {
+    if (req.stepId === 'failing') return { status: 500, body: {}, durationMs: 5 };
+    throw new Error('source down');
+  };
+  const verdict = await runFlow(f, context, execute);
+  expect(verdict.counts.fail).toBe(1);
+  expect(verdict.counts.error).toBe(1);
+  expect(verdict.severity).toBe('fail');
 });

@@ -1,4 +1,5 @@
-// The interpreter. All I/O belongs to the caller: `execute` performs the request or query and returns
+// The interpreter. StepVerdict and FlowVerdict live here beside the interpreter that produces them;
+// verdict/model.ts owns the severity algebra they use. All I/O belongs to the caller: `execute` performs the request or query and returns
 // what happened. The kernel interpolates, extracts, asserts, and decides the verdict — nothing else.
 import type { Scope } from '../scope/scope.ts';
 import type { Counts, Severity } from '../verdict/model.ts';
@@ -55,8 +56,8 @@ export interface FlowVerdict {
 
 const SUCCEEDED: readonly Severity[] = ['ok', 'warn'];
 
-function bagOf(context: FlowContext, extracts: Record<string, unknown>): Bag {
-  return { ...context.scope, ...(context.bases ?? {}), ...(context.variables ?? {}), fixtures: context.fixtures ?? {}, ...extracts };
+function bagOf(flow: Flow, context: FlowContext, extracts: Record<string, unknown>): Bag {
+  return { ...context.scope, ...(context.bases ?? {}), ...flow.variables, ...(context.variables ?? {}), fixtures: context.fixtures ?? {}, ...extracts };
 }
 
 function requestOf(step: Step, bag: Bag): { request: ExecuteRequest; missing: string[] } {
@@ -73,7 +74,7 @@ function requestOf(step: Step, bag: Bag): { request: ExecuteRequest; missing: st
   return { request, missing };
 }
 
-async function runStep(step: Step, context: FlowContext, execute: Executor, done: Map<string, Severity>, extracts: Record<string, unknown>): Promise<StepVerdict> {
+async function runStep(flow: Flow, step: Step, context: FlowContext, execute: Executor, done: Map<string, Severity>, extracts: Record<string, unknown>): Promise<StepVerdict> {
   const base: StepVerdict = { id: step.id, kind: step.kind, severity: 'ok', assertions: [] };
 
   const blocked = step.needs.filter(n => !SUCCEEDED.includes(done.get(n) ?? 'none'));
@@ -87,7 +88,7 @@ async function runStep(step: Step, context: FlowContext, execute: Executor, done
     const children: StepVerdict[] = [];
     let severity: Severity = 'none';
     for (const child of step.steps) {
-      const verdict = await runStep(child, context, execute, done, extracts);
+      const verdict = await runStep(flow, child, context, execute, done, extracts);
       done.set(child.id, verdict.severity);
       children.push(verdict);
       severity = worst(severity, verdict.severity);
@@ -95,7 +96,7 @@ async function runStep(step: Step, context: FlowContext, execute: Executor, done
     return { ...base, severity: severity === 'none' ? 'ok' : severity, steps: children };
   }
 
-  const bag = bagOf(context, extracts);
+  const bag = bagOf(flow, context, extracts);
 
   if (step.kind === 'wait') {
     const { missing } = requestOf(step, bag);
@@ -131,7 +132,7 @@ export async function runFlow(flow: Flow, context: FlowContext, execute: Executo
   const counts = emptyCounts();
   let severity: Severity = 'none';
   for (const step of flow.steps) {
-    const verdict = await runStep(step, context, execute, done, extracts);
+    const verdict = await runStep(flow, step, context, execute, done, extracts);
     done.set(step.id, verdict.severity);
     steps.push(verdict);
     counts[verdict.severity] += 1;
