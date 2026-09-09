@@ -1,6 +1,6 @@
 # ADR-0015 — Kernel may depend on pure, I/O-free libraries
 
-Status: proposed · Date: 2026-09-09
+Status: accepted · Date: 2026-09-09
 
 ## Context
 
