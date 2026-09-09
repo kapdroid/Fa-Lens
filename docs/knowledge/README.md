@@ -1,16 +1,14 @@
-# Knowledge notes
+# Knowledge
 
-One lesson per file: a gotcha, a non-obvious convention, a tool quirk, or a wrong assumption that cost a builder time and that the code or an existing doc does not already say. Written by the memory-scribe agent after a unit's PR opens (`/build` state 8), or by a human who hit the same thing twice.
+Repo-level lessons that a newcomer (human or agent) would otherwise re-learn the hard way: business rules verified against real data, tool quirks, wrong assumptions that cost time. Pack-local gotchas live inside the pack (`packs/<name>/knowledge/`); this folder holds what spans the repository.
 
-Conventions:
-- Path: `docs/knowledge/<area>/<slug>.md`, one topic per file, area matches the unit's `owner` or the part of the tree the lesson concerns (e.g. `harness`, `sources`, `adapters`, `ui`).
-- Every note ends with a `Source:` line naming the unit id and the date the lesson was learned, e.g. `Source: E-004, 2026-09-09`.
-- Keep it short: what the surprise was, why it happened, what to do differently. No restating the ADR or the code; link to it instead.
-- Superseding a note: add a new note with the current date and a link back; do not silently delete the old one if it is still partially true. If it is fully obsolete, delete it and say so in the superseding note.
+Conventions (kept by the `memory-scribe` agent after every unit):
+- One lesson per file, `docs/knowledge/<area>/<slug>.md`.
+- Each file ends with a `Source:` line naming where the fact came from (unit id, spec, ticket, investigation date).
+- Plain words, sentence case, no codes. State the rule, then why it matters.
+- Delete a file when it turns out to be wrong; do not leave corrections as appendices.
 
 ## Index
 
-| Area | Note | Summary |
-|---|---|---|
-| harness | [config-validator-allow-list-first](harness/config-validator-allow-list-first.md) | Hand-rolled config validators must be allow-list first and self-tested in the gate |
-| sources | [catalog-server-names-unconfirmed](sources/catalog-server-names-unconfirmed.md) | Artifact-tool server names in the catalog are not confirmed replica endpoints until an adapter unit checks them |
+- [van-sales/cycle-rules.md](van-sales/cycle-rules.md) — the six locked Van Sales cycle and mapping rules from the artifact tools.
+- [harness/build-skill-isolate-before-plan.md](harness/build-skill-isolate-before-plan.md) — why `/build` isolates into a worktree before writing the plan, and why `.falens-unit` is gitignored.

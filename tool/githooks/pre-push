@@ -4,6 +4,10 @@ set -euo pipefail
 MAIN="${FALENS_MAIN:-main}"
 while read -r local_ref local_sha remote_ref remote_sha; do
   if [[ "$remote_ref" == "refs/heads/$MAIN" ]]; then
+    # one-time bootstrap: allowed only while the remote has no main yet AND a human set the escape
+    if [[ -n "${FALENS_BOOTSTRAP_MAIN:-}" && "$remote_sha" == "0000000000000000000000000000000000000000" ]]; then
+      echo "pre-push: bootstrap push of $MAIN (remote had no main)" >&2; continue
+    fi
     echo "pre-push: refusing to push $MAIN. Open a PR from a unit/ branch; a human merges." >&2
     exit 1
   fi

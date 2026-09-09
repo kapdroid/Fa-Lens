@@ -7,7 +7,7 @@ CMD="$(jq -r '.tool_input.command // empty' 2>/dev/null)"
 deny() { jq -n --arg r "$1" '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$r}}'; exit 0; }
 
 # never push main, never force-push, never delete remote branches
-if echo "$CMD" | grep -Eq 'git push[^|;&]*( origin)? +(main|master)( |$)'; then deny "Pushing main is not allowed. Open a PR from a unit/ branch."; fi
+if echo "$CMD" | grep -Eq 'git push[^|;&]*( origin)? +(main|master)( |$)' && [[ -z "${FALENS_BOOTSTRAP_MAIN:-}" ]] && ! echo "$CMD" | grep -q 'FALENS_BOOTSTRAP_MAIN=1'; then deny "Pushing main is not allowed. Open a PR from a unit/ branch. (One-time bootstrap of an empty remote: FALENS_BOOTSTRAP_MAIN=1, human only.)"; fi
 if echo "$CMD" | grep -Eq 'git push[^|;&]*(--force|-f |--delete)'; then deny "Force-push and remote branch deletion are not allowed."; fi
 # never commit on main in the root checkout (units live in worktrees)
 if echo "$CMD" | grep -Eq '(^|[;&|] *)git commit'; then
