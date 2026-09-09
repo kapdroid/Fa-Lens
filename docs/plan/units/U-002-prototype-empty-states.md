@@ -1,7 +1,7 @@
 ---
 id: U-002
 title: Render the nine per-tab empty states in the prototype
-status: in_progress
+status: review
 tier: 2
 kind: ui
 depends_on: [E-003]
@@ -46,3 +46,4 @@ No changes to `screens.md` or `components.md` (copy and component spec are settl
 2026-09-09 11:35 · verify · evidence complete: summary.json 3/3 pass at 26f857c (grep 9, full gate green, nine screenshots)
 2026-09-09 11:45 · review · adr-reviewer pass (2 notes: --fast log added as gate-fast.log; Stylelint not yet wired — pre-existing). design-reviewer pass with 3 should → all fixed in round 1: header toggle removed and replaced by Scenario 'Designer: every tab, no data yet' (+ /empty deep link); shift-click action shows the failed state (crit-text line); 18 screenshots light+dark. Note answered: 234474 stays plain text because the DoD grep is the verbatim sentence. follow-up: DoD wording vs ids-monospace rule for the Overview empty sentence (screens.md owner). Merged origin/main (PRs #8–#10) into the branch; tool-tests stage now runs here too
 2026-09-09 11:48 · review · design-reviewer round 2 pass (1 note carried: 234474 mono vs verbatim DoD grep → follow-up above)
+2026-09-09 11:48 · pr · https://github.com/kapdroid/Fa-Lens/pull/11
