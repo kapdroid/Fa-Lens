@@ -4,5 +4,10 @@ packages:
 
 # pnpm 11 settings live here, not in package.json.
 allowBuilds:
+  # Testcontainers reaches Docker over a socket; none of these native build scripts are needed for that,
+  # and the integration suite is green without them.
+  cpu-features: false
   esbuild: true
+  protobufjs: false
+  ssh2: false
 verifyDepsBeforeRun: false

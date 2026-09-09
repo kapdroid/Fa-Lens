@@ -17,6 +17,7 @@ allowed_files:
   - package.json
   - vitest.workspace.ts
   - pnpm-lock.yaml
+  - pnpm-workspace.yaml
 adrs: [ADR-0004, ADR-0011, ADR-0008]
 design: []
 dod:
@@ -59,3 +60,4 @@ No queue, lock, bus, or cache implementations (U-011). No use-cases or API (serv
 2026-09-09 16:58 · isolate · worktree /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-010-control-plane-schema
 2026-09-09 17:11 · build · gate --fast green at 792f985; 11 integration tests green on a real Postgres 16 container (migrate, tenant-scope, evidence-partitions), unit project still green, docker compose up + pnpm migrate applied both migrations and the second run was a no-op. Notes: red.log was taken by moving packages/control/src aside after the tests were written, since the gate's typecheck covers test files and a tests-only commit cannot pass; the .sql migrations are the source of truth and a drift test asserts every table the Drizzle schema declares exists after migrating; drizzle-kit is present for tooling but generates nothing today
 2026-09-09 17:11 · build · note for whoever runs the full gate next: tool/gate.sh without --fast now runs the integration project, so it needs Docker; --fast still skips it and stays the pre-commit gate
+2026-09-09 17:11 · build · second contract correction: pnpm wrote allowBuilds placeholders ('set this to true or false') into pnpm-workspace.yaml when testcontainers pulled ssh2, cpu-features and protobufjs, which breaks a fresh frozen install — the same defect U-006 hit with esbuild. All three set to false, which is what the green integration run already proved is enough, and pnpm-workspace.yaml added to allowed_files as a pnpm-managed side effect of adding a dependency. follow-up (harness): tool/check-allowed.mjs should always allow pnpm-lock.yaml and pnpm-workspace.yaml, since any unit that adds a dependency touches both
