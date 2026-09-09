@@ -51,6 +51,11 @@ function countStatement(ctx: Ctx, table: string, keys: readonly string[], having
   return { sql, params: { ...ctx.params }, dialect: ctx.dialect };
 }
 
+function totalStatement(ctx: Ctx, table: string): CompiledStatement {
+  const sql = `SELECT COUNT(*) AS ${ctx.q('n')} FROM ${ctx.q(table)} WHERE ${ctx.scopeWhere}`;
+  return { sql, params: { ...ctx.params }, dialect: ctx.dialect };
+}
+
 function columnsStatement(ctx: Ctx, table: string, keys: readonly string[], columns: readonly string[], side: 'anchor' | 'enrich'): CompiledStatement {
   const sql = `SELECT ${list(ctx, [...keys, ...columns])} FROM ${ctx.q(table)} WHERE ${ctx.scopeWhere}`;
   return { sql, params: { ...ctx.params }, dialect: ctx.dialect, side };
@@ -66,8 +71,10 @@ export function compileRule(rule: Rule, dialect: Dialect, scope: Scope): Compile
 
   switch (rule.type) {
     case 'presence': {
+      // Without keys the question is simply "are there any rows in scope", so the statement counts
+      // without grouping; routing a '*' through the identifier quoter would produce broken SQL.
       if (!rule.table) problems.push({ path: at, message: 'presence needs a table' });
-      else statements.push(countStatement(ctx, rule.table, keys.length ? keys : ['*']));
+      else statements.push(keys.length ? countStatement(ctx, rule.table, keys) : totalStatement(ctx, rule.table));
       break;
     }
     case 'uniqueness': {

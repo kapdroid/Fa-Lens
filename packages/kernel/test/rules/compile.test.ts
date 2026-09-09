@@ -51,6 +51,13 @@ describe('compileRule', () => {
     expect(s?.sql).toContain('HAVING COUNT(*) > 1');
   });
 
+  test('a presence rule with no keys counts the rows in scope instead of grouping by nothing', () => {
+    const { statements, problems } = compileRule({ id: 'any-orders', type: 'presence', source: 'fa_txn', table: 'VanOrder' }, 'mssql', scope);
+    expect(problems).toEqual([]);
+    expect(statements[0]?.sql).toBe('SELECT COUNT(*) AS [n] FROM [VanOrder] WHERE [CompanyId] = @company AND [CreatedOn] >= @dateFrom AND [CreatedOn] < DATEADD(day, 1, @dateTo)');
+    expect(statements[0]?.sql).not.toContain('[]');
+  });
+
   test('a custom-check compiles to no statement and says which reference is unknown', () => {
     const { statements, problems } = compileRule(customCheck, 'mssql', scope);
     expect(statements).toEqual([]);

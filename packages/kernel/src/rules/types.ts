@@ -1,5 +1,6 @@
 // Declarative rule types (ADR-0010) and what compiling one produces. The kernel builds SQL text only;
 // executing it, and mapping a logical source to a dialect, belong to the adapters and the catalog.
+import type { RULE_TYPES } from '../pack/schemas/index.ts';
 import type { Problem } from '../pack/types.ts';
 
 export type Dialect = 'mssql' | 'postgres' | 'clickhouse';
@@ -18,9 +19,11 @@ export type Cause = 'balanced' | 'physical short' | 'sync gap' | 'audit pending'
 
 export interface Side { source?: string; table?: string; measure?: string; keys?: string[]; columns?: string[] }
 
+export type RuleType = (typeof RULE_TYPES)[number];
+
 export interface Rule {
   id: string;
-  type: string;
+  type: RuleType;
   source: string;
   table?: string;
   keys?: string[];
