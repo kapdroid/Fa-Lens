@@ -1,0 +1,32 @@
+# 2026-09-09 18:37 · 840b4f2 · unit/U-012
+▸ docs                        ok
+▸ knowledge-index             ok
+▸ knowledge-index-selftest    ok
+▸ units                       ok
+▸ harness                     ok
+▸ catalog                     ok
+▸ catalog-selftest            ok
+▸ evals-selftest              ok
+▸ evals-rendered              ok
+▸ whitespace                  ok
+▸ no-secrets                  ok
+▸ prototype-parses            ok
+▸ tokens-in-sync              ok
+▸ shell-scripts               ok
+▸ tool-tests                  ok
+▸ typecheck                   ok
+▸ lint                        FAIL
+    $ eslint .
+    
+    /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-012-http-adapter/packages/adapters/src/http/http-adapter.ts
+      125:26  error  '_' is assigned a value but never used  @typescript-eslint/no-unused-vars
+    
+    ✖ 1 problem (1 error, 0 warnings)
+    
+    [ELIFECYCLE] Command failed with exit code 1.
+▸ boundaries                  ok
+▸ contract                    ok
+▸ unit-tests                  ok
+▸ integration-tests           ok
+▸ e2e                         ok
+gate: RED
