@@ -89,7 +89,6 @@ export const mcpTokens = pgTable('mcp_tokens', {
   userId: text('user_id').notNull(),
   name: text('name').notNull(),
   scope: jsonb('scope').notNull(),
-  companies: text('companies').array().notNull(),
   expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
   revokedAt: timestamp('revoked_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),

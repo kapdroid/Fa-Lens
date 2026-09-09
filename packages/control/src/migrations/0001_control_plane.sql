@@ -100,8 +100,8 @@ CREATE TABLE mcp_tokens (
   id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id      text NOT NULL REFERENCES users(id),
   name         text NOT NULL,
+  -- Allowed verbs and the optional company allow-list both live in scope (ADR-0008).
   scope        jsonb NOT NULL DEFAULT '{}'::jsonb,
-  companies    text[] NOT NULL DEFAULT '{}',
   expires_at   timestamptz NOT NULL,
   revoked_at   timestamptz,
   created_at   timestamptz NOT NULL DEFAULT now(),
