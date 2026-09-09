@@ -43,3 +43,5 @@ No new tests, no package.json, no CI wiring.
 2026-09-09 11:33 · verify · evidence complete: summary.json 3/3 pass at e528a0c, full gate green (gate.log)
 2026-09-09 11:35 · review · adr-reviewer pass (2 notes: ADR-0011 static list does not name tool tests — elaboration, no fix; docs/orchestration.md §5 stage list stale — already a follow-up line above)
 2026-09-09 11:35 · pr · https://github.com/kapdroid/Fa-Lens/pull/10
+2026-09-09 11:40 · pr · https://github.com/kapdroid/Fa-Lens/pull/10
+2026-09-09 11:37 · memory · updated docs/knowledge/harness/tool-tests-zero-dependency.md (empty-glob guard, prove-the-gap-first) + README index; no ADR; follow-ups stay as Progress lines
