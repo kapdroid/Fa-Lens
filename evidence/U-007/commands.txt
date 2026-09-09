@@ -1,0 +1,12 @@
+pnpm -s vitest run packages/kernel/test/pack   # DoD 1: red before implementation -> evidence/U-007/red.log (captured earlier in build phase, sha 9681eeb)
+pnpm -s vitest run packages/kernel/test/pack   # DoD 1: green after implementation -> evidence/U-007/test.log
+cat packages/kernel/package.json               # DoD 2: dependencies list -> evidence/U-007/package.json.log
+node tool/check-boundaries.mjs                 # DoD 2: exits 0 -> evidence/U-007/check-boundaries.log
+cp packages/kernel/package.json <backup>
+node -e "add lodash to dependencies"           # DoD 2: temporarily inject bogus dependency to prove deps.test.ts guards
+pnpm -s vitest run packages/kernel/test/pack/deps.test.ts   # DoD 2: expected failure -> evidence/U-007/deps-guard-red.log
+git checkout -- packages/kernel/package.json   # DoD 2: restore package.json
+pnpm -s vitest run packages/kernel/test/pack/deps.test.ts   # DoD 2: confirm passes again -> evidence/U-007/deps-guard-green.log
+cat packages/kernel/test/pack/hash.test.ts     # DoD 3: inspect hashPack stability/change tests (covered by test.log run above)
+bash tool/gate.sh                              # DoD 4 / Verification: full gate -> evidence/U-007/gate.log
+git rev-parse HEAD

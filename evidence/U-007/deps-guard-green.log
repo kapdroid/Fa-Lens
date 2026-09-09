@@ -1,0 +1,11 @@
+ DEPRECATED  The workspace file is deprecated and will be removed in the next major. Please, use the `test.projects` field in the root config file instead.
+
+ RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-007-kernel-pack-schema
+
+ ✓ |unit| packages/kernel/test/pack/deps.test.ts (1 test) 1ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  16:07:45
+   Duration  174ms (transform 5ms, setup 0ms, collect 7ms, tests 1ms, environment 0ms, prepare 38ms)
+

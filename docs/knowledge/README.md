@@ -20,6 +20,7 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 ### harness
 
 - [The build skill isolates into a worktree before writing the plan](harness/build-skill-isolate-before-plan.md)
+- [Any unit that adds a dependency must list `pnpm-lock.yaml` in `allowed_files` until the harness always allows it](harness/check-allowed-should-always-allow-pnpm-lock-yaml.md)
 - [Hand-rolled config validators must be allow-list first and self-tested in the gate](harness/config-validator-allow-list-first.md)
 - [Evidencing a DoD command that mutates a committed ledger: run it literally, capture the diff, then revert](harness/evidence-for-ledger-mutating-dod.md)
 - [The generated knowledge index only carries a note's first heading](harness/generated-knowledge-index-only-keeps-a-notes-first-heading.md)
@@ -28,6 +29,7 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 - [A unit's Plan must describe example links in words, not write a placeholder markdown link](harness/plan-example-links-must-be-real-or-worded-not-placeholder-markdown-links.md)
 - [`tool/pr.sh`'s body renderer needs `summary.json` `evidence` fields to be plain strings](harness/pr-sh-summary-evidence-must-be-a-string.md)
 - [A red check must fail for the reason the unit fixes](harness/red-check-must-fail-for-the-right-reason.md)
+- [Tests-first cannot be committed as a separate red commit; `red.log` is the red evidence instead](harness/tests-and-implementation-land-in-one-commit-red-log-is-the-evidence.md)
 - [A tool's own `selftest` subcommand gives red-then-green evidence when `tool/test/**` is outside the unit's allowed_files](harness/tool-selftest-when-tests-dir-not-allowed.md)
 - [Zero-dependency tests under `tool/test/` use `node:assert` and spawn the script](harness/tool-tests-zero-dependency.md)
 
@@ -37,6 +39,7 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 
 ### toolchain
 
+- [`ajv` and `ajv-formats` are CommonJS; import them accordingly under NodeNext](toolchain/ajv-and-ajv-formats-are-commonjs-under-nodenext.md)
 - [ESLint config must ignore `.claude/**` and `tool/**`](toolchain/eslint-must-ignore-claude-and-tool-dirs.md)
 - [pnpm 11 reads its build/dep settings from `pnpm-workspace.yaml`, not `package.json`'s `pnpm` field](toolchain/pnpm-11-reads-pnpm-workspace-yaml-not-package-json.md)
 

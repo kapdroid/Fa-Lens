@@ -1,0 +1,110 @@
+// In-memory packs for the validator tests: a valid Van Sales-shaped pack and five invalid variants.
+// A pack is a { path: text } map (ADR-0010 layout); the kernel never reads the file system.
+export type Files = Record<string, string>;
+
+export function validPack(): Files {
+  return {
+    'pack.yaml': [
+      'id: van-sales',
+      'name: Van Sales',
+      'category: Field app',
+      'version: 1.0.0',
+      'kind: module',
+      'tabs: [overview, apis, cases, flows, validations, runs]',
+      'variables:',
+      '  employeeCode: EMP-001',
+      '  vanCode: VAN-7',
+      '',
+    ].join('\n'),
+    'flows/day-cycle.yaml': [
+      '$schemaVersion: 1',
+      'id: app.day-cycle',
+      'name: App day cycle',
+      'steps:',
+      '  - id: login',
+      '    kind: request',
+      '    method: POST',
+      '    url: "{{app_api}}/check/login"',
+      '    body: "{{fixtures.login}}"',
+      '    extract:',
+      '      token: $.data.token',
+      '    assert:',
+      '      - status: 200',
+      '      - path: $.data.token',
+      '        matches: "^[A-Za-z0-9._-]+$"',
+      '  - id: day-begin',
+      '    kind: request',
+      '    needs: [login]',
+      '    method: POST',
+      '    url: "{{app_api}}/day/begin"',
+      '    headers:',
+      '      Authorization: "Bearer {{token}}"',
+      '    body: "{{fixtures.day-begin}}"',
+      '    assert:',
+      '      - status: 200',
+      '      - path: $.data.cycleNo',
+      '        gte: 1',
+      '  - id: cycle-open',
+      '    kind: query',
+      '    needs: [day-begin]',
+      '    source: fa_txn',
+      '    sql: SELECT COUNT(*) AS n FROM VanCycle WHERE EmployeeCode = {{employeeCode}} AND CloseTime IS NULL',
+      '    assert:',
+      '      - rows: 1',
+      '      - path: $[0].n',
+      '        equals: 1',
+      '  - id: settle',
+      '    kind: wait',
+      '    seconds: 2',
+      '  - id: balance',
+      '    kind: validate',
+      '    rule: cycle-balance',
+      '',
+    ].join('\n'),
+    'rules/cycle-balance.yaml': [
+      'id: cycle-balance',
+      'name: Cycle stock balance',
+      'type: aggregate_match',
+      'source: fa_txn',
+      'anchor:',
+      '  table: VanCycleStock',
+      '  measure: SUM(Quantity)',
+      '  keys: [CycleNo, ProductCode]',
+      'enrich:',
+      '  source: dms',
+      '  table: VanStockLedger',
+      '  measure: SUM(Qty)',
+      '  keys: [CycleNo, ProductCode]',
+      'window: cycle',
+      '',
+    ].join('\n'),
+    'cases/day-begin.yaml': [
+      'id: day-begin.happy',
+      'kind: happy',
+      'endpoint: POST day/begin',
+      'expect:',
+      '  status: 200',
+      '',
+    ].join('\n'),
+    'fixtures/login.json': '{"username": "{{employeeCode}}", "password": "vault://sandbox/van-sales/login"}\n',
+    'fixtures/day-begin.json': '{"vanCode": "{{vanCode}}", "odometer": 120}\n',
+    'drilldown.yaml': 'levels:\n  - company\n  - employee\n  - cycle\n  - product\ncolumns:\n  cycle: [CycleNo, StartTime, EndTime, Status]\n',
+    'presets.yaml': 'validator:\n  dateRangeDays: 31\ncolumns:\n  cases: [Case, Kind, Endpoint, Verdict]\n',
+    'catalog.refs.yaml': 'sources: [fa_txn, dms]\nendpoints:\n  - POST check/login\n  - POST day/begin\n',
+    'knowledge/cycles.md': '# Cycles open on PureDayStart\n\nSource: E-001.\n',
+  };
+}
+
+const swap = (files: Files, path: string, from: string, to: string): Files => {
+  const text = files[path];
+  if (text === undefined || !text.includes(from)) throw new Error(`fixture ${path} does not contain ${from}`);
+  return { ...files, [path]: text.replace(from, to) };
+};
+
+export const invalid = {
+  undeclaredVariable: () => swap(validPack(), 'flows/day-cycle.yaml', '{{employeeCode}}', '{{employeeCodee}}'),
+  unreachableStep: () => swap(validPack(), 'flows/day-cycle.yaml', 'needs: [day-begin]', 'needs: [never-defined]'),
+  unknownRuleType: () => swap(validPack(), 'rules/cycle-balance.yaml', 'type: aggregate_match', 'type: magic'),
+  credentialValue: () => swap(validPack(), 'fixtures/login.json', 'vault://sandbox/van-sales/login', 'hunter22'),
+  serverName: () => swap(validPack(), 'rules/cycle-balance.yaml', 'source: fa_txn\n', 'source: fa_txn\nserver: mars-sql01.database.windows.net\n'),
+};

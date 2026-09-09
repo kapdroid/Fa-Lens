@@ -1,0 +1,32 @@
+{
+  "unit": "U-007",
+  "sha": "497b166ba0e2f75b1976cb993fc453d6bfbdd6ce",
+  "items": [
+    {
+      "dod": "vitest packages/kernel/test/pack fails without the validator and passes with it: valid fixture accepted, each invalid fixture rejected with a message naming the JSON path",
+      "command": "pnpm -s vitest run packages/kernel/test/pack",
+      "evidence": "evidence/U-007/test.log",
+      "status": "pass"
+    },
+    {
+      "dod": "packages/kernel/package.json declares only the ADR-0015 libraries (ajv, ajv-formats, yaml, jsonpath-plus) as dependencies, deps.test.ts fails when another key appears, and node tool/check-boundaries.mjs exits 0",
+      "command": "cat packages/kernel/package.json; node tool/check-boundaries.mjs; pnpm -s vitest run packages/kernel/test/pack/deps.test.ts (with a temporary bogus lodash dependency, then restored via git checkout)",
+      "evidence": "evidence/U-007/package.json.log",
+      "status": "pass"
+    },
+    {
+      "dod": "hashPack() returns the same hash for the same pack content published twice and a different hash when one byte changes (test in packages/kernel/test/pack/hash.test.ts)",
+      "command": "pnpm -s vitest run packages/kernel/test/pack (hash.test.ts subset: 3 tests covering stability, one-byte change, and key-order invariance)",
+      "evidence": "evidence/U-007/test.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh",
+      "evidence": "evidence/U-007/gate.log",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "missing": []
+}
