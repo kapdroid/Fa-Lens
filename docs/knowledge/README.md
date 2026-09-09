@@ -12,6 +12,14 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 ## Index
 
 <!-- index:start -->
+### adapters
+
+- [A breaker should count only what the source did](adapters/a-breaker-should-count-only-what-the-source-did.md)
+- [A catalog guard is only as strong as a rule no catalog edit can loosen](adapters/a-catalog-guard-is-only-as-strong-as-a-rule-no-catalog-edit-can-loosen.md)
+- [A circuit breaker must be read again after the permit is taken, and the second read must not consume the trial](adapters/a-circuit-breaker-must-be-read-again-after-the-permit-is-taken.md)
+- [An allow-list must compare origins, not hosts](adapters/an-allow-list-must-compare-origins-not-hosts.md)
+- [An error message from a driver must not reach the log verbatim](adapters/an-error-message-from-a-driver-must-not-reach-the-log-verbatim.md)
+
 ### control
 
 - [A seam meant to be swapped later must not expose the current implementation's concepts](control/a-swappable-seam-must-not-leak-its-implementation.md)
