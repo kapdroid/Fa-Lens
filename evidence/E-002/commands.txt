@@ -1,0 +1,7 @@
+node tool/test/check-units.test.mjs                     # rerun of DoD 1, green (see test.log); red run at c03cc63 already captured in red.log
+node tool/check-units.mjs                                # clean tree -> exit 0 (see manual-check.log)
+mkdir -p evidence/X-999 && echo placeholder > evidence/X-999/placeholder.txt
+node tool/check-units.mjs                                # evidence/X-999 present -> exit 1, names it (see manual-check.log)
+rm -rf evidence/X-999                                    # cleanup, ran even though prior command's failure was expected
+bash tool/gate.sh --fast                                 # DoD 3, green
+bash tool/gate.sh                                        # full gate, run last -> evidence/E-002/gate.log
