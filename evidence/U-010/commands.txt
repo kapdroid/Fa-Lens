@@ -1,0 +1,12 @@
+pnpm --filter @falens/control test:integration   # exit=1, evidence/U-010/filter-cwd-failure.log
+pnpm -s test:integration                          # exit=0, evidence/U-010/integration.log
+pnpm -s test                                       # exit=0, evidence/U-010/unit-test.log
+docker compose up -d postgres                      # exit=0
+pnpm -s migrate (immediate, before healthcheck)     # exit=1, ECONNRESET
+pnpm -s migrate (retry after pg_isready)            # exit=0
+pnpm -s migrate (second run, idempotency check)     # exit=0, no-op
+docker compose down -v                              # exit=0
+# all four above combined in evidence/U-010/migrate.log
+bash tool/gate.sh --fast                            # exit=0, evidence/U-010/gate-fast.log
+bash tool/gate.sh                                   # exit=0, evidence/U-010/gate.log
+git rev-parse HEAD

@@ -12,6 +12,11 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 ## Index
 
 <!-- index:start -->
+### control
+
+- [Evidence expires by dropping a monthly partition, never by deleting rows](control/evidence-expires-by-dropping-a-partition-never-deleting-rows.md)
+- [Tenant isolation is a property of the repository factory, not of the caller](control/tenant-isolation-is-a-property-of-the-repository-factory.md)
+
 ### design
 
 - [Prototype demo affordances belong in Scenarios, not the module header](design/demo-affordances-in-scenarios-not-header.md)
@@ -48,6 +53,7 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 - [`ajv` and `ajv-formats` are CommonJS; import them accordingly under NodeNext](toolchain/ajv-and-ajv-formats-are-commonjs-under-nodenext.md)
 - [ESLint config must ignore `.claude/**` and `tool/**`](toolchain/eslint-must-ignore-claude-and-tool-dirs.md)
 - [pnpm 11 reads its build/dep settings from `pnpm-workspace.yaml`, not `package.json`'s `pnpm` field](toolchain/pnpm-11-reads-pnpm-workspace-yaml-not-package-json.md)
+- [`pnpm --filter <pkg> <script>` runs the script from the package directory, not the repo root](toolchain/pnpm-filter-script-runs-in-package-dir-not-repo-root.md)
 
 ### van-sales
 

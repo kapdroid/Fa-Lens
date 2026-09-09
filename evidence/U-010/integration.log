@@ -1,0 +1,7 @@
+# 2026-09-09 17:18 · the DoD's literal command, after fixing the package script to run vitest from the workspace root
+ ✓ |integration| packages/control/test/integration/migrate.test.ts (4 tests) 1676ms
+ ✓ |integration| packages/control/test/integration/evidence-partitions.test.ts (4 tests) 2027ms
+ ✓ |integration| packages/control/test/integration/tenant-scope.test.ts (3 tests) 2487ms
+ Test Files  3 passed (3)
+      Tests  11 passed (11)
+exit=0

@@ -2,9 +2,24 @@
   "name": "@falens/control",
   "version": "0.0.0",
   "private": true,
-  "description": "Postgres control plane: schema, repositories, Queue, Lock, Bus, Cache (docs/architecture.md §2)",
+  "description": "Postgres control plane: schema, repositories, Queue, Lock, Bus, Cache (docs/architecture.md \u00a72)",
   "type": "module",
-  "exports": { ".": "./src/index.ts" },
-  "scripts": { "typecheck": "tsc -p tsconfig.json" },
-  "dependencies": { "@falens/kernel": "workspace:*" }
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test:integration": "vitest run --root ../.. --project integration packages/control",
+    "migrate": "node --experimental-strip-types src/migrations/cli.ts"
+  },
+  "dependencies": {
+    "@falens/kernel": "workspace:*",
+    "drizzle-orm": "^0.45.2",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@testcontainers/postgresql": "^12.1.0",
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "^0.31.10"
+  }
 }

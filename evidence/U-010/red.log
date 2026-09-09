@@ -1,0 +1,5 @@
+# 2026-09-09 17:08 · the integration tests with packages/control/src moved aside: they fail for want of the implementation
+Error: Cannot find module '../../src/migrations/apply.ts' imported from '/Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-010-control-plane-schema/packages/control/test/integration/harness.ts'
+Caused by: Error: Failed to load url ../../src/migrations/apply.ts (resolved id: ../../src/migrations/apply.ts) in /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-010-control-plane-schema/packages/control/test/integration/migrate.test.ts. Does the file exist?
+ Test Files  3 failed (3)
+      Tests  no tests
