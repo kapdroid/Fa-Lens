@@ -1,7 +1,7 @@
 ---
 id: U-011
 title: Control plane Queue, Lock, Bus, and Cache seams implemented on Postgres
-status: in_progress
+status: review
 tier: 2
 kind: service
 depends_on: [U-010]
@@ -56,3 +56,4 @@ No job handlers (worker unit). No SSE relay (api unit). No NATS implementation (
 2026-09-09 18:12 · isolate · worktree /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-011-control-queue-lock-bus-cache
 2026-09-09 18:17 · build · gate --fast green at 8e03a2d; red.log shows the four seams missing, integration.log 24 tests green including the queue's crash-and-retry, unit project still green and still Docker-free. Two corrections while building: pg-boss 12 exports a named PgBoss, not a default; and my first queue test put the retry delay on the worker, where pg-boss ignores it — retry and expiry are properties of the job, so the API now takes them on send and the test says why
 2026-09-09 18:24 · review · adr-reviewer pass (3 should, 5 notes), all addressed in round 1. The sharpest one: createRun ran outside the transaction that holds the gate, so the run row was not atomic with the decision to start it and a job could never be enqueued in the same commit, which is exactly ADR-0004's transactional enqueue — acquire now hands the transaction to createRun through a narrow TxClient that names no driver. Also: lockKey came off the Lock interface because a NATS implementation would have no use for a 64-bit key; the bus now really reconnects and re-listens, proved by a test that terminates the backend mid-subscription; and the DoD now says retry delay rather than expiry, because that is the pg-boss mechanism the test drives. follow-up: architecture §4 still says the worker releases the lock, which ADR-0016 reinterprets — a docs unit should reword it
+2026-09-09 18:25 · pr · https://github.com/kapdroid/Fa-Lens/pull/24
