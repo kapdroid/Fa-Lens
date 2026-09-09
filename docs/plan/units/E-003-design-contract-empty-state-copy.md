@@ -1,7 +1,7 @@
 ---
 id: E-003
 title: Specify empty-state copy for every module tab in the design contract
-status: in_progress
+status: review
 tier: 2
 kind: ui
 depends_on: []
@@ -49,3 +49,4 @@ follow-up: prototype/index.html has no per-tab empty-state rendering; a later UI
 2026-09-09 09:56 · build · gate --fast green at 1f9acb7; red.log (0,0) → green.log (9,1)
 2026-09-09 10:01 · verify · evidence complete: summary.json 4/4 pass, full gate green
 2026-09-09 10:01 · review · adr-reviewer pass; design-reviewer pass with 1 should + 2 notes → all fixed in the same round (CTA accent rule, Table→EmptyState reference, 'New chain' label)
+2026-09-09 10:02 · pr · https://github.com/kapdroid/Fa-Lens/pull/3
