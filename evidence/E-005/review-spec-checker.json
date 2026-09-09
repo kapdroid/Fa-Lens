@@ -1,0 +1,17 @@
+{
+  "verdict": "pass",
+  "dod_coverage": [
+    {"item": "record appends a JSON line with id, verdict, note, date, sha", "steps": ["2", "5"], "covered": true},
+    {"item": "render regenerates the table, idempotent", "steps": ["3", "4"], "covered": true},
+    {"item": "bash tool/gate.sh --fast is green", "steps": ["5"], "covered": true}
+  ],
+  "tests_first": true,
+  "files_outside_allowed": [],
+  "out_of_scope_work": [],
+  "open_markers": [],
+  "notes": [
+    "First plan line quoted verbatim by the checker (grounding ok).",
+    "Tests-first satisfied via an internal selftest command, consistent with the tool/check-catalog.mjs --selftest precedent, since tool/test/** is not in allowed_files.",
+    "DoD-1's literal command is executed as evidence in step 5 and the jsonl mutation reverted so the committed ledger holds only real rows."
+  ]
+}
