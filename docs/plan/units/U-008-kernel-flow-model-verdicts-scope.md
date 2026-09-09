@@ -1,7 +1,7 @@
 ---
 id: U-008
 title: Kernel flow model, step semantics, verdict rollup, and scope hash
-status: in_progress
+status: review
 tier: 1
 kind: kernel
 depends_on: [U-007]
@@ -54,3 +54,4 @@ No HTTP client, no adapters (U-012). No windowing of date ranges (U-009). No per
 2026-09-09 16:43 · build · gate --fast green at b01c1bc; red.log shows runFlow/rollup/scopeHash missing before, test.log 19/19 after; typecheck, lint, boundaries clean. Decisions recorded while building: delta asserts |actual - equals| <= delta (ADR-0003 names the keyword but not its arithmetic); counts tally direct children, so a company counts modules, not leaves — one of my own rollup expectations encoded the other reading and was corrected with a comment naming the semantic; a group's verdict is the worst of its children and its children hang off step.steps
 2026-09-09 16:45 · verify · evidence complete: summary.json 5/5 pass at a7ea1a1, full gate green (22 stages), per-suite logs saved
 2026-09-09 16:49 · review · adr-reviewer pass (1 should, 3 notes), all addressed in round 1. The should found a real defect: contains and delta were untested, and writing the tests showed delta was parsed as a plain equals (equals sorts first in ASSERT_KINDS) so the tolerance never applied — fixed, delta now wins when both keys are present. Also carried step.name, flow.description and flow-level variables through the AST (flow variables sit under pack variables in the bag), and replaced a mis-titled test with one that genuinely produces an error and a fail together. 34 kernel tests green
+2026-09-09 16:49 · pr · https://github.com/kapdroid/Fa-Lens/pull/20
