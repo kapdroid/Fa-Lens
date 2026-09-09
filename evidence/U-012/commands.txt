@@ -1,0 +1,8 @@
+git rev-parse HEAD
+pnpm -s vitest run packages/adapters/test
+pnpm -s vitest run packages/adapters/test/http/allowlist.test.ts
+pnpm -s vitest run packages/adapters/test/http/budget.test.ts
+pnpm -s vitest run packages/adapters/test/http/breaker.test.ts
+pnpm -s vitest run packages/adapters/test/http/redaction.test.ts
+pnpm -s vitest run packages/adapters/test/http/guard.test.ts
+bash tool/gate.sh --fast

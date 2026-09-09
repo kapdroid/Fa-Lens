@@ -1,0 +1,11 @@
+ DEPRECATED  The workspace file is deprecated and will be removed in the next major. Please, use the `test.projects` field in the root config file instead.
+
+ RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-012-http-adapter
+
+ ✓ |unit| packages/adapters/test/http/guard.test.ts (14 tests) 2ms
+
+ Test Files  1 passed (1)
+      Tests  14 passed (14)
+   Start at  18:56:46
+   Duration  212ms (transform 21ms, setup 0ms, collect 50ms, tests 2ms, environment 0ms, prepare 32ms)
+

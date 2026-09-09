@@ -1,0 +1,62 @@
+{
+  "unit": "U-012",
+  "sha": "ed04bc8e681f7f24a2cea9631463ca2406a0e67d",
+  "items": [
+    {
+      "dod": "`pnpm -s vitest run packages/adapters/test` fails without the adapter and passes with it: allow-listed host returns a chunk carrying rowsLookedAt, truncated, durationMs and server; a host outside the allow-list returns `BLOCKED · host not in the catalog` without a socket opening; a method the catalog does not list for that source returns `BLOCKED · method not allowed` the same way",
+      "command": "pnpm -s vitest run packages/adapters/test",
+      "evidence": "evidence/U-012/test.log",
+      "status": "pass"
+    },
+    {
+      "dod": "red run before the adapter existed (14 failing) captured for comparison; not re-run this session, kept as the genuine pre-implementation evidence",
+      "command": "pnpm -s vitest run packages/adapters/test (pre-adapter, captured earlier in this unit's build phase at 840b4f2)",
+      "evidence": "evidence/U-012/red.log",
+      "status": "pass"
+    },
+    {
+      "dod": "`vitest packages/adapters/test/http/budget.test.ts` shows concurrency never exceeding the per-host budget under 100 parallel steps, a statement beyond the timeout returning an `error` chunk rather than throwing, and a response past the row cap returning `truncated: true`",
+      "command": "pnpm -s vitest run packages/adapters/test/http/budget.test.ts",
+      "evidence": "evidence/U-012/budget.log",
+      "status": "pass"
+    },
+    {
+      "dod": "`vitest packages/adapters/test/http/breaker.test.ts` shows the breaker opening after the configured failures, refusing calls while open with `source down`, and half-opening after its cooldown",
+      "command": "pnpm -s vitest run packages/adapters/test/http/breaker.test.ts",
+      "evidence": "evidence/U-012/breaker.log",
+      "status": "pass"
+    },
+    {
+      "dod": "`vitest packages/adapters/test/http/redaction.test.ts` shows the request log carrying the step id, host, status, rows and duration and never a credential, a bearer token, or a value from the response body",
+      "command": "pnpm -s vitest run packages/adapters/test/http/redaction.test.ts",
+      "evidence": "evidence/U-012/redaction.log",
+      "status": "pass"
+    },
+    {
+      "dod": "allowlist.test.ts (host/method guard) evidence for the allow-listed-host chunk and both BLOCKED verdicts named in the first dod item",
+      "command": "pnpm -s vitest run packages/adapters/test/http/allowlist.test.ts",
+      "evidence": "evidence/U-012/allowlist.log",
+      "status": "pass"
+    },
+    {
+      "dod": "guard.test.ts (host/origin/method refusals underlying the allow-list, added during round-1 safety review) stays green",
+      "command": "pnpm -s vitest run packages/adapters/test/http/guard.test.ts",
+      "evidence": "evidence/U-012/guard.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/U-012/gate.log",
+      "status": "pass"
+    },
+    {
+      "dod": "A human runs the adapter once against a real beta endpoint before U-016 uses it; tier 3 asks for that and this unit cannot do it.",
+      "command": "none available to this session",
+      "evidence": "n/a - this is a tier-3 human step requiring real beta credentials and network access this session does not have",
+      "status": "unverifiable"
+    }
+  ],
+  "gate": "green",
+  "missing": []
+}
