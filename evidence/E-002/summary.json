@@ -1,0 +1,26 @@
+{
+  "unit": "E-002",
+  "sha": "4902b92e937a61d6c483fb1968d9189550bbe6d6",
+  "items": [
+    {
+      "dod": "node tool/test/check-units.test.mjs fails before the change (orphan evidence dir not detected) and passes after",
+      "command": "node tool/test/check-units.test.mjs",
+      "evidence": "evidence/E-002/red.log (fails at c03cc63, pre-change), evidence/E-002/test.log (passes post-change; reconfirmed this run)",
+      "status": "pass"
+    },
+    {
+      "dod": "node tool/check-units.mjs exits 1 when evidence/X-999/ exists without a unit, exits 0 otherwise",
+      "command": "node tool/check-units.mjs (clean), then with temporary evidence/X-999/ created and removed after",
+      "evidence": "evidence/E-002/manual-check.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/E-002/gate.log (reconfirmed --fast exit 0 with identical 8 stages GREEN; full bash tool/gate.sh run last and persisted here per evidence-collector protocol)",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "missing": []
+}

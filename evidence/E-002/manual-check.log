@@ -1,0 +1,8 @@
+# manual check
+$ node tool/check-units.mjs   (clean)
+check-units: OK (5 units, 5 active)
+exit=0
+$ node tool/check-units.mjs   (with evidence/X-999)
+check-units: FAIL
+ - evidence/X-999: no unit X-999 found (orphan evidence directory)
+exit=1

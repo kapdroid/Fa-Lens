@@ -1,0 +1,8 @@
+# red run · 2026-09-09 04:53 · c03cc63
+ok   clean tree: check-units exits 0
+FAIL orphan evidence dir: check-units exits 1 and names it
+     expected exit 1 for orphan evidence dir, got 0
+ok   cleanup: evidence/X-999 removed
+
+1 failing
+exit=1
