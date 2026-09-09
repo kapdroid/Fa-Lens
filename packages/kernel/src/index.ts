@@ -21,3 +21,12 @@ export type { Counts, Rolled, Severity } from './verdict/model.ts';
 
 export { SCOPE_KEYS, scopeHash } from './scope/scope.ts';
 export type { Scope } from './scope/scope.ts';
+
+export { compileRule, guardOk } from './rules/compile.ts';
+export { DIALECTS } from './rules/types.ts';
+export type { Bucket, Cause, Compiled, CompiledStatement, Dialect, Rule } from './rules/types.ts';
+export { SYNTAX } from './rules/dialect.ts';
+export { bucketFingerprint, classify, diffFingerprints } from './rules/fingerprint.ts';
+export type { BucketDiff, ClassifyOptions, FingerprintOptions } from './rules/fingerprint.ts';
+export { InteractiveRangeTooLarge, MAX_INTERACTIVE_DAYS, MAX_WINDOW_DAYS, splitWindows } from './rules/windows.ts';
+export type { DateRange, WindowOptions } from './rules/windows.ts';

@@ -1,0 +1,44 @@
+{
+  "unit": "U-009",
+  "sha": "afdd8bd50489574b3c6f5c3b929a5cc341067033",
+  "items": [
+    {
+      "dod": "`vitest packages/kernel/test/rules` fails without the compiler and passes with it: every statement generated for the fixture rules on the mssql, postgres, and clickhouse dialects starts with SELECT or WITH, contains no semicolon, and matches its snapshot",
+      "command": "pnpm -s vitest run packages/kernel/test/rules/compile.test.ts",
+      "evidence": "evidence/U-009/compile.log",
+      "status": "pass"
+    },
+    {
+      "dod": "`diffFingerprints(anchor, enrich)` on the fixture buckets returns exactly the expected differing buckets, and each is classified with one of the cause words sync gap, audit pending, unexplained, physical short, duplicate, balanced (test packages/kernel/test/rules/fingerprint.test.ts)",
+      "command": "pnpm -s vitest run packages/kernel/test/rules/fingerprint.test.ts",
+      "evidence": "evidence/U-009/fingerprint.log",
+      "status": "pass"
+    },
+    {
+      "dod": "`splitWindows()` turns a 31-day range into windows no longer than 7 days and rejects a 32-day interactive range with `InteractiveRangeTooLarge` (test packages/kernel/test/rules/windows.test.ts)",
+      "command": "pnpm -s vitest run packages/kernel/test/rules/windows.test.ts",
+      "evidence": "evidence/U-009/windows.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/U-009/gate-fast.log",
+      "status": "pass"
+    },
+    {
+      "dod": "vitest packages/kernel/test/rules red before, green after -> evidence/U-009/test.log",
+      "command": "pnpm -s vitest run packages/kernel/test/rules",
+      "evidence": "evidence/U-009/test.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast -> evidence/U-009/gate.log",
+      "command": "bash tool/gate.sh",
+      "evidence": "evidence/U-009/gate.log",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "missing": []
+}
