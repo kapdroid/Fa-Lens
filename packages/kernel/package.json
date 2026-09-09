@@ -1,0 +1,9 @@
+{
+  "name": "@falens/kernel",
+  "version": "0.0.0",
+  "private": true,
+  "description": "pure domain: flow, step, scope, verdict, rules, fingerprint diff, pack schema + validator (docs/architecture.md §2)",
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc -p tsconfig.json" }
+}

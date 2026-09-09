@@ -1,0 +1,6 @@
+{
+  "name": "@falens/packs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "YAML/JSON packs: data only, validated against the kernel schema (ADR-0010); _sources is the catalog (ADR-0013)"
+}

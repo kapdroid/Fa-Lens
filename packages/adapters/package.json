@@ -1,0 +1,10 @@
+{
+  "name": "@falens/adapters",
+  "version": "0.0.0",
+  "private": true,
+  "description": "http, mssql, postgres, clickhouse behind one Adapter interface; budgets, breaker, read-only guard (docs/architecture.md §2)",
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc -p tsconfig.json" },
+  "dependencies": { "@falens/kernel": "workspace:*" }
+}

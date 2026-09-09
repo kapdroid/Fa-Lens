@@ -1,0 +1,10 @@
+{
+  "name": "@falens/mcp",
+  "version": "0.0.0",
+  "private": true,
+  "description": "MCP server: tools generated from service contracts (docs/architecture.md §2)",
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc -p tsconfig.json" },
+  "dependencies": { "@falens/service": "workspace:*" }
+}
