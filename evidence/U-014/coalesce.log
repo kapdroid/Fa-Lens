@@ -1,0 +1,4 @@
+# 2026-09-09 19:10 · pnpm --filter @falens/service test:integration (Testcontainers Postgres 16)
+ ✓ |integration| packages/service/test/integration/coalesce.test.ts (3 tests) 1393ms
+ Test Files  1 passed (1)
+      Tests  3 passed (3)

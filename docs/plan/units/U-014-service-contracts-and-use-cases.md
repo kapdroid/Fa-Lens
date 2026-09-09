@@ -9,7 +9,6 @@ allowed_files:
   - packages/service/src/**
   - packages/service/test/**
   - packages/service/package.json
-  - packages/control/test/integration/**
 adrs: [ADR-0002, ADR-0004, ADR-0016]
 design: []
 dod:
@@ -43,7 +42,7 @@ No Hono, no HTTP, no SSE, no OpenAPI generation (U-015). No MCP or CLI (U-017). 
 
 ## Verification
 - `pnpm -s vitest run packages/service/test` red before, green after → `evidence/U-014/red.log`, `evidence/U-014/test.log`
-- `pnpm --filter @falens/control test:integration` → `evidence/U-014/coalesce.log`
+- `pnpm --filter @falens/service test:integration` → `evidence/U-014/coalesce.log`
 - `bash tool/gate.sh --fast` → `evidence/U-014/gate.log`
 
 ## Progress
