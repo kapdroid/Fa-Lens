@@ -1,7 +1,7 @@
 ---
 id: E-004
 title: Write the v1 source catalog skeleton with tenant maps and replica-only servers
-status: review
+status: done
 tier: 3
 kind: pack
 depends_on: []

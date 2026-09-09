@@ -19,7 +19,7 @@ A unit is the only shape of work. `docs/plan/units/U-xxx-slug.md` with frontmatt
 - `tier` decides human involvement: **1** docs and pure code → PR only · **2** service and UI → plan approval + PR · **3** adapters, auth, anything touching sources → plan approval + mandatory reviewers + PR + a human runs it once on beta.
 - `allowed_files` is enforced by the `post-edit` hook: an edit outside it is rejected with a message to write the need into Progress and stop. Always allowed in addition: the unit file itself, `evidence/<id>/**`, and the memory layer (`docs/knowledge/**`, new ADR files) that the loop writes in state 8.
 - `dod` items must name a command or a test. "Works correctly" is not a DoD item; `vitest packages/kernel/test/verdict.test.ts passes and fails when the rollup line is reverted` is.
-- `status` moves `draft → ready → in_progress → review → done` (or `blocked`). Only a human sets `ready`.
+- `status` moves `draft → ready → in_progress → review → done` (or `blocked`). Only a human sets `ready`. `done` means the unit's PR is merged; the field is flipped in the next housekeeping commit, and `intake.mjs` already treats a `review` dependency whose `unit/<id>` branch is merged into `origin/main` as done, so a lagging field never blocks a dependent unit.
 - `E-xxx` units are harness evals: small real tasks that prove the loop itself works (see §7).
 
 Create one with `/unit "<one-line outcome>"`; it interviews for the missing facts and refuses vague DoD items.
