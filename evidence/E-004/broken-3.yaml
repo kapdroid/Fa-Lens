@@ -14,6 +14,7 @@ sources:
     database: FA_Transactions
     replica: true
     confirm: true
+    credential: plain-text-first
     credential: vault://fa-txn-readonly
     scope:
       company: CompanyId

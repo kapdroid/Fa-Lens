@@ -22,16 +22,17 @@ sources:
       rows: 50000
       timeoutMs: 30000
       concurrency: 4
-      interactiveMaxDays: 31
+      interactiveMaxDays: 45
       windowDays: 7
       pauseMs: 500
     servers:
-      general: transaction-db
+      general: "Server=tcp:transaction-db,1433;User Id=x;Password=y"
       mars: mars-transaction-db
       colpal: colpal-transaction-db
       haldiram: haldiram-transaction-db
       slmg: slmg-transaction-db
       bdf: bdf-transaction-db
+      default: transaction-db-primary
 
   fa_master:
     kind: sql
@@ -117,7 +118,7 @@ sources:
   unify:
     kind: sql
     dialect: clickhouse
-    status: coming-soon
+    status: active
 
   app_api:
     kind: http
@@ -130,11 +131,34 @@ sources:
       interactiveMaxDays: 31
     baseUrl:
       general: https://app-api-general.fieldassist.example
-      mars: https://app-api-mars.fieldassist.example
+      mars: http://app-api-mars.fieldassist.example
       colpal: https://app-api-colpal.fieldassist.example
       haldiram: https://app-api-haldiram.fieldassist.example
       slmg: https://app-api-slmg.fieldassist.example
       bdf: https://app-api-bdf.fieldassist.example
+
+  fa_txn_rw:
+    kind: sql
+    dialect: mssql
+    database: FA_Transactions
+    replica: true
+    credential: vault://fa-txn-admin
+    scope:
+      company: CompanyId
+      date: CreatedAt
+    limits:
+      rows: 99999999
+      timeoutMs: 30000
+      concurrency: 500
+      interactiveMaxDays: 31
+      windowDays: 7
+    servers:
+      general: a
+      mars: a
+      colpal: a
+      haldiram: a
+      slmg: a
+      bdf: a
 
   dashboard_api:
     kind: http

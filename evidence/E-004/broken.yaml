@@ -1,8 +1,10 @@
 # FA Lens source catalog (ADR-0013). Admin-owned. Logical source names only; flows never see servers.
 # Rules enforced by tool/check-catalog.mjs: every source is tenant-wise (no "default"), replicas only,
 # credentials are vault:// references, budgets present, Unify is coming-soon in v1.
-# Hosts marked confirm: true are placeholders until the owner confirms the replica hostnames.
+# Hosts marked confirm: true are placeholders, or known names not yet confirmed to be replica endpoints.
+# env: which environment this file describes; a beta overlay is a second file validated the same way.
 version: 1
+env: prod
 tenants: [general, mars, colpal, haldiram, slmg, bdf]
 
 sources:
@@ -11,6 +13,7 @@ sources:
     dialect: mssql
     database: FA_Transactions
     replica: true
+    confirm: true
     credential: vault://fa-txn-readonly
     scope:
       company: CompanyId
@@ -20,6 +23,8 @@ sources:
       timeoutMs: 30000
       concurrency: 4
       interactiveMaxDays: 31
+      windowDays: 7
+      pauseMs: 500
     servers:
       general: transaction-db
       mars: mars-transaction-db
@@ -31,6 +36,7 @@ sources:
     kind: sql
     dialect: mssql
     replica: true
+    confirm: true
     credential: vault://fa-master-readonly
     scope:
       company: Company
@@ -40,6 +46,8 @@ sources:
       timeoutMs: 30000
       concurrency: 4
       interactiveMaxDays: 31
+      windowDays: 7
+      pauseMs: 500
     servers:
       general: master-db
       mars: mars-master-db
@@ -71,6 +79,8 @@ sources:
       timeoutMs: 30000
       concurrency: 4
       interactiveMaxDays: 31
+      windowDays: 7
+      pauseMs: 500
     servers:
       general: report-general
       mars: report-mars
@@ -94,6 +104,8 @@ sources:
       timeoutMs: 30000
       concurrency: 4
       interactiveMaxDays: 31
+      windowDays: 7
+      pauseMs: 500
     servers:
       general: dms-general
       mars: dms-mars
@@ -111,9 +123,11 @@ sources:
     kind: http
     confirm: true
     credential: vault://app-api-agent-token
+    methods: [GET, HEAD]
     limits:
       timeoutMs: 15000
       concurrency: 4
+      interactiveMaxDays: 31
     baseUrl:
       general: https://app-api-general.fieldassist.example
       mars: https://app-api-mars.fieldassist.example
@@ -126,9 +140,11 @@ sources:
     kind: http
     confirm: true
     credential: vault://dashboard-api-agent-token
+    methods: [GET, HEAD]
     limits:
       timeoutMs: 15000
       concurrency: 4
+      interactiveMaxDays: 31
     baseUrl:
       general: https://dashboard-api-general.fieldassist.example
       mars: https://dashboard-api-mars.fieldassist.example

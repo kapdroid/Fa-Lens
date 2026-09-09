@@ -1,0 +1,13 @@
+git rev-parse HEAD
+node tool/check-catalog.mjs
+grep -nE '^  (fa_txn|fa_master|report|dms|unify|app_api|dashboard_api):' packs/_sources/catalog.yaml
+awk (per-source tenant map extraction for fa_txn, fa_master, report, dms) packs/_sources/catalog.yaml
+grep -n 'credential: vault://' packs/_sources/catalog.yaml
+grep -n 'replica: true' packs/_sources/catalog.yaml
+grep -n 'company:' packs/_sources/catalog.yaml
+grep -n 'limits:' packs/_sources/catalog.yaml
+grep -n 'default:' packs/_sources/catalog.yaml
+grep -ni 'primary' packs/_sources/catalog.yaml
+node tool/check-catalog.mjs --file evidence/E-004/broken.yaml
+bash tool/gate.sh --fast | grep '▸ catalog'
+bash tool/gate.sh

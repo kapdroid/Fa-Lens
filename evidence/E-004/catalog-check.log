@@ -1,20 +1,50 @@
-# green · 2026-09-09 10:02
+# green (hardened validator) · 2026-09-09 10:10
 $ node tool/check-catalog.mjs
- ! report: hosts are placeholders (confirm: true)
- ! dms: hosts are placeholders (confirm: true)
- ! app_api: hosts are placeholders (confirm: true)
- ! dashboard_api: hosts are placeholders (confirm: true)
-check-catalog: OK (7 sources, 4 placeholder warnings)
+ ! fa_txn: hosts are placeholders or unconfirmed replicas (confirm: true)
+ ! fa_master: hosts are placeholders or unconfirmed replicas (confirm: true)
+ ! report: hosts are placeholders or unconfirmed replicas (confirm: true)
+ ! dms: hosts are placeholders or unconfirmed replicas (confirm: true)
+ ! app_api: hosts are placeholders or unconfirmed replicas (confirm: true)
+ ! dashboard_api: hosts are placeholders or unconfirmed replicas (confirm: true)
+check-catalog: OK (7 sources, 6 placeholder warnings)
 exit=0
 
-$ node tool/check-catalog.mjs --file evidence/E-004/broken.yaml   (deliberately broken copy)
- ! report: hosts are placeholders (confirm: true)
- ! dms: hosts are placeholders (confirm: true)
- ! app_api: hosts are placeholders (confirm: true)
- ! dashboard_api: hosts are placeholders (confirm: true)
+$ node tool/check-catalog.mjs --file evidence/E-004/broken.yaml
 check-catalog: FAIL
- - sources.report.password: forbidden key (credentials and primaries never live in the catalog)
+ - catalog.sources.report.password: suspicious key (credentials, primaries, hosts never live in the catalog)
  - fa_txn.servers: missing tenant "slmg"
+ - report.password: key not allowed for this source kind (allowed: kind, dialect, database, replica, confirm, status, credential, scope, limits, servers)
  - report.replica: must be true (ADR-0013: only replicas are listed)
- - dms.credential: must be a vault://<name> reference
-exit=1
+ - dms.credential: must be vault://<key-vault-secret-name> (letters, digits, hyphens)
+
+$ node tool/check-catalog.mjs --file evidence/E-004/broken-2.yaml
+check-catalog: FAIL
+ - catalog.sources.fa_txn.servers.general: value looks like a connection string or credential
+ - sources.fa_txn_rw: not a v1 source (allow-list: fa_txn, fa_master, report, dms, unify, app_api, dashboard_api); adding one needs an ADR
+ - fa_txn.servers.general: must be a bare hostname (no ports, credentials, or connection strings)
+ - fa_txn.servers: "default" is not allowed in v1 (ADR-0013: every source is tenant-wise; shared sources need an ADR)
+ - fa_txn.limits.interactiveMaxDays: must be ≤ 31
+ - unify.credential: must be vault://<key-vault-secret-name> (letters, digits, hyphens)
+ - unify.replica: must be true (ADR-0013: only replicas are listed)
+ - unify.servers: must be a tenant → value map
+ - unify.database: identifier or tenant map required
+ - unify.scope.company: column identifier required
+ - unify.scope.date: column identifier required
+ - unify.limits.rows: required
+ - unify.limits.timeoutMs: required
+ - unify.limits.concurrency: required
+ - unify.limits.interactiveMaxDays: required
+ - unify.limits.windowDays: required
+ - app_api.baseUrl.mars: must be an https:// origin without userinfo, query, or fragment
+ - fa_txn_rw.limits.rows: must be ≤ 100000
+ - fa_txn_rw.limits.concurrency: must be ≤ 8
+ - sources.unify.status: must be coming-soon in v1
+
+$ node tool/check-catalog.mjs --file evidence/E-004/broken-3.yaml
+check-catalog: FAIL
+ - line 18: duplicate key "credential" (last-key-wins is not allowed)
+
+$ node tool/check-catalog.mjs --file evidence/E-004/broken-4.yaml
+check-catalog: FAIL
+ - top-level key "connectionString" is not allowed (only version, env, tenants, sources)
+ - catalog.connectionString: value looks like a connection string or credential

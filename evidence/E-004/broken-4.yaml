@@ -1,3 +1,4 @@
+connectionString: Server=tcp:prod;User Id=sa;Password=nope
 # FA Lens source catalog (ADR-0013). Admin-owned. Logical source names only; flows never see servers.
 # Rules enforced by tool/check-catalog.mjs: every source is tenant-wise (no "default"), replicas only,
 # credentials are vault:// references, budgets present, Unify is coming-soon in v1.

@@ -1,19 +1,9 @@
-# FA Lens source catalog (ADR-0013). Admin-owned. Logical source names only; flows never see servers.
-# Rules enforced by tool/check-catalog.mjs: every source is tenant-wise (no "default"), replicas only,
-# credentials are vault:// references, budgets present, Unify is coming-soon in v1.
-# Hosts marked confirm: true are placeholders, or known names not yet confirmed to be replica endpoints.
-# env: which environment this file describes; a beta overlay is a second file validated the same way.
-version: 1
-env: prod
-tenants: [general, mars, colpal, haldiram, slmg, bdf]
-
-sources:
+== fa_txn ==
   fa_txn:
     kind: sql
     dialect: mssql
     database: FA_Transactions
     replica: true
-    confirm: true
     credential: vault://fa-txn-readonly
     scope:
       company: CompanyId
@@ -23,8 +13,6 @@ sources:
       timeoutMs: 30000
       concurrency: 4
       interactiveMaxDays: 31
-      windowDays: 7
-      pauseMs: 500
     servers:
       general: transaction-db
       mars: mars-transaction-db
@@ -33,11 +21,11 @@ sources:
       slmg: slmg-transaction-db
       bdf: bdf-transaction-db
 
+== fa_master ==
   fa_master:
     kind: sql
     dialect: mssql
     replica: true
-    confirm: true
     credential: vault://fa-master-readonly
     scope:
       company: Company
@@ -47,8 +35,6 @@ sources:
       timeoutMs: 30000
       concurrency: 4
       interactiveMaxDays: 31
-      windowDays: 7
-      pauseMs: 500
     servers:
       general: master-db
       mars: mars-master-db
@@ -64,6 +50,7 @@ sources:
       slmg: F2KLocationsNetworkV3
       bdf: F2KLocationsNetworkV3
 
+== report ==
   report:
     kind: sql
     dialect: mssql
@@ -79,8 +66,6 @@ sources:
       timeoutMs: 30000
       concurrency: 4
       interactiveMaxDays: 31
-      windowDays: 7
-      pauseMs: 500
     servers:
       general: report-general
       mars: report-mars
@@ -89,6 +74,7 @@ sources:
       slmg: report-slmg
       bdf: report-bdf
 
+== dms ==
   dms:
     kind: sql
     dialect: postgres
@@ -104,8 +90,6 @@ sources:
       timeoutMs: 30000
       concurrency: 4
       interactiveMaxDays: 31
-      windowDays: 7
-      pauseMs: 500
     servers:
       general: dms-general
       mars: dms-mars
@@ -113,42 +97,3 @@ sources:
       haldiram: dms-haldiram
       slmg: dms-slmg
       bdf: dms-bdf
-
-  unify:
-    kind: sql
-    dialect: clickhouse
-    status: coming-soon
-
-  app_api:
-    kind: http
-    confirm: true
-    credential: vault://app-api-agent-token
-    methods: [GET, HEAD]
-    limits:
-      timeoutMs: 15000
-      concurrency: 4
-      interactiveMaxDays: 31
-    baseUrl:
-      general: https://app-api-general.fieldassist.example
-      mars: https://app-api-mars.fieldassist.example
-      colpal: https://app-api-colpal.fieldassist.example
-      haldiram: https://app-api-haldiram.fieldassist.example
-      slmg: https://app-api-slmg.fieldassist.example
-      bdf: https://app-api-bdf.fieldassist.example
-
-  dashboard_api:
-    kind: http
-    confirm: true
-    credential: vault://dashboard-api-agent-token
-    methods: [GET, HEAD]
-    limits:
-      timeoutMs: 15000
-      concurrency: 4
-      interactiveMaxDays: 31
-    baseUrl:
-      general: https://dashboard-api-general.fieldassist.example
-      mars: https://dashboard-api-mars.fieldassist.example
-      colpal: https://dashboard-api-colpal.fieldassist.example
-      haldiram: https://dashboard-api-haldiram.fieldassist.example
-      slmg: https://dashboard-api-slmg.fieldassist.example
-      bdf: https://dashboard-api-bdf.fieldassist.example
