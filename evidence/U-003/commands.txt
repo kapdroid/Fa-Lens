@@ -1,0 +1,5 @@
+grep -n 'packs/_sources/\*\*.*ADR-0013' .claude/rules/packs.md > evidence/U-003/verify-content-check.log
+node tool/check-docs.mjs > evidence/U-003/check-docs-verify.log
+bash tool/gate.sh --fast > evidence/U-003/gate-fast-verify.log
+bash tool/gate.sh > evidence/U-003/gate.log
+git rev-parse HEAD
