@@ -1,4 +1,4 @@
-# 2026-09-09 11:32 · e528a0c2532326c7eb9032686f1b8347cc02114f · unit/U-001 · full gate: bash tool/gate.sh
+# 2026-09-09 11:32 · e528a0c2532326c7eb9032686f1b8347cc02114f · DoD item 1: bash tool/gate.sh --fast prints tool-tests stage and runs tool/test/*.test.mjs
 ▸ docs                        ok
 ▸ units                       ok
 ▸ harness                     ok

@@ -1,4 +1,4 @@
-# 2026-09-09 11:31 · AFTER the gate change, tool/test/zz-fails.test.mjs still present: bash tool/gate.sh --fast
+# 2026-09-09 11:32 · e528a0c2532326c7eb9032686f1b8347cc02114f · DoD item 2 RED: tool/test/zz-fails.test.mjs present: bash tool/gate.sh --fast
 ▸ docs                        ok
 ▸ units                       ok
 ▸ harness                     ok
