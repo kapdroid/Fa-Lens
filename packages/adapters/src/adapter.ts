@@ -34,10 +34,11 @@ export interface ResolvedServer {
 export interface ResolvedStep {
   stepId: string;
   server: ResolvedServer;
+  /** http only. The SQL adapters (U-013) will carry sql and parameters instead, and this shape becomes a
+   *  union on `server.kind` when the first of them lands. */
   method: string;
   url: string;
   headers?: Record<string, string>;
-  body?: unknown;
   sql?: string;
 }
 
@@ -46,6 +47,8 @@ export interface ExecContext {
   runId?: string;
   companyId?: string;
   log?: (line: LogLine) => void;
+  /** Fires when the caller stops caring — a run cancelled, an iterator dropped. The source is let go too. */
+  signal?: AbortSignal;
 }
 
 /** The only shape that reaches a log: fields chosen one by one, so a value cannot arrive by accident. */

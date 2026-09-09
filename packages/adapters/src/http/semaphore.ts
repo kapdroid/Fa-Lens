@@ -10,12 +10,14 @@ export function semaphore(limit: number): Semaphore {
   const waiting: (() => void)[] = [];
   const take = async (): Promise<void> => {
     if (active < limit) { active += 1; return; }
+    // The permit is handed over already counted; the waiter does not increment again.
     await new Promise<void>(resolve => waiting.push(resolve));
-    active += 1;
   };
+  // Hand the permit straight to a waiter rather than releasing and re-taking it, so the count can never
+  // dip in the window before that waiter resumes.
   const give = (): void => {
-    active -= 1;
-    waiting.shift()?.();
+    const next = waiting.shift();
+    if (next) next(); else active -= 1;
   };
   return {
     async run(work) {

@@ -41,3 +41,24 @@ test('a blocked call is logged too, so a refusal is never silent', async () => {
   expect(lines[0]?.verdict).toBe('BLOCKED · host not in the catalog');
   expect(lines[0]?.host).toBe('evil.example');
 });
+
+test('an error verdict says what happened in fixed words, never echoing a url or its query', async () => {
+  const lines: LogLine[] = [];
+  const adapter = httpAdapter({
+    isolate: true,
+    request: async (url: string) => { throw new Error(`connect ECONNREFUSED while fetching ${url}`); },
+  });
+  const src = server(s.origin);
+  const chunk = await first(adapter.execute(step(src, { url: `${s.origin}/check/login?token=super-secret-token` }), { log: line => lines.push(line) }));
+  expect(chunk.verdict).toBe('the source refused the connection');
+  expect(JSON.stringify(lines)).not.toContain('super-secret-token');
+});
+
+test('an override header cannot turn an allowed GET into a write', async () => {
+  const seen = await startTestServer();
+  try {
+    const adapter = httpAdapter({ isolate: true });
+    await first(adapter.execute(step(server(seen.origin), { headers: { 'X-HTTP-Method-Override': 'DELETE' } }), {}));
+    expect(seen.requests[0]?.method).toBe('GET');
+  } finally { await seen.close(); }
+});

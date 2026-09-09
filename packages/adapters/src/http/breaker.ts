@@ -44,6 +44,9 @@ export function breaker(failuresToOpen: number, cooldownMs: number, now: () => n
     failed(key) {
       const e = of(key);
       e.trialInFlight = false;
+      // A trial that fails puts the breaker straight back to open: a source that is still down should be
+      // probed once per cooldown, not on every call that arrives after it.
+      if (e.openedAt !== 0) { e.openedAt = now(); e.failures = 0; return; }
       e.failures += 1;
       if (e.failures >= failuresToOpen) { e.openedAt = now(); e.failures = 0; }
     },
