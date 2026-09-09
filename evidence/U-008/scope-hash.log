@@ -1,0 +1,12 @@
+ DEPRECATED  The workspace file is deprecated and will be removed in the next major. Please, use the `test.projects` field in the root config file instead.
+
+ RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-008-kernel-flow-model
+
+ ✓ |unit| packages/kernel/test/scope/hash.test.ts (4 tests) 3ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  16:44:32
+   Duration  234ms (transform 30ms, setup 0ms, collect 70ms, tests 3ms, environment 0ms, prepare 28ms)
+
+exit=0
