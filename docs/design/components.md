@@ -121,7 +121,7 @@ Rows enter with `reveal` (stagger 30ms, max 12). Expand-in-place is not used; dr
 
 Toolbar above table: search (ids only, mono), filter chips (`All · Issues only · OK only` + tile-driven filters), density toggle, column picker, Export.
 
-Empty state inside table: one sentence + primary action, centered, 48px padding. Loading: 8 skeleton rows.
+Empty state inside table: the EmptyState component (see below), inside-a-table variant. Loading: 8 skeleton rows.
 
 ## FocusPanel (drill-down)
 
@@ -188,6 +188,21 @@ Bottom-right, `surface-2`, `--el-2`, radius `--r-md`, 12px 14px, icon in verdict
 ## Skeleton
 
 Blocks in `surface-3` with `shimmer` sweep. Shapes match the real component (row height, tile height). Never a spinner for content areas; spinners are only inside buttons.
+
+## EmptyState
+
+Purpose: turn an empty data region into a next step, so the reader never wonders whether something failed to load.
+
+Anatomy: optional 20px icon in `text-faint` · one sentence `--fs-base` in `text-dim`, max 60ch, sentence case, names the scope it is empty for · one button whose label names what happens; it is `accent` whenever the page header already carries the screen's one primary button for the same scope (true on every module and company page today), and `primary` only in the rare empty state with no competing header action (`Run smoke flow`, `Import collection`, never `OK` or `Get started`). Vertical stack, centered, gap `--sp-3`.
+
+Placement variants, all with the same content rule "one sentence + one action, never two, never a paragraph":
+- **inside a table region** (replaces the rows; padding 48px; header row stays so the columns are still visible),
+- **inside a card** (replaces the card body; the card title stays),
+- **page banner** (company or suite level; full width, `surface-1`, radius `--r-md`, padding `--card-pad`).
+
+Copy comes from the per-tab table in `screens.md` (Module page → Empty states per tab); views do not invent their own sentences. Tokens only; the icon never carries a semantic color. Motion: enters with `reveal`; no shimmer (shimmer means loading, not empty). Reduced motion: opacity only.
+
+States: default · action loading (button spinner, sentence unchanged) · action failed (a `crit-text` line under the button: what happened + how to fix, still one action).
 
 ## Tooltip
 

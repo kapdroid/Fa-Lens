@@ -1,0 +1,5 @@
+# green · 2026-09-09 09:56
+$ grep -c '^| \(Overview\|APIs\|Cases\|Flows\|Validations\|Load\|Runs\|Data\|Knowledge\) |' docs/design/screens.md
+9
+$ grep -c '^## EmptyState' docs/design/components.md
+1
