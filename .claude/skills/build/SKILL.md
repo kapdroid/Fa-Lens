@@ -94,4 +94,4 @@ Blocking question · dependency not done · edit needed outside `allowed_files` 
 
 ## Budget
 
-At most 6 agent launches for tier 1 and 2, 8 for tier 3 (its mandatory reviewers and fresh-eyes already take six), and 2 fix rounds per unit. Reaching either is a stop, not a retry.
+At most 6 review-and-exploration agent launches for tier 1 and 2, 8 for tier 3 (explorer, spec-checker, adr-reviewer, design-reviewer, adapter-safety-reviewer, fresh-eyes and their reruns), and 2 fix rounds per unit. The evidence-collector and memory-scribe are loop steps and do not count. Reaching a limit is a stop, not a retry; when a review rerun would exceed it, add a deterministic check (a self-test in the gate) and say so in Progress.
