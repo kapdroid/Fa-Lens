@@ -1,0 +1,17 @@
+Pre-existing evidence from the build step (not re-run, red run cannot be reproduced once the code exists):
+  pnpm -s vitest run packages/service/test   -> evidence/U-014/red.log   (2026-09-09 19:07, 17 failing, service did not exist yet)
+  pnpm -s vitest run packages/service/test   -> evidence/U-014/test.log (2026-09-09 19:10, 21 passing)
+  pnpm --filter @falens/service test:integration -> evidence/U-014/coalesce.log (2026-09-09 19:10, 3 passing against real Postgres)
+  bash tool/gate.sh --fast                   -> evidence/U-014/gate-fast.log (2026-09-09 19:11, GREEN, 19 stages)
+  bash tool/gate.sh (full)                   -> evidence/U-014/gate.log (2026-09-09 19:11, GREEN, 22 stages, includes real integration+e2e)
+
+Re-verification run this session (verifier), from worktree root, in order:
+  git status
+  git rev-parse HEAD
+  ls packages/service/test
+  ls packages/service/test/integration
+  pnpm -s vitest run packages/service/test                          -> evidence/U-014/service-test-reverify.log
+  pnpm -s vitest run packages/service/test/contract.test.ts         -> evidence/U-014/contract.log
+  pnpm -s vitest run packages/service/test/matrix.test.ts           -> evidence/U-014/matrix.log
+  pnpm --filter @falens/service test:integration                   -> evidence/U-014/coalesce-reverify.log
+  bash tool/gate.sh --fast                                          -> evidence/U-014/gate-fast-reverify.log

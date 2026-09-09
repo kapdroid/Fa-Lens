@@ -15,13 +15,14 @@ export interface Verb {
   handler: (input: never, deps: Deps) => Promise<unknown>;
 }
 
-export const VERBS = {
+// Frozen, not merely const: `as const` is a compile-time promise, and a skin runs at run time.
+export const VERBS = Object.freeze({
   list_modules: listModules,
   list_flows: listFlows,
   get_matrix: getMatrix,
   create_run: createRun,
   get_run: getRun,
-} as const satisfies Record<string, Verb>;
+} as const satisfies Record<string, Verb>);
 
 export type VerbName = keyof typeof VERBS;
 
@@ -49,6 +50,12 @@ export async function call(name: string, input: unknown, deps: Deps): Promise<Re
   if (!parsedInput.success) {
     const { message, field } = firstIssue(parsedInput.error);
     return problem({ code: 'invalid_input', message, ...(field ? { field } : {}) });
+  }
+
+  // A verb that takes a scope may only read the company its collaborators are bound to.
+  const asked = (parsedInput.data as { scope?: { company?: string } }).scope?.company;
+  if (asked !== undefined && asked !== deps.companyId) {
+    return problem({ code: 'not_found', message: `nothing here belongs to company ${asked}`, field: 'scope.company' });
   }
 
   let raw: unknown;

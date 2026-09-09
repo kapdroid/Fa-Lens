@@ -50,6 +50,8 @@ export interface ModulesPort {
 }
 
 export interface Deps {
+  /** The company these collaborators are bound to. A request naming a different one is refused. */
+  companyId: string;
   runs: RunsPort;
   lock: LockPort;
   queue: QueuePort;

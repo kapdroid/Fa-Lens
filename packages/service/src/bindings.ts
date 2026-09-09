@@ -21,6 +21,7 @@ export function bindDeps(options: BindOptions): Deps {
   const modules = options.modules ?? [];
   const flows = options.flows ?? {};
   return {
+    companyId: options.companyId,
     runs: {
       byId: async id => {
         const row = await runs.byId(id);

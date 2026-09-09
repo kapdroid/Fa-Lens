@@ -22,3 +22,19 @@ test('names are unique and snake_case, so a skin can expose them verbatim', () =
 test('the first verbs the product needs are all here', () => {
   expect(verbNames().sort()).toEqual(['create_run', 'get_matrix', 'get_run', 'list_flows', 'list_modules']);
 });
+
+test('the package exposes no way to declare a verb, so a skin cannot invent one', async () => {
+  // What a skin can see is exactly this module's exports; the individual verb objects are not among them.
+  const surface = await import('../src/index.ts');
+  const names = Object.keys(surface);
+  for (const verb of verbNames()) expect(names).not.toContain(verb);
+  expect(names).not.toContain('register');
+  expect(names).not.toContain('createRun');
+  expect(names).not.toContain('getMatrix');
+});
+
+test('the registry cannot be extended at run time either', () => {
+  expect(Object.isFrozen(VERBS)).toBe(true);
+  expect(() => { (VERBS as unknown as Record<string, unknown>)['made_up'] = {}; }).toThrow();
+  expect(verbNames()).not.toContain('made_up');
+});

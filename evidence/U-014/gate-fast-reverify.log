@@ -1,4 +1,4 @@
-# 2026-09-09 19:16 · bash tool/gate.sh --fast after review round 1
+# 2026-09-09 19:12 · 525272473752d1eff49dc1482b5127dac257109a · bash tool/gate.sh --fast (re-verification of gate-fast.log)
 ▸ docs                        ok
 ▸ knowledge-index             ok
 ▸ knowledge-index-selftest    ok
@@ -22,4 +22,3 @@
 ▸ integration-tests           skipped (--fast)
 ▸ e2e                         skipped (--fast)
 gate: GREEN (19 stages)
-exit=0

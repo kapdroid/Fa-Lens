@@ -43,3 +43,11 @@ test('a good call returns the parsed output', async () => {
   if (!result.ok) throw new Error('expected a value');
   expect(result.value.modules.map(m => m.id)).toEqual(['van', 'jp', 'out']);
 });
+
+test('a request naming another company finds nothing, rather than reading across the tenancy', async () => {
+  const result = await call('get_matrix', { scope: { ...scope, company: '999999' } }, fakeDeps());
+  expect(result.ok).toBe(false);
+  if (result.ok) throw new Error('expected a problem');
+  expect(result.problem.code).toBe('not_found');
+  expect(result.problem.field).toBe('scope.company');
+});

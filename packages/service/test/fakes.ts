@@ -46,7 +46,7 @@ export function fakeDeps(over: Partial<Deps> = {}): Deps & { sent: { name: strin
     async flows(moduleId) { return moduleId === 'van' ? [{ id: 'app.day-cycle', name: 'App day cycle' }] : []; },
   };
 
-  return { runs, lock, queue, verdicts, modules, ...over, sent, rows };
+  return { companyId: '234474', runs, lock, queue, verdicts, modules, ...over, sent, rows };
 }
 
 export const scope = { env: 'beta', tenant: 'mars', company: '234474', user: 'DSR-1', dateFrom: '2026-08-01', dateTo: '2026-08-31' };

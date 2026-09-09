@@ -1,0 +1,61 @@
+{
+  "unit": "U-014",
+  "sha": "525272473752d1eff49dc1482b5127dac257109a",
+  "items": [
+    {
+      "dod": "pnpm -s vitest run packages/service/test fails without the use-cases and passes with them: every verb in the registry declares a Zod input and output schema, and rejecting an input the schema forbids returns a typed problem rather than throwing",
+      "command": "pnpm -s vitest run packages/service/test",
+      "evidence": "evidence/U-014/red.log, evidence/U-014/test.log, evidence/U-014/service-test-reverify.log",
+      "status": "pass"
+    },
+    {
+      "dod": "pnpm -s vitest run packages/service/test/contract.test.ts asserts every verb has a name, a description, an input schema and an output schema, and that the registry is the only place a verb is declared, so a skin cannot invent one",
+      "command": "pnpm -s vitest run packages/service/test/contract.test.ts",
+      "evidence": "evidence/U-014/contract.log",
+      "status": "pass"
+    },
+    {
+      "dod": "pnpm --filter @falens/control test:integration passes a new packages/control/test/integration/coalesce.test.ts: fifty concurrent createRun calls for one scope produce exactly one run row and forty-nine callers that joined it, each carrying the same runId",
+      "command": "pnpm --filter @falens/service test:integration",
+      "evidence": "evidence/U-014/coalesce.log, evidence/U-014/coalesce-reverify.log",
+      "status": "pass"
+    },
+    {
+      "dod": "vitest packages/service/test/matrix.test.ts shows the company matrix folding verdicts to the worst per module and testing type, and a module with no runs reading as none rather than as a failure",
+      "command": "pnpm -s vitest run packages/service/test/matrix.test.ts",
+      "evidence": "evidence/U-014/matrix.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/U-014/gate-fast.log, evidence/U-014/gate-fast-reverify.log",
+      "status": "pass"
+    },
+    {
+      "dod": "Verification: pnpm -s vitest run packages/service/test red before, green after",
+      "command": "pnpm -s vitest run packages/service/test",
+      "evidence": "evidence/U-014/red.log, evidence/U-014/test.log",
+      "status": "pass"
+    },
+    {
+      "dod": "Verification: pnpm --filter @falens/service test:integration",
+      "command": "pnpm --filter @falens/service test:integration",
+      "evidence": "evidence/U-014/coalesce.log",
+      "status": "pass"
+    },
+    {
+      "dod": "Verification: bash tool/gate.sh --fast",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/U-014/gate-fast.log",
+      "status": "pass"
+    }
+  ],
+  "notes": [
+    "The third DoD item names packages/control/test/integration/coalesce.test.ts and pnpm --filter @falens/control test:integration, but per the unit's own Progress log the test was relocated to packages/service/test/integration/coalesce.test.ts and the command corrected to pnpm --filter @falens/service test:integration, because putting the coalescing test under control would have made the service a dependency of the layer below it. Verified against the actual DoD-item-3 path as corrected; the literal command in the original DoD text (pnpm --filter @falens/control test:integration) does not apply to this codebase and was not run.",
+    "The red run (17 failing) was captured earlier in the build step at 2026-09-09 19:07 before the service package existed; it was not re-captured this session since the code now exists and would not reproduce a red result. red.log is taken as-is as the red evidence.",
+    "This session's re-verification runs (service-test-reverify.log, contract.log, matrix.log, coalesce-reverify.log, gate-fast-reverify.log) independently confirm the existing evidence still holds at the same HEAD sha; no source, test, or config files were modified."
+  ],
+  "gate": "green",
+  "missing": []
+}

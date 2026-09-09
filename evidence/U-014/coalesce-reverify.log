@@ -1,0 +1,13 @@
+# 2026-09-09 19:12 · 525272473752d1eff49dc1482b5127dac257109a · pnpm --filter @falens/service test:integration (re-verification of coalesce.log)
+$ vitest run --root ../.. --project integration packages/service
+ DEPRECATED  The workspace file is deprecated and will be removed in the next major. Please, use the `test.projects` field in the root config file instead.
+
+ RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-014-service-contracts
+
+ ✓ |integration| packages/service/test/integration/coalesce.test.ts (3 tests) 1544ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  19:12:20
+   Duration  2.15s (transform 68ms, setup 0ms, collect 420ms, tests 1.54s, environment 0ms, prepare 26ms)
+
