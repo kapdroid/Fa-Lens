@@ -64,6 +64,24 @@ Regions: list rows (name, cell count, schedule, mini RunStrip, verdict, `Run`), 
 
 Tabs, fixed order: Overview · APIs · Cases · Flows · Validations · **Load** · Runs · Data · Knowledge. Each tab that has a verdict shows a 6px health dot before its label. Keys `1`–`9` switch tabs. The primary button's label changes per tab (see App shell).
 
+### Empty states per tab
+
+Never an empty screen: each tab's empty state is one sentence in plain words plus one primary action whose label names what happens (components.md → EmptyState). The sentence names the scope it is empty for, so a reader knows it is not a loading failure.
+
+| Tab | Empty state (one sentence) | Primary action |
+|---|---|---|
+| Overview | No runs yet for Van Sales in Mars · 234474. Run the smoke flow to get a first verdict. | Run smoke flow |
+| APIs | No endpoints in the catalog for this module yet. Import a Postman collection or an OpenAPI spec to fill it. | Import collection |
+| Cases | No cases yet. Generate from the catalog or save one from the workbench. | Generate cases |
+| Flows | No flows in Van Sales. Start from the app's real sequence. | New flow: App day cycle |
+| Validations | No validation has run for this scope yet. Choose a validation and a date range to run one. | Run cycle reconciliation |
+| Load | No load tests yet. Export a k6 script from any flow or endpoint to start one. | Export k6 script |
+| Runs | Nothing has run in this scope yet. Results appear here the moment a run finishes. | Run smoke flow |
+| Data | No test users or fixtures for this tenant yet. Add a test user to run write flows on the sandbox company. | Add test user |
+| Knowledge | No notes for this module yet. Sync the ADO knowledge base or write the first gotcha. | Sync from ADO |
+
+For sync packs the same rule applies with the module's own verbs (Flows: "No chains defined for this company yet." → Run chain discovery). A tab that cannot be empty for structural reasons (Overview with a registry entry) still shows this state until the first run has written a verdict.
+
 ## S1 Module · Overview
 
 Job: module health at a glance and the fastest path to what is wrong.

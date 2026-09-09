@@ -189,6 +189,21 @@ Bottom-right, `surface-2`, `--el-2`, radius `--r-md`, 12px 14px, icon in verdict
 
 Blocks in `surface-3` with `shimmer` sweep. Shapes match the real component (row height, tile height). Never a spinner for content areas; spinners are only inside buttons.
 
+## EmptyState
+
+Purpose: turn an empty data region into a next step, so the reader never wonders whether something failed to load.
+
+Anatomy: optional 20px icon in `text-faint` · one sentence `--fs-base` in `text-dim`, max 60ch, sentence case, names the scope it is empty for · one button (`primary` if it is the thing the user came to do, otherwise `accent`) whose label names what happens (`Run smoke flow`, `Import collection`, never `OK` or `Get started`). Vertical stack, centered, gap `--sp-3`.
+
+Placement variants, all with the same content rule "one sentence + one action, never two, never a paragraph":
+- **inside a table region** (replaces the rows; padding 48px; header row stays so the columns are still visible),
+- **inside a card** (replaces the card body; the card title stays),
+- **page banner** (company or suite level; full width, `surface-1`, radius `--r-md`, padding `--card-pad`).
+
+Copy comes from the per-tab table in `screens.md` (Module page → Empty states per tab); views do not invent their own sentences. Tokens only; the icon never carries a semantic color. Motion: enters with `reveal`; no shimmer (shimmer means loading, not empty). Reduced motion: opacity only.
+
+States: default · action loading (button spinner, sentence unchanged) · action failed (a `crit-text` line under the button: what happened + how to fix, still one action).
+
 ## Tooltip
 
 `surface-3`, 1px hairline, `--fs-sm`, radius `--r-xs`, 6px 8px, delay 300ms, fade `--d-fast`. Contains the full reason text that a badge abbreviates.
