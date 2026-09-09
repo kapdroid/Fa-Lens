@@ -1,0 +1,24 @@
+# 2026-09-09 19:12 · 525272473752d1eff49dc1482b5127dac257109a · bash tool/gate.sh --fast (re-verification of gate-fast.log)
+▸ docs                        ok
+▸ knowledge-index             ok
+▸ knowledge-index-selftest    ok
+▸ units                       ok
+▸ harness                     ok
+▸ catalog                     ok
+▸ catalog-selftest            ok
+▸ evals-selftest              ok
+▸ evals-rendered              ok
+▸ whitespace                  ok
+▸ no-secrets                  ok
+▸ prototype-parses            ok
+▸ tokens-in-sync              ok
+▸ shell-scripts               ok
+▸ tool-tests                  ok
+▸ typecheck                   ok
+▸ lint                        ok
+▸ boundaries                  ok
+▸ contract                    ok
+▸ unit-tests                  skipped (--fast)
+▸ integration-tests           skipped (--fast)
+▸ e2e                         skipped (--fast)
+gate: GREEN (19 stages)

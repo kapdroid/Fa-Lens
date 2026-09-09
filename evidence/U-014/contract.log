@@ -1,0 +1,12 @@
+# 2026-09-09 19:12 · 525272473752d1eff49dc1482b5127dac257109a · pnpm -s vitest run packages/service/test/contract.test.ts
+ DEPRECATED  The workspace file is deprecated and will be removed in the next major. Please, use the `test.projects` field in the root config file instead.
+
+ RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-014-service-contracts
+
+ ✓ |unit| packages/service/test/contract.test.ts (3 tests) 1ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  19:12:12
+   Duration  486ms (transform 66ms, setup 0ms, collect 320ms, tests 1ms, environment 0ms, prepare 26ms)
+
