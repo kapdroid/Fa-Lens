@@ -1,0 +1,11 @@
+---running check-catalog on broken.yaml---
+ ! report: hosts are placeholders (confirm: true)
+ ! dms: hosts are placeholders (confirm: true)
+ ! app_api: hosts are placeholders (confirm: true)
+ ! dashboard_api: hosts are placeholders (confirm: true)
+check-catalog: FAIL
+ - sources.report.password: forbidden key (credentials and primaries never live in the catalog)
+ - fa_txn.servers: missing tenant "slmg"
+ - report.replica: must be true (ADR-0013: only replicas are listed)
+ - dms.credential: must be a vault://<name> reference
+exit:1

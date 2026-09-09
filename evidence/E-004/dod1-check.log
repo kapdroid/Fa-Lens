@@ -1,0 +1,5 @@
+ ! report: hosts are placeholders (confirm: true)
+ ! dms: hosts are placeholders (confirm: true)
+ ! app_api: hosts are placeholders (confirm: true)
+ ! dashboard_api: hosts are placeholders (confirm: true)
+check-catalog: OK (7 sources, 4 placeholder warnings)

@@ -1,0 +1,99 @@
+== fa_txn ==
+  fa_txn:
+    kind: sql
+    dialect: mssql
+    database: FA_Transactions
+    replica: true
+    credential: vault://fa-txn-readonly
+    scope:
+      company: CompanyId
+      date: CreatedAt
+    limits:
+      rows: 50000
+      timeoutMs: 30000
+      concurrency: 4
+      interactiveMaxDays: 31
+    servers:
+      general: transaction-db
+      mars: mars-transaction-db
+      colpal: colpal-transaction-db
+      haldiram: haldiram-transaction-db
+      slmg: slmg-transaction-db
+      bdf: bdf-transaction-db
+
+== fa_master ==
+  fa_master:
+    kind: sql
+    dialect: mssql
+    replica: true
+    credential: vault://fa-master-readonly
+    scope:
+      company: Company
+      date: CreatedAt
+    limits:
+      rows: 50000
+      timeoutMs: 30000
+      concurrency: 4
+      interactiveMaxDays: 31
+    servers:
+      general: master-db
+      mars: mars-master-db
+      colpal: colpal-master-db
+      haldiram: haldiram-master-db
+      slmg: slmg-master-db
+      bdf: bdf-master-db
+    database:
+      general: Masters_GT_Replica
+      mars: F2KLocationsNetworkV3
+      colpal: F2KLocationsNetworkV3
+      haldiram: F2KLocationsNetworkV3
+      slmg: F2KLocationsNetworkV3
+      bdf: F2KLocationsNetworkV3
+
+== report ==
+  report:
+    kind: sql
+    dialect: mssql
+    database: FA_Reports
+    replica: true
+    confirm: true
+    credential: vault://report-readonly
+    scope:
+      company: CompanyId
+      date: CreatedAt
+    limits:
+      rows: 50000
+      timeoutMs: 30000
+      concurrency: 4
+      interactiveMaxDays: 31
+    servers:
+      general: report-general
+      mars: report-mars
+      colpal: report-colpal
+      haldiram: report-haldiram
+      slmg: report-slmg
+      bdf: report-bdf
+
+== dms ==
+  dms:
+    kind: sql
+    dialect: postgres
+    database: dms_pg_prod
+    replica: true
+    confirm: true
+    credential: vault://dms-readonly
+    scope:
+      company: company_id
+      date: created_at
+    limits:
+      rows: 50000
+      timeoutMs: 30000
+      concurrency: 4
+      interactiveMaxDays: 31
+    servers:
+      general: dms-general
+      mars: dms-mars
+      colpal: dms-colpal
+      haldiram: dms-haldiram
+      slmg: dms-slmg
+      bdf: dms-bdf

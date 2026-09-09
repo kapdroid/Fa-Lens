@@ -1,0 +1,13 @@
+# DoD 1: sources and tenant maps
+fa_txn         1
+fa_master      1
+report         1
+dms            1
+unify          1
+app_api        1
+dashboard_api  1
+
+fa_txn tenants: 6
+fa_master tenants: 12
+report tenants: 6
+dms tenants: 6
