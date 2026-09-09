@@ -17,10 +17,16 @@ try { execSync(`node ${join(root, 'tool/check-units.mjs')}`, { stdio: 'pipe' });
 
 const { data, body } = readFrontmatter(join(dir, file));
 if (!['ready', 'in_progress'].includes(data.status)) fail(`status is "${data.status}"; only a human sets ready`);
+// A dependency is done when its unit file says so, or when its unit branch is already merged into origin/main:
+// the status field is edited by hand and lags the merge; the merge is the fact (found by the E-005 eval).
+const merged = (dep) => { try { execSync(`git merge-base --is-ancestor origin/unit/${dep} origin/main`, { cwd: root, stdio: 'pipe' }); return true; } catch { return false; } };
+const depNotes = [];
 for (const dep of data.depends_on || []) {
   const df = readdirSync(dir).find(f => f.startsWith(dep));
   const st = df ? readFrontmatter(join(dir, df)).data.status : 'missing';
-  if (st !== 'done') fail(`dependency ${dep} is ${st}, needs done`);
+  if (st === 'done') continue;
+  if (st === 'review' && merged(dep)) { depNotes.push(`dependency ${dep} is "review" but unit/${dep} is merged into origin/main → treated as done (flip its status to done in the next housekeeping commit)`); continue; }
+  fail(`dependency ${dep} is ${st}, needs done`);
 }
 const progress = body.split('## Progress')[1]?.trim().split('\n').filter(Boolean) ?? [];
 const last = progress.at(-1) || '(none) → start at state 0';
@@ -38,4 +44,4 @@ ${(data.dod || []).map((d, i) => `  ${i + 1}. ${d}`).join('\n')}
 scope: ${scope.replace(/\s+/g, ' ').slice(0, 600)}
 out of scope: ${out.replace(/\s+/g, ' ').slice(0, 300)}
 resume point: ${last}
-checkpoints: ${data.tier >= 2 ? 'plan approval required before code' : 'PR only'}${data.tier === 3 ? '; adapter-safety-reviewer + fresh-eyes mandatory' : ''}`);
+${depNotes.length ? depNotes.map(n => 'note: ' + n).join('\n') + '\n' : ''}checkpoints: ${data.tier >= 2 ? 'plan approval required before code' : 'PR only'}${data.tier === 3 ? '; adapter-safety-reviewer + fresh-eyes mandatory' : ''}`);

@@ -1,7 +1,7 @@
 ---
 id: E-002
 title: Gate fails on evidence folders that belong to no unit
-status: review
+status: done
 tier: 1
 kind: harness
 depends_on: []

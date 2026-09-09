@@ -1,7 +1,7 @@
 ---
 id: E-001
 title: Add the locked Van Sales cycle rules as a knowledge note
-status: review
+status: done
 tier: 1
 kind: docs
 depends_on: []

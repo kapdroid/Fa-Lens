@@ -1,7 +1,7 @@
 ---
 id: E-003
 title: Specify empty-state copy for every module tab in the design contract
-status: review
+status: done
 tier: 2
 kind: ui
 depends_on: []
