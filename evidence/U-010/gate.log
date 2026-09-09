@@ -1,0 +1,24 @@
+# 2026-09-09 17:11 · 8537320 · unit/U-010
+▸ docs                        ok
+▸ knowledge-index             ok
+▸ knowledge-index-selftest    ok
+▸ units                       ok
+▸ harness                     ok
+▸ catalog                     ok
+▸ catalog-selftest            ok
+▸ evals-selftest              ok
+▸ evals-rendered              ok
+▸ whitespace                  ok
+▸ no-secrets                  ok
+▸ prototype-parses            ok
+▸ tokens-in-sync              ok
+▸ shell-scripts               ok
+▸ tool-tests                  ok
+▸ typecheck                   ok
+▸ lint                        ok
+▸ boundaries                  ok
+▸ contract                    ok
+▸ unit-tests                  ok
+▸ integration-tests           ok
+▸ e2e                         ok
+gate: GREEN (22 stages)
