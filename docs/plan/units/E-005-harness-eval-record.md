@@ -43,3 +43,4 @@ No scheduling, no CI wiring, no charts.
 2026-09-09 10:57 · intake · brief ok via chore branch intake fix (PR #6): E-002 is review but unit/E-002 merged into origin/main; harness defect recorded there. Second defect: .falens-unit tracked on main → untracked in PR #6, skip-worktree here
 2026-09-09 10:57 · explore · findings recorded; 2 open questions. Decided: tests-first satisfied by a selftest command inside tool/evals.mjs (precedent tool/check-catalog.mjs --selftest; tool/test/** not allowed); jsonl is seeded from the five existing rows so history is kept
 2026-09-09 10:57 · isolate · worktree /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/E-005-harness-eval-record
+2026-09-09 11:00 · build · gate --fast green at 4f85ca3; red.log 8 failing before implementation, selftest.log 8 ok after; render.diff empty on second render; record.log shows the DoD-1 line then reverted
