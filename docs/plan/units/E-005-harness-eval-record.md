@@ -1,7 +1,7 @@
 ---
 id: E-005
 title: Record harness eval runs in a machine-readable log and render evals.md from it
-status: in_progress
+status: review
 tier: 1
 kind: harness
 depends_on: [E-002]
@@ -46,3 +46,4 @@ No scheduling, no CI wiring, no charts.
 2026-09-09 11:00 · build · gate --fast green at 4f85ca3; red.log 8 failing before implementation, selftest.log 8 ok after; render.diff empty on second render; record.log shows the DoD-1 line then reverted
 2026-09-09 11:02 · verify · evidence complete: summary.json 3/3 pass at c50b87f, full gate green (gate.log), selftest 8/8 re-run
 2026-09-09 11:04 · review · adr-reviewer pass (0 items); recorded E-005's own result with the new tool (6th ledger row) and replaced the stale 'not yet invoked natively' note in evals.md. follow-up: wire node tool/evals.mjs selftest and node tool/evals.mjs render --check into tool/gate.sh as stages (kind harness, tier 1; tool/gate.sh is outside this unit's allowed_files and Out of scope forbids CI wiring). follow-up: E-001..E-004 status flips and the intake merged-dependency rule live in PR #6; the loop still has no step that sets status done after a merge (a wt.sh gc hook or a /unit done command)
+2026-09-09 11:04 · pr · https://github.com/kapdroid/Fa-Lens/pull/7
