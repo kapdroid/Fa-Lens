@@ -1,0 +1,4 @@
+# 2026-09-09 11:30 · red check, corrected: the planned grep 'packs/_sources' already matched line 7 (the catalog reference), so it proved nothing. The real check is the exception sentence: packs/_sources/** and ADR-0013 in one line.
+before the edit (git show 3b615d0:.claude/rules/packs.md):
+0
+exit=1 (0 matches → red)

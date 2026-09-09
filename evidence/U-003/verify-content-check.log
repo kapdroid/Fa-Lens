@@ -1,0 +1,3 @@
+# 2026-09-09 11:32 · verify run · grep for packs/_sources/** and ADR-0013 in same sentence of .claude/rules/packs.md
+9:- No scripts, no code, no credentials, no server names in a pack. The one exception is `packs/_sources/**` (the source catalog, ADR-0013): it holds the tenant → server maps precisely so that no module pack ever needs one — server names yes, credentials never (only `vault://` references; no connection strings, no primary hosts). If a check cannot be expressed declaratively, write the gap into the unit's Progress; it becomes a kernel or adapter unit.
+exit=0
