@@ -36,7 +36,10 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 ### kernel
 
 - [An assertion keyword that modifies another (`delta` on `equals`) must win the kind lookup, not lose to declaration order](kernel/assertion-keyword-that-modifies-another-must-win-kind-lookup.md)
+- [The six fingerprint cause words, and why duplicate is judged before agreement](kernel/fingerprint-cause-words-defined-and-duplicate-before-agreement.md)
+- [Generated SQL is safe by construction, not by inspection](kernel/generated-sql-is-safe-by-construction-not-by-inspection.md)
 - [The kernel stays pure by taking the executor as a callback and asserting latency from its reported duration, never a clock](kernel/kernel-purity-executor-callback-and-reported-duration.md)
+- [A sentinel value routed through a formatter is a bug waiting to happen](kernel/sentinel-value-through-a-formatter-is-a-bug-waiting-to-happen.md)
 - [Verdict severity order is `none < skipped < ok < warn < error < fail`, and counts tally direct children only](kernel/verdict-severity-order-and-count-tally.md)
 
 ### sources
