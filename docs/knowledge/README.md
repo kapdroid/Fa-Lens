@@ -36,6 +36,7 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 
 ### harness
 
+- [A boundary checker that reads only source misses the two places a rule is usually broken first](harness/a-boundary-checker-must-read-manifests-and-tests-not-only-src.md)
 - [The build skill isolates into a worktree before writing the plan](harness/build-skill-isolate-before-plan.md)
 - [Any unit that adds a dependency must list `pnpm-lock.yaml` in `allowed_files` until the harness always allows it](harness/check-allowed-should-always-allow-pnpm-lock-yaml.md)
 - [Hand-rolled config validators must be allow-list first and self-tested in the gate](harness/config-validator-allow-list-first.md)

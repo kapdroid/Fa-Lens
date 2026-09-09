@@ -1,0 +1,6 @@
+# 2026-09-09 19:30 · after review round 1 (optional and peer edges too)
+
+check-boundaries selftest: OK (10 checks)
+--- the repository
+check-boundaries: OK (10 packages in the table)
+exit=0

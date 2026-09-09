@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Boundary check (ADR-0001; table in docs/architecture.md §2). A package may import only the packages in its row.
-//   node tool/check-boundaries.mjs            walks packages/*/src, exit 1 on any forbidden @falens/* import
+//   node tool/check-boundaries.mjs            walks each package's manifest, src and test; exit 1 on any forbidden @falens/* edge
 //   node tool/check-boundaries.mjs selftest   runs the check on a temp tree and asserts the contract
 // Zero dependencies on purpose: the gate runs on a fresh clone before `pnpm install`.
 import { readdirSync, readFileSync, existsSync, mkdtempSync, mkdirSync, writeFileSync, rmSync, realpathSync } from 'node:fs';
@@ -52,14 +52,38 @@ export function checkBoundaries(rootDir) {
   if (!existsSync(pk)) return problems;
   for (const name of readdirSync(pk, { withFileTypes: true }).filter(e => e.isDirectory()).map(e => e.name).sort()) {
     const src = join(pk, name, 'src');
-    if (!existsSync(src)) continue;
+    const test = join(pk, name, 'test');
+    const manifest = join(pk, name, 'package.json');
+    if (!existsSync(src) && !existsSync(test) && !existsSync(manifest)) continue;
     const allowed = ALLOWED[name];
     if (!allowed) { problems.push(`${name}: not in the dependency table of docs/architecture.md §2; add the row (and this script's copy) before adding the package`); continue; }
-    for (const f of sourceFiles(src)) {
-      for (const { spec, line } of specifiers(readFileSync(f, 'utf8'))) {
-        const m = spec.match(/^@falens\/([a-z-]+)/);
-        if (!m || m[1] === name) continue;
-        if (!allowed.includes(m[1])) problems.push(`${name} → ${m[1]} is not allowed (${relative(rootDir, f)}:${line})`);
+
+    // A dependency named in the manifest is an edge whether or not anything imports it yet, and it is the
+    // form a reversed layer usually takes first (found the hard way in U-014).
+    if (existsSync(manifest)) {
+      let pkg = {};
+      try { pkg = JSON.parse(readFileSync(manifest, 'utf8')); } catch { problems.push(`${name}: package.json is not readable JSON`); }
+      // Every field that can carry an edge, so a boundary cannot be crossed by declaring the
+      // dependency optional or peer instead.
+      for (const field of ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']) {
+        for (const dep of Object.keys(pkg[field] ?? {})) {
+          const m = dep.match(/^@falens\/([a-z-]+)/);
+          if (!m || m[1] === name) continue;
+          if (!allowed.includes(m[1])) problems.push(`${name} → ${m[1]} is not allowed (packages/${name}/package.json)`);
+        }
+      }
+    }
+
+    // Source and tests are held to the same rule: a test that reaches across a boundary drags the
+    // package with it, and it is still the package's code.
+    for (const dir of [src, test]) {
+      if (!existsSync(dir)) continue;
+      for (const f of sourceFiles(dir)) {
+        for (const { spec, line } of specifiers(readFileSync(f, 'utf8'))) {
+          const m = spec.match(/^@falens\/([a-z-]+)/);
+          if (!m || m[1] === name) continue;
+          if (!allowed.includes(m[1])) problems.push(`${name} → ${m[1]} is not allowed (${relative(rootDir, f)}:${line})`);
+        }
       }
     }
   }
@@ -71,6 +95,11 @@ export function selftest() {
   const results = [];
   const test = (name, fn) => { try { fn(); results.push(`ok   ${name}`); } catch (e) { results.push(`FAIL ${name}\n     ${String(e.message).split('\n')[0]}`); } };
   const put = (pkg, file, text) => { mkdirSync(join(dir, 'packages', pkg, 'src'), { recursive: true }); writeFileSync(join(dir, 'packages', pkg, 'src', file), text); };
+  const putTest = (pkg, file, text) => { mkdirSync(join(dir, 'packages', pkg, 'test'), { recursive: true }); writeFileSync(join(dir, 'packages', pkg, 'test', file), text); };
+  const putManifest = (pkg, deps, devDeps = {}) => {
+    mkdirSync(join(dir, 'packages', pkg), { recursive: true });
+    writeFileSync(join(dir, 'packages', pkg, 'package.json'), JSON.stringify({ name: `@falens/${pkg}`, dependencies: deps, devDependencies: devDeps }, null, 2));
+  };
   try {
     put('kernel', 'index.ts', "import { z } from 'zod';\nimport { readFileSync } from 'node:fs';\nexport const PACKAGE = 'kernel';\n");
     put('api', 'index.ts', "import { runs } from '@falens/service';\nimport type { Adapter } from '@falens/adapters';\nexport { runs };\n");
@@ -98,6 +127,37 @@ export function selftest() {
       const p = checkBoundaries(dir).filter(x => x.startsWith('kernel'));
       assert.deepEqual(p, ['kernel → adapters is not allowed (packages/kernel/src/bad.ts:1)']);
     });
+    test('a manifest edge is flagged even when no source file imports it', () => {
+      putManifest('control', { '@falens/kernel': 'workspace:*', '@falens/service': 'workspace:*' });
+      const p = checkBoundaries(dir).filter(x => x.startsWith('control'));
+      assert.deepEqual(p, ['control → service is not allowed (packages/control/package.json)']);
+    });
+
+    test('third-party dependencies are not the boundary checker\'s business', () => {
+      putManifest('adapters', { '@falens/kernel': 'workspace:*', undici: '^8' }, { vitest: '^3', '@types/pg': '^8' });
+      assert.deepEqual(checkBoundaries(dir).filter(x => x.startsWith('adapters')), []);
+    });
+
+    test('an edge declared optional or peer is still an edge', () => {
+      mkdirSync(join(dir, 'packages', 'mcp'), { recursive: true });
+      writeFileSync(join(dir, 'packages', 'mcp', 'package.json'), JSON.stringify({
+        name: '@falens/mcp',
+        optionalDependencies: { '@falens/control': 'workspace:*' },
+        peerDependencies: { '@falens/adapters': 'workspace:*' },
+      }));
+      const p = checkBoundaries(dir).filter(x => x.startsWith('mcp'));
+      assert.deepEqual(p, [
+        'mcp → control is not allowed (packages/mcp/package.json)',
+        'mcp → adapters is not allowed (packages/mcp/package.json)',
+      ]);
+    });
+
+    test('a forbidden import under test/ is flagged, because a test is code too', () => {
+      putTest('ui', 'render.test.ts', "import { runsRepo } from '@falens/control';\n");
+      const p = checkBoundaries(dir).filter(x => x.startsWith('ui'));
+      assert.deepEqual(p, ['ui → control is not allowed (packages/ui/test/render.test.ts:1)']);
+    });
+
     test('a package missing from the table is flagged', () => {
       put('rogue', 'index.ts', "export const x = 1;\n");
       assert.ok(checkBoundaries(dir).some(x => x.startsWith('rogue: not in the dependency table')));
