@@ -1,7 +1,7 @@
 ---
 id: U-006
 title: Scaffold the pnpm/Turborepo monorepo with the eleven packages, boundary check, and a real gate
-status: draft
+status: ready
 tier: 1
 kind: infra
 depends_on: []
@@ -52,3 +52,4 @@ No real domain code (U-007 onward). No Docker or Testcontainers wiring beyond th
 - `bash tool/gate.sh --fast` → `evidence/U-006/gate.log` showing typecheck, lint, boundaries stages `ok`
 
 ## Progress
+2026-09-09 15:37 · ready · set by /build on the owner's instruction after PR #14 merged
