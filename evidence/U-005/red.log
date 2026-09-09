@@ -1,0 +1,15 @@
+# 2026-09-09 11:57 · 9b01b48 · selftest BEFORE listNotes/renderIndex/generate are implemented
+FAIL generate lists every note under a ### area heading, areas and files sorted, title = first heading
+     not implemented
+ok   prose outside the markers is byte-identical and the file ends with one newline
+FAIL running it twice changes nothing and --check agrees
+     not implemented
+FAIL --check reports a stale index without writing
+     not implemented
+FAIL a note without a first-line # heading fails naming the file
+     The input did not match the regular expression /design\/bad\.md: first line must be a "# " heading/. Input:
+FAIL missing markers fail
+     The input did not match the regular expression /markers/. Input:
+
+knowledge-index selftest: 5 failing
+exit=1

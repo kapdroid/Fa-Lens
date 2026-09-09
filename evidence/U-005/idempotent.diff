@@ -1,0 +1,6 @@
+# 2026-09-09 11:57 · generator run twice; second run:
+knowledge-index: unchanged docs/knowledge/README.md (12 notes)
+git diff --stat docs/knowledge/README.md (index vs working tree after the second run) →
+(empty = no diff)
+knowledge-index: up to date (12 notes)
+--check exit=0

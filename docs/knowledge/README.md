@@ -3,6 +3,7 @@
 Repo-level lessons that a newcomer (human or agent) would otherwise re-learn the hard way: business rules verified against real data, tool quirks, wrong assumptions that cost time. Pack-local gotchas live inside the pack (`packs/<name>/knowledge/`); this folder holds what spans the repository.
 
 Conventions (kept by the `memory-scribe` agent after every unit):
+- The index below is generated: `node tool/knowledge-index.mjs` lists every note by area with its first heading as the description; the gate's `knowledge-index` stage fails when the committed index is stale. Do not edit it by hand; make the note's heading say what a reader needs.
 - One lesson per file, `docs/knowledge/<area>/<slug>.md`.
 - Each file ends with a `Source:` line naming where the fact came from (unit id, spec, ticket, investigation date).
 - Plain words, sentence case, no codes. State the rule, then why it matters.
@@ -10,13 +11,28 @@ Conventions (kept by the `memory-scribe` agent after every unit):
 
 ## Index
 
-- [van-sales/cycle-rules.md](van-sales/cycle-rules.md) — the six locked Van Sales cycle and mapping rules from the artifact tools.
-- [harness/build-skill-isolate-before-plan.md](harness/build-skill-isolate-before-plan.md) — why `/build` isolates into a worktree before writing the plan, and why `.falens-unit` is gitignored.
-- [harness/tool-tests-zero-dependency.md](harness/tool-tests-zero-dependency.md) — zero-dependency tests under `tool/test/` use `node:assert` and spawn the script under test; temp fixtures under `evidence/` must be cleaned up in `finally`; a gate stage that globs a directory must guard the empty case with `compgen -G` and skip loudly; prove a coverage gap exists (gate green while broken) before closing it.
-- [One primary button per screen](design/one-primary-per-screen.md) — an EmptyState's action button must not compete with the page header's single primary button; use the accent variant when the header already owns the primary for that scope.
-- [harness/tool-selftest-when-tests-dir-not-allowed.md](harness/tool-selftest-when-tests-dir-not-allowed.md) — a tool's own `selftest` subcommand gives red-then-green tests-first evidence when `tool/test/**` is outside the unit's `allowed_files`.
-- [harness/evidence-for-ledger-mutating-dod.md](harness/evidence-for-ledger-mutating-dod.md) — evidencing a DoD command that mutates a committed ledger: run it literally, capture the diff, then revert, and say so in the evidence log.
-- [harness/intake-accepts-merged-review-dependency.md](harness/intake-accepts-merged-review-dependency.md) — intake must accept a `depends_on` unit that is merged into `origin/main` but still reads `status: review`; a second `.falens-unit` tracking regression fixed alongside it.
-- [harness/red-check-must-fail-for-the-right-reason.md](harness/red-check-must-fail-for-the-right-reason.md) — a planned red check must grep for the exact sentence the unit adds, not a keyword that already appears elsewhere in the file, or it passes red-or-green and proves nothing.
-- [design/demo-affordances-in-scenarios-not-header.md](design/demo-affordances-in-scenarios-not-header.md) — prototype-only ways to trigger a state (empty, failed, …) belong in the Scenarios menu plus a deep link, never in a spec'd region like the module header.
-- [harness/headless-chrome-light-and-dark-screenshots.md](harness/headless-chrome-light-and-dark-screenshots.md) — `--headless=new` cannot pick a color scheme by itself; use a CDP script with `Emulation.setEmulatedMedia` and `--remote-allow-origins=*` to capture both light and dark screenshots.
+<!-- index:start -->
+### design
+
+- [Prototype demo affordances belong in Scenarios, not the module header](design/demo-affordances-in-scenarios-not-header.md)
+- [One primary button per screen](design/one-primary-per-screen.md)
+
+### harness
+
+- [The build skill isolates into a worktree before writing the plan](harness/build-skill-isolate-before-plan.md)
+- [Hand-rolled config validators must be allow-list first and self-tested in the gate](harness/config-validator-allow-list-first.md)
+- [Evidencing a DoD command that mutates a committed ledger: run it literally, capture the diff, then revert](harness/evidence-for-ledger-mutating-dod.md)
+- [Capturing light and dark screenshots with headless Chrome](harness/headless-chrome-light-and-dark-screenshots.md)
+- [Intake must accept a `depends_on` unit that is merged but still says `status: review`](harness/intake-accepts-merged-review-dependency.md)
+- [A red check must fail for the reason the unit fixes](harness/red-check-must-fail-for-the-right-reason.md)
+- [A tool's own `selftest` subcommand gives red-then-green evidence when `tool/test/**` is outside the unit's allowed_files](harness/tool-selftest-when-tests-dir-not-allowed.md)
+- [Zero-dependency tests under `tool/test/` use `node:assert` and spawn the script](harness/tool-tests-zero-dependency.md)
+
+### sources
+
+- [Catalog server names come from artifact tools, not from a confirmed replica list](sources/catalog-server-names-unconfirmed.md)
+
+### van-sales
+
+- [Van Sales: the six locked cycle and mapping rules](van-sales/cycle-rules.md)
+<!-- index:end -->
