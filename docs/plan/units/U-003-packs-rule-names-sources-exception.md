@@ -1,7 +1,7 @@
 ---
 id: U-003
 title: packs.md rule names the _sources exception
-status: in_progress
+status: review
 tier: 1
 kind: docs
 depends_on: []
@@ -45,3 +45,4 @@ No changes to the catalog itself, no new rules, no restructuring of `packs.md` b
 2026-09-09 11:30 · build · red check corrected in the plan and red.log: plain grep matched line 7 already (test proved nothing); the exception-sentence grep is 0 before (3b615d0) and 1 after
 2026-09-09 11:33 · verify · evidence complete: summary.json 3/3 pass at cca0aa2, full gate green (gate.log)
 2026-09-09 11:35 · review · adr-reviewer pass (0 items)
+2026-09-09 11:35 · pr · https://github.com/kapdroid/Fa-Lens/pull/9
