@@ -1,0 +1,8 @@
+pnpm -s vitest run packages/kernel/test/rules  # red before implementation -> evidence/U-009/red.log (captured during earlier build step)
+pnpm -s vitest run packages/kernel/test/rules  # green after implementation -> evidence/U-009/test.log (captured during earlier build step)
+pnpm -s vitest run packages/kernel/test/rules/compile.test.ts > evidence/U-009/compile.log
+pnpm -s vitest run packages/kernel/test/rules/fingerprint.test.ts > evidence/U-009/fingerprint.log
+pnpm -s vitest run packages/kernel/test/rules/windows.test.ts > evidence/U-009/windows.log
+bash tool/gate.sh --fast > evidence/U-009/gate-fast.log
+bash tool/gate.sh > evidence/U-009/gate.log
+git rev-parse HEAD

@@ -1,0 +1,12 @@
+# 2026-09-09 17:04 · afdd8bd50489574b3c6f5c3b929a5cc341067033 · pnpm -s vitest run packages/kernel/test/rules/compile.test.ts
+ DEPRECATED  The workspace file is deprecated and will be removed in the next major. Please, use the `test.projects` field in the root config file instead.
+
+ RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-009-kernel-rules-sql
+
+ ✓ |unit| packages/kernel/test/rules/compile.test.ts (7 tests) 3ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  17:04:36
+   Duration  255ms (transform 36ms, setup 0ms, collect 75ms, tests 3ms, environment 0ms, prepare 24ms)
+
