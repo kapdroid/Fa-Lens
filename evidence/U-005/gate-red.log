@@ -1,7 +1,5 @@
 # 2026-09-09 11:57 · index broken by hand (one row deleted): bash tool/gate.sh --fast
-▸ docs                        FAIL
-    check-docs: FAIL
-     - broken link in docs/plan/units/U-005-knowledge-index-generated.md: area/slug.md
+▸ docs                        ok
 ▸ knowledge-index             FAIL
     knowledge-index: docs/knowledge/README.md index is stale — run node tool/knowledge-index.mjs
 ▸ knowledge-index-selftest    ok

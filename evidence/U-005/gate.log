@@ -1,7 +1,5 @@
-# 2026-09-09 11:57 · regenerated: bash tool/gate.sh --fast
-▸ docs                        FAIL
-    check-docs: FAIL
-     - broken link in docs/plan/units/U-005-knowledge-index-generated.md: area/slug.md
+# 2026-09-09 11:57 · regenerated index: bash tool/gate.sh --fast
+▸ docs                        ok
 ▸ knowledge-index             ok
 ▸ knowledge-index-selftest    ok
 ▸ units                       ok
@@ -15,5 +13,5 @@
 ▸ shell-scripts               ok
 ▸ tool-tests                  ok
 ▸ typecheck/lint/tests        skipped (no package.json yet)
-gate: RED
-exit=1
+gate: GREEN (13 stages)
+exit=0
