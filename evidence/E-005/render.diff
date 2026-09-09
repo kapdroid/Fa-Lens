@@ -1,0 +1,6 @@
+# 2026-09-09 11:00 · e77c10c · second 'node tool/evals.mjs render' after the rendered table was committed; then git diff --stat and render --check
+evals: unchanged docs/orchestration/evals.md (5 rows)
+git diff --stat docs/orchestration/evals.md →
+(empty = no diff)
+evals: docs/orchestration/evals.md is up to date (5 rows)
+render --check exit=0
