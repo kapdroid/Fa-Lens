@@ -1,0 +1,8 @@
+git rev-parse HEAD
+bash evidence/U-002/dod-grep.sh                                   # re-verification, printed 9, appended to evidence/U-002/grep.log
+bash tool/gate.sh                                                 # full gate, saved to evidence/U-002/gate.log
+
+# Prior evidence already present in evidence/U-002/ from the earlier build pass:
+#   evidence/U-002/red.log    - bash evidence/U-002/dod-grep.sh before the change (0)
+#   evidence/U-002/grep.log   - bash evidence/U-002/dod-grep.sh after the change (9)
+#   evidence/U-002/screens/*.png - nine headless-Chrome screenshots at #/module/van/<tab>/empty

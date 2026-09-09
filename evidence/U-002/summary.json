@@ -1,0 +1,26 @@
+{
+  "unit": "U-002",
+  "sha": "26f857c499cf4bac8aacd633cd500943c5882566",
+  "items": [
+    {
+      "dod": "prototype renders each of the nine tab empty states when the module has no data (grep for the nine sentences from screens.md in index.html prints 9)",
+      "command": "bash evidence/U-002/dod-grep.sh",
+      "evidence": "evidence/U-002/grep.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh",
+      "evidence": "evidence/U-002/gate.log",
+      "status": "pass"
+    },
+    {
+      "dod": "Manual: switch each of the nine tabs to its empty state in the prototype and confirm the button variant matches the header-primary rule (accent when the header owns the primary for that scope)",
+      "command": "headless-Chrome screenshots at #/module/van/<tab>/empty",
+      "evidence": "evidence/U-002/screens/",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "missing": []
+}
