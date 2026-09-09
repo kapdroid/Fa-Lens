@@ -1,0 +1,7 @@
+# DoD 2: credentials, replica, scope, limits, no default/primary
+vault credentials: 6
+replica true: 4
+scope.company: 4
+limits blocks: 6
+default keys: 0
+primary mentions: 0

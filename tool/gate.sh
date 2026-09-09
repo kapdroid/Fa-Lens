@@ -15,6 +15,7 @@ run "docs"            node tool/check-docs.mjs
 run "units"           node tool/check-units.mjs
 run "harness"         node tool/check-harness.mjs
 run "catalog"         node tool/check-catalog.mjs
+run "catalog-selftest" node tool/check-catalog.mjs --selftest
 run "whitespace"      git diff --cached --check
 run "no-secrets"      bash -c '! git grep -nE "(password|secret|connection ?string)\s*[:=]\s*[\"'"'"'][^\"'"'"'\$ ]{6,}" -- ":!*.md" ":!tool/gate.sh" ":!docs/**" 2>/dev/null'
 run "prototype-parses" node -e "const fs=require('fs');const s=fs.readFileSync('docs/design/prototype/index.html','utf8');const js=s.slice(s.indexOf('<script>')+8,s.lastIndexOf('</script>'));new Function(js);"

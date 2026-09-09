@@ -11,7 +11,7 @@
 - Every source is tenant-wise: `fa_txn`, `fa_master`, `report`, and `dms` each have six servers, one per tenant (`general`, `mars`, `colpal`, `haldiram`, `slmg`, `bdf`). A `default` entry is not allowed unless a source is marked `shared: true` (none in v1).
 - Only read replicas are listed (`replica: true`); primaries are not in the catalog, so the run engine cannot reach one even by mistake.
 - Read-only logins already exist for every source; the vault names here map to them.
-- `unify` (ClickHouse) is `status: coming-soon` in v1: it renders as such in the flow map and matrix, and enabling it later is a catalog change, not code.
+- `unify` (ClickHouse) is `status: coming-soon` in v1: it renders as such in the flow map and matrix. Enabling it is a catalog change plus a one-line change to the validator's v1 allow-list (`COMING_SOON_ALLOWED`), recorded by an ADR; the same holds for adding any source name, on purpose.
 
 ## Environment
 
@@ -23,4 +23,4 @@ Entries marked `confirm: true` carry hostnames that are known in shape but not y
 
 ## Validation
 
-`node tool/check-catalog.mjs` runs in the gate (`tool/gate.sh`, stage `catalog`) and fails on: a missing tenant, a `default` server, a non-`vault://` credential, `replica` not true, a missing budget (`rows`, `timeoutMs`, `concurrency`, `interactiveMaxDays` ≤ 31), a forbidden key (`password`, `connectionString`, `primary`, …), a non-https base URL, or `unify` not marked coming-soon. It is allow-list first: only `version`, `env`, `tenants`, `sources` at the top; only the seven v1 source names; only the keys each source kind may carry; hostnames must be bare hostnames, databases identifiers, base URLs https origins; duplicate keys and tabs are parse errors. Use `--file <path>` to validate a copy.
+`node tool/check-catalog.mjs` runs in the gate (`tool/gate.sh`, stage `catalog`) and fails on: a missing tenant, a `default` server, a non-`vault://` credential, `replica` not true, a missing budget (`rows`, `timeoutMs`, `concurrency`, `interactiveMaxDays` ≤ 31), a forbidden key (`password`, `connectionString`, `primary`, …), a non-https base URL, or `unify` not marked coming-soon. It also runs `--selftest` in the gate: twenty known-bad mutations of the prod file must each be rejected with the expected message, so weakening a check turns the gate red. It is allow-list first: only `version`, `env`, `tenants`, `sources` at the top; only the seven v1 source names; only the keys each source kind may carry; hostnames must be bare hostnames, databases identifiers, base URLs https origins; duplicate keys and tabs are parse errors. Use `--file <path>` to validate a copy.
