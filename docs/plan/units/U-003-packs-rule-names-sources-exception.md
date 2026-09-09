@@ -27,7 +27,7 @@ owner: harness
 No changes to the catalog itself, no new rules, no restructuring of `packs.md` beyond the exception sentence.
 
 ## Plan
-1. Red check first: `grep -n 'packs/_sources' .claude/rules/packs.md` exits 1 (the rule does not name the exception) → `evidence/U-003/red.log`.
+1. Red check first: `grep -c 'packs/_sources/\*\*.*ADR-0013' .claude/rules/packs.md` prints 0 (the rule does not name the exception; a plain `packs/_sources` grep already matches the catalog reference on line 7, so it is not the test) → `evidence/U-003/red.log`.
 2. Edit only line 9 of `.claude/rules/packs.md` (body, frontmatter untouched): after "no server names in a pack." add one sentence naming the exception: `packs/_sources/**` (the source catalog, ADR-0013) holds the tenant → server maps precisely so no module pack ever needs one — server names yes, credentials never (only `vault://` references; no connection strings, no primary hosts). Wording echoes `packs/_sources/README.md` so the two stay consistent. No links added (check-docs does not scan `.claude/rules`).
 3. Green check: the same grep prints the line naming `packs/_sources/**` and ADR-0013 in one sentence → `evidence/U-003/green.log`; `node tool/check-docs.mjs` → `evidence/U-003/check-docs.log`; `bash tool/gate.sh --fast` → `evidence/U-003/gate.log`. Commit `U-003: packs.md names the _sources exception`.
 
@@ -42,3 +42,4 @@ No changes to the catalog itself, no new rules, no restructuring of `packs.md` b
 2026-09-09 11:28 · explore · findings recorded; 0 open questions. Target sentence packs.md:9; wording to echo packs/_sources/README.md:5-7 and ADR-0013 line 11; check-harness requires the paths: frontmatter untouched; check-docs does not scan .claude/rules so no links are added
 2026-09-09 11:28 · isolate · worktree /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-003-packs-sources-exception
 2026-09-09 11:30 · build · gate --fast green at 41c6aae; red.log grep exit 1 before, green.log names packs/_sources/** and ADR-0013 in one sentence
+2026-09-09 11:30 · build · red check corrected in the plan and red.log: plain grep matched line 7 already (test proved nothing); the exception-sentence grep is 0 before (3b615d0) and 1 after

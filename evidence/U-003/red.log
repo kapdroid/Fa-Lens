@@ -1,3 +1,4 @@
-# 2026-09-09 11:30 · 3b615d0 · before the edit: grep -n 'packs/_sources' .claude/rules/packs.md
-7:A pack is YAML/JSON only (ADR-0010). Flows follow ADR-0003; rules use the five declarative types; sources come from `packs/_sources/catalog.yaml` by logical name.
-exit=0
+# 2026-09-09 11:30 · red check, corrected: the planned grep 'packs/_sources' already matched line 7 (the catalog reference), so it proved nothing. The real check is the exception sentence: packs/_sources/** and ADR-0013 in one line.
+before the edit (git show 3b615d0:.claude/rules/packs.md):
+0
+exit=1 (0 matches → red)
