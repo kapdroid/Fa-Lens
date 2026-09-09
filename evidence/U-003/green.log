@@ -1,0 +1,5 @@
+# 2026-09-09 11:30 · after the edit: grep -n 'packs/_sources' .claude/rules/packs.md
+7:A pack is YAML/JSON only (ADR-0010). Flows follow ADR-0003; rules use the five declarative types; sources come from `packs/_sources/catalog.yaml` by logical name.
+9:- No scripts, no code, no credentials, no server names in a pack. The one exception is `packs/_sources/**` (the source catalog, ADR-0013): it holds the tenant → server maps precisely so that no mo
+exit=0
+ADR-0013 in the same line: 1
