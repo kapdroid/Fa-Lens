@@ -1,15 +1,15 @@
 # Knowledge
 
-Lessons a future builder would otherwise re-learn: gotchas, non-obvious conventions, tool quirks, wrong assumptions that cost time. Written by the memory-scribe step after a unit's PR opens.
+Repo-level lessons that a newcomer (human or agent) would otherwise re-learn the hard way: business rules verified against real data, tool quirks, wrong assumptions that cost time. Pack-local gotchas live inside the pack (`packs/<name>/knowledge/`); this folder holds what spans the repository.
 
-## Conventions
-- One lesson per file, named `docs/knowledge/<area>/<slug>.md`.
-- Every note ends with a `Source:` line naming the unit id and date.
-- Write for a reader who was not in the conversation: say what the lesson is, why it matters, and where to see it applied.
-- Skip anything the code or an existing doc already states; do not duplicate ADRs, `docs/design/`, or `docs/architecture.md` — link to them instead.
-- Keep notes short (a few paragraphs). If a lesson grows into a policy, it belongs in an ADR or a design/rule doc, not here.
+Conventions (kept by the `memory-scribe` agent after every unit):
+- One lesson per file, `docs/knowledge/<area>/<slug>.md`.
+- Each file ends with a `Source:` line naming where the fact came from (unit id, spec, ticket, investigation date).
+- Plain words, sentence case, no codes. State the rule, then why it matters.
+- Delete a file when it turns out to be wrong; do not leave corrections as appendices.
 
 ## Index
 
-### design
+- [van-sales/cycle-rules.md](van-sales/cycle-rules.md) — the six locked Van Sales cycle and mapping rules from the artifact tools.
+- [harness/build-skill-isolate-before-plan.md](harness/build-skill-isolate-before-plan.md) — why `/build` isolates into a worktree before writing the plan, and why `.falens-unit` is gitignored.
 - [One primary button per screen](design/one-primary-per-screen.md) — an EmptyState's action button must not compete with the page header's single primary button; use the accent variant when the header already owns the primary for that scope.

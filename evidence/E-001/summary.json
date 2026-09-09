@@ -1,0 +1,32 @@
+{
+  "unit": "E-001",
+  "sha": "fd7a1adb7e28239a4446ee8f8821af16d9b28593",
+  "items": [
+    {
+      "dod": "docs/knowledge/van-sales/cycle-rules.md exists and states the six locked rules (cycle open/close, partial end, additional stock, sales window, approval violation, mapping severity) with their source",
+      "command": "test -f docs/knowledge/van-sales/cycle-rules.md && grep -c -E \"PureDayStart|Partial|Additional|sales window|violation|warning\" docs/knowledge/van-sales/cycle-rules.md && grep -c \"^Source:\" docs/knowledge/van-sales/cycle-rules.md",
+      "evidence": "evidence/E-001/dod1-recheck.log",
+      "status": "pass",
+      "note": "red.log (captured before the change, file absent, exit=1) is the DoD-1 red run; green.log is the first post-change green run; dod1-recheck.log is this evidence-collector's independent re-run, also green (10 keyword matches across all six rule categories, 1 Source: line)"
+    },
+    {
+      "dod": "node tool/check-docs.mjs passes (links resolve)",
+      "command": "node tool/check-docs.mjs",
+      "evidence": "evidence/E-001/check-docs.log",
+      "status": "pass"
+    },
+    {
+      "dod": "bash tool/gate.sh --fast is green",
+      "command": "bash tool/gate.sh --fast",
+      "evidence": "evidence/E-001/gate-fast.log",
+      "status": "pass"
+    }
+  ],
+  "gate": "green",
+  "missing": [],
+  "notes": [
+    "evidence/E-001/red.log already present (captured pre-existing failing DoD-1 run before the change: file absent, exit=1) — this is the red run for this unit.",
+    "Full `bash tool/gate.sh` (all 8 stages, not just --fast) run last per evidence-collector protocol and saved to evidence/E-001/gate.log: GREEN (8 stages).",
+    "typecheck/lint/tests stage is skipped by gate.sh itself (no package.json yet) in both --fast and full runs; this is the gate script's own behavior, not a collection gap."
+  ]
+}
