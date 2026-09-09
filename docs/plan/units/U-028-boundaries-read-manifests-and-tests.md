@@ -1,7 +1,7 @@
 ---
 id: U-028
 title: The boundary check reads package manifests and test imports, not only source
-status: in_progress
+status: review
 tier: 1
 kind: harness
 depends_on: []
@@ -46,3 +46,4 @@ No change to the dependency table itself. No new gate stage: the existing `bound
 2026-09-09 19:26 · isolate · worktree /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-028-boundaries-manifests
 2026-09-09 19:27 · build · gate --fast green at 850fe0c; red.log shows the two new selftest cases failing against yesterday's implementation, selftest.log 9 ok after, repo.log exits 0 so nothing in the tree violates a boundary today. The checker now reads dependencies and devDependencies for @falens keys only, so a third-party devDependency cannot produce a false positive, and walks test/ with the same reader as src/
 2026-09-09 19:30 · review · adr-reviewer pass (2 notes). Fixed the one that was a real hole: the manifest check read only dependencies and devDependencies, so a boundary could have been crossed by declaring the dependency optional or peer instead — all four fields are read now, with a selftest case for it. Answered the other: packs/ has a row in the architecture table but lives outside packages/, so a manifest edge there would go unchecked; packs are data by ADR-0010 and carry no code, and the pack validator refuses a script file, so this is recorded rather than filed
+2026-09-09 19:30 · pr · https://github.com/kapdroid/Fa-Lens/pull/27
