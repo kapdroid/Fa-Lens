@@ -1,7 +1,7 @@
 ---
 id: U-007
 title: Kernel pack schema and validator with content hash
-status: in_progress
+status: review
 tier: 1
 kind: kernel
 depends_on: [U-006]
@@ -50,3 +50,4 @@ No registry tables or publish use-case (U-010, service units). No SQL generation
 2026-09-09 16:06 · build · gate --fast green at 6d40e26; red.log: parsePack is not a function before; test.log 11/11 after; typecheck/lint/boundaries green. Gotchas: the gate's typecheck includes test files, so red tests cannot be committed alone (tests + implementation land in one commit, red.log is the evidence); ajv and ajv-formats are CommonJS — under NodeNext use ajv's named export and unwrap ajv-formats' .default; schemas are draft-07 objects in a .ts module because resolveJsonModule is off in tsconfig.base (ADR-0015 wording adjusted)
 2026-09-09 16:08 · verify · evidence complete: summary.json 4/4 pass at 497b166, full gate green (22 stages), deps guard red/green shown
 2026-09-09 16:11 · review · adr-reviewer pass (2 should, 4 notes). fixed: rule type custom-check spelled as in ADR-0010; gate-fast.log added; unreachable message says the step can never run. answered: architecture.md kernel row → docs follow-up (below); ADR README row is always-allowed; loose additionalProperties on rule/case schemas deliberate for v1. follow-up: docs unit updates docs/architecture.md §2 kernel row to cite ADR-0015 and corrects ADR-0001's check-boundaries.ts filename. follow-up: tighten rule/case/drilldown schemas (additionalProperties false) once the van-sales pack fixes the shapes
+2026-09-09 16:12 · pr · https://github.com/kapdroid/Fa-Lens/pull/18
