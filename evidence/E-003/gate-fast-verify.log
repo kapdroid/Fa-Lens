@@ -1,0 +1,10 @@
+▸ docs                        ok
+▸ units                       ok
+▸ harness                     ok
+▸ whitespace                  ok
+▸ no-secrets                  ok
+▸ prototype-parses            ok
+▸ tokens-in-sync              ok
+▸ shell-scripts               ok
+▸ typecheck/lint/tests        skipped (no package.json yet)
+gate: GREEN (8 stages)

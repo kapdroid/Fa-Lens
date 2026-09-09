@@ -121,7 +121,7 @@ Rows enter with `reveal` (stagger 30ms, max 12). Expand-in-place is not used; dr
 
 Toolbar above table: search (ids only, mono), filter chips (`All · Issues only · OK only` + tile-driven filters), density toggle, column picker, Export.
 
-Empty state inside table: one sentence + primary action, centered, 48px padding. Loading: 8 skeleton rows.
+Empty state inside table: the EmptyState component (see below), inside-a-table variant. Loading: 8 skeleton rows.
 
 ## FocusPanel (drill-down)
 
@@ -193,7 +193,7 @@ Blocks in `surface-3` with `shimmer` sweep. Shapes match the real component (row
 
 Purpose: turn an empty data region into a next step, so the reader never wonders whether something failed to load.
 
-Anatomy: optional 20px icon in `text-faint` · one sentence `--fs-base` in `text-dim`, max 60ch, sentence case, names the scope it is empty for · one button (`primary` if it is the thing the user came to do, otherwise `accent`) whose label names what happens (`Run smoke flow`, `Import collection`, never `OK` or `Get started`). Vertical stack, centered, gap `--sp-3`.
+Anatomy: optional 20px icon in `text-faint` · one sentence `--fs-base` in `text-dim`, max 60ch, sentence case, names the scope it is empty for · one button whose label names what happens; it is `accent` whenever the page header already carries the screen's one primary button for the same scope (true on every module and company page today), and `primary` only in the rare empty state with no competing header action (`Run smoke flow`, `Import collection`, never `OK` or `Get started`). Vertical stack, centered, gap `--sp-3`.
 
 Placement variants, all with the same content rule "one sentence + one action, never two, never a paragraph":
 - **inside a table region** (replaces the rows; padding 48px; header row stays so the columns are still visible),

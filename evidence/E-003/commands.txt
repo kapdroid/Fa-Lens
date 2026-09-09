@@ -1,0 +1,11 @@
+git rev-parse HEAD
+grep -c '^| \(Overview\|APIs\|Cases\|Flows\|Validations\|Load\|Runs\|Data\|Knowledge\) |' docs/design/screens.md
+grep -o '^| \(Overview\|APIs\|Cases\|Flows\|Validations\|Load\|Runs\|Data\|Knowledge\) |' docs/design/screens.md
+grep -c '^## EmptyState' docs/design/components.md
+awk '/^## EmptyState/{flag=1} /^## /{if(flag && $0!~/EmptyState/) exit} flag' docs/design/components.md > /tmp/emptystate_section.txt
+grep -n -i 'anatomy' /tmp/emptystate_section.txt
+grep -n -i 'tokens' /tmp/emptystate_section.txt
+grep -n -i 'one sentence + one action' /tmp/emptystate_section.txt
+node tool/check-docs.mjs 2>&1 | tee evidence/E-003/check-docs-verify.log
+bash tool/gate.sh --fast 2>&1 | tee evidence/E-003/gate-fast-verify.log
+bash tool/gate.sh 2>&1 | tee evidence/E-003/gate.log

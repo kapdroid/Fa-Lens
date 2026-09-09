@@ -80,7 +80,7 @@ Never an empty screen: each tab's empty state is one sentence in plain words plu
 | Data | No test users or fixtures for this tenant yet. Add a test user to run write flows on the sandbox company. | Add test user |
 | Knowledge | No notes for this module yet. Sync the ADO knowledge base or write the first gotcha. | Sync from ADO |
 
-For sync packs the same rule applies with the module's own verbs (Flows: "No chains defined for this company yet." → Run chain discovery). A tab that cannot be empty for structural reasons (Overview with a registry entry) still shows this state until the first run has written a verdict.
+For sync packs the same rule applies with the module's own verbs (Flows: "No chains defined for this company yet." → New chain). A tab that cannot be empty for structural reasons (Overview with a registry entry) still shows this state until the first run has written a verdict.
 
 ## S1 Module · Overview
 
