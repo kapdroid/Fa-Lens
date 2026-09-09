@@ -2,12 +2,12 @@
 
  RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-012-http-adapter
 
- ✓ |unit| packages/adapters/test/http/budget.test.ts (4 tests) 1084ms
-   ✓ a hundred parallel steps never put more than the budget on the wire at once  1061ms
+ ✓ |unit| packages/adapters/test/http/budget.test.ts (7 tests) 1419ms
+   ✓ a hundred parallel steps never put more than the budget on the wire at once  1085ms
+   ✓ a caller that stops caring lets the source go, and the permit comes back  304ms
 
  Test Files  1 passed (1)
-      Tests  4 passed (4)
-   Start at  18:39:43
-   Duration  1.32s (transform 21ms, setup 0ms, collect 53ms, tests 1.08s, environment 0ms, prepare 35ms)
+      Tests  7 passed (7)
+   Start at  18:56:41
+   Duration  1.63s (transform 21ms, setup 0ms, collect 50ms, tests 1.42s, environment 0ms, prepare 28ms)
 
-exit:0

@@ -21,4 +21,3 @@
 ▸ integration-tests           skipped (--fast)
 ▸ e2e                         skipped (--fast)
 gate: GREEN (19 stages)
-exit:0

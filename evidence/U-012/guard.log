@@ -2,10 +2,10 @@
 
  RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-012-http-adapter
 
- ✓ |unit| packages/adapters/test/http/redaction.test.ts (5 tests) 14ms
+ ✓ |unit| packages/adapters/test/http/guard.test.ts (14 tests) 2ms
 
  Test Files  1 passed (1)
-      Tests  5 passed (5)
-   Start at  18:56:45
-   Duration  235ms (transform 21ms, setup 0ms, collect 51ms, tests 14ms, environment 0ms, prepare 25ms)
+      Tests  14 passed (14)
+   Start at  18:56:46
+   Duration  212ms (transform 21ms, setup 0ms, collect 50ms, tests 2ms, environment 0ms, prepare 32ms)
 

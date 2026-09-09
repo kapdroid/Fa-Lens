@@ -2,12 +2,13 @@
 
  RUN  v3.2.7 /Users/kapdroid/StudioProjects/Fa-Lens.worktrees/U-012-http-adapter
 
- ✓ |unit| packages/adapters/test/http/breaker.test.ts (3 tests) 378ms
-   ✓ after the cooldown it half-opens, tries once, and closes when the source answers  356ms
+ ✓ |unit| packages/adapters/test/http/breaker.test.ts (8 tests) 1561ms
+   ✓ after the cooldown it half-opens, tries once, and closes when the source answers  357ms
+   ✓ a step that queued while the source was healthy does not reach it once the breaker has opened  509ms
+   ✓ a run the caller cancelled leaves the breaker closed for everyone else  411ms
 
  Test Files  1 passed (1)
-      Tests  3 passed (3)
-   Start at  18:39:45
-   Duration  626ms (transform 22ms, setup 0ms, collect 52ms, tests 378ms, environment 0ms, prepare 28ms)
+      Tests  8 passed (8)
+   Start at  18:56:43
+   Duration  1.80s (transform 23ms, setup 0ms, collect 52ms, tests 1.56s, environment 0ms, prepare 36ms)
 
-exit:0
