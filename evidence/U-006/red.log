@@ -1,0 +1,16 @@
+# 2026-09-09 15:43 · selftest before checkBoundaries is implemented
+FAIL clean packages produce no problems (third-party and node: imports ignored)
+     not implemented
+FAIL api → adapters is flagged with file and line, even as a type import
+     not implemented
+FAIL worker → kernel via dynamic import is flagged; worker → adapters and service are allowed
+     not implemented
+FAIL web may import only @falens/api; web → control is flagged
+     not implemented
+FAIL kernel importing another @falens package is flagged
+     not implemented
+FAIL a package missing from the table is flagged
+     not implemented
+
+check-boundaries selftest: 6 failing
+exit=1
