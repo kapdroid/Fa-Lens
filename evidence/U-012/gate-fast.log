@@ -1,4 +1,4 @@
-# 2026-09-09 18:48 · bash tool/gate.sh --fast after safety review round 1
+# 2026-09-09 18:54 · bash tool/gate.sh --fast after safety review round 2
 ▸ docs                        ok
 ▸ knowledge-index             ok
 ▸ knowledge-index-selftest    ok

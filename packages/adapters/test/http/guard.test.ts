@@ -20,15 +20,27 @@ describe('refuse', () => {
     ['something that is not a url', 'not a url', 'BLOCKED · not a usable url'],
   ];
   for (const [name, url, verdict] of cases) {
-    test(name, () => { expect(refuse(step(src, { url }))?.verdict).toBe(verdict); });
+    test(name, () => { expect(refuse(step(src, { url }), { allowInsecureLoopback: true })?.verdict).toBe(verdict); });
   }
 
   test('a method the catalog does not list', () => {
     expect(refuse(step(src, { method: 'POST' }))?.verdict).toBe('BLOCKED · method not allowed');
   });
 
+  test('a writing method the catalog does list is still refused unless the source is the sandbox', () => {
+    const writable = server('https://app-api-mars.fieldassist.example', { methods: ['GET', 'POST'] });
+    expect(refuse(step(writable, { method: 'POST' }))?.verdict).toBe('BLOCKED · writing method outside a sandbox source');
+    const sandbox = server('https://app-api-mars.fieldassist.example', { methods: ['GET', 'POST'], sandbox: true });
+    expect(refuse(step(sandbox, { method: 'POST' }))).toBeUndefined();
+  });
+
+  test('plain http on loopback is refused unless a caller asks for that allowance', () => {
+    const local = server('http://127.0.0.1:8080');
+    expect(refuse(step(local, { url: 'http://127.0.0.1:8080/x' }))?.verdict).toBe('BLOCKED · not https');
+  });
+
   test('loopback over plain http is allowed, because that is how a test reaches a local server', () => {
     const local = server('http://127.0.0.1:8080');
-    expect(refuse(step(local, { url: 'http://127.0.0.1:8080/x' }))).toBeUndefined();
+    expect(refuse(step(local, { url: 'http://127.0.0.1:8080/x' }), { allowInsecureLoopback: true })).toBeUndefined();
   });
 });

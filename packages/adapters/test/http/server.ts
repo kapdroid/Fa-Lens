@@ -8,13 +8,14 @@ export interface TestServer {
   origin: string;
   /** How many requests were in flight at the busiest moment. */
   peakInFlight: number;
-  requests: { method: string; url: string; authorization?: string }[];
+  requests: { method: string; url: string; host?: string; authorization?: string }[];
   close: () => Promise<void>;
 }
 
 export interface ServerBehaviour {
   delayMs?: number;
   status?: number;
+  location?: string;
   body?: () => string;
   failFirst?: number;
 }
@@ -27,7 +28,7 @@ export async function startTestServer(behaviour: ServerBehaviour = {}): Promise<
     inFlight += 1;
     state.peakInFlight = Math.max(state.peakInFlight, inFlight);
     const auth = req.headers.authorization;
-    state.requests.push({ method: req.method ?? '', url: req.url ?? '', ...(auth === undefined ? {} : { authorization: auth }) });
+    state.requests.push({ method: req.method ?? '', url: req.url ?? '', ...(req.headers.host === undefined ? {} : { host: req.headers.host }), ...(auth === undefined ? {} : { authorization: auth }) });
     const finish = () => {
       inFlight -= 1;
       if (behaviour.failFirst !== undefined && failures < behaviour.failFirst) {
@@ -35,7 +36,7 @@ export async function startTestServer(behaviour: ServerBehaviour = {}): Promise<
         res.writeHead(500).end('nope');
         return;
       }
-      res.writeHead(behaviour.status ?? 200, { 'content-type': 'application/json' });
+      res.writeHead(behaviour.status ?? 200, { 'content-type': 'application/json', ...(behaviour.location ? { location: behaviour.location } : {}) });
       res.end(behaviour.body ? behaviour.body() : JSON.stringify({ data: { token: 'tok-abc' } }));
     };
     if (behaviour.delayMs) setTimeout(finish, behaviour.delayMs); else finish();

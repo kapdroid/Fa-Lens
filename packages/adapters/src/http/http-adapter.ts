@@ -7,6 +7,7 @@ import { DEFAULT_COOLDOWN_MS, DEFAULT_FAILURES_TO_OPEN, DEFAULT_MAX_BYTES, DEFAU
 import { breaker } from './breaker.ts';
 import type { Breaker } from './breaker.ts';
 import { budgetKey, refuse, safeHeaders } from './guard.ts';
+import type { GuardOptions } from './guard.ts';
 import { semaphore } from './semaphore.ts';
 import type { Semaphore } from './semaphore.ts';
 
@@ -22,6 +23,8 @@ export interface HttpAdapterOptions {
   now?: () => number;
   /** Tests use their own budget registry; a worker shares one so a breaker cannot be reset by making a new adapter. */
   isolate?: boolean;
+  /** Lets a test reach a local server over plain http. A worker never sets it. */
+  allowInsecureLoopback?: boolean;
 }
 
 const READ_ONLY_METHODS = ['GET', 'HEAD'];
@@ -48,6 +51,7 @@ export function httpAdapter(options: HttpAdapterOptions = {}): Adapter {
   const send = options.request ?? defaultRequest;
   const now = options.now ?? Date.now;
   const budgets: Budgets = options.isolate ? { permits: new Map(), breakers: new Map() } : shared;
+  const guardOptions: GuardOptions = options.allowInsecureLoopback === true ? { allowInsecureLoopback: true } : {};
 
   const permitsFor = (key: string, budget: Budget): Semaphore => {
     const existing = budgets.permits.get(key);
@@ -85,10 +89,11 @@ export function httpAdapter(options: HttpAdapterOptions = {}): Adapter {
       if (signal?.aborted) stop(); else signal?.addEventListener('abort', stop, { once: true });
       const timer = setTimeout(stop, server.budget.timeoutMs);
       try {
-        const res = await send(url, { method, ...(headers ? { headers } : {}), signal: controller.signal });
+        const res = await send(url, { method: method.toUpperCase(), ...(headers ? { headers } : {}), signal: controller.signal });
         const read = await readBody(res.body, server.budget);
-        if (res.statusCode >= 300 && res.statusCode < 400) {
-          gate.failed(key);
+        // A redirect is a configuration fault, not an outage: refuse it without counting it against the source.
+        if (res.statusCode >= 300 && res.statusCode < 400 && res.statusCode !== 304) {
+          gate.succeeded(key);
           return { kind: 'error', server: server.server, rowsLookedAt: 0, truncated: false, durationMs: now() - started, status: res.statusCode, verdict: 'redirect refused' };
         }
         if (res.statusCode >= 500) gate.failed(key); else gate.succeeded(key);
@@ -99,7 +104,8 @@ export function httpAdapter(options: HttpAdapterOptions = {}): Adapter {
         if (read.rows) result.rows = read.rows;
         return result;
       } catch (e) {
-        gate.failed(key);
+        // A caller walking away says nothing about the source, so it must not push the breaker open.
+        if (!signal?.aborted) gate.failed(key);
         return {
           kind: 'error' as const, server: server.server, rowsLookedAt: 0, truncated: false, durationMs: now() - started,
           verdict: signal?.aborted ? 'stopped' : controller.signal.aborted ? `timed out after ${server.budget.timeoutMs} ms` : reason(e),
@@ -120,7 +126,7 @@ export function httpAdapter(options: HttpAdapterOptions = {}): Adapter {
       const host = hostOf(step.url);
       const emit = (chunk: Chunk): Chunk => { report(ctx, { step, host, chunk }); return chunk; };
 
-      const refusal = refuse(step);
+      const refusal = refuse(step, guardOptions);
       if (refusal) { yield emit(blocked(server.server, refusal.verdict, now() - started)); return; }
       if (server.budget.concurrency <= 0 || server.budget.timeoutMs <= 0) {
         yield emit(blocked(server.server, 'BLOCKED · this source has no usable budget', now() - started));
@@ -145,8 +151,11 @@ export function httpAdapter(options: HttpAdapterOptions = {}): Adapter {
       if (!server.methods.map(m => m.toUpperCase()).includes('HEAD')) {
         return { ok: false, durationMs: 0, detail: 'the catalog does not list HEAD for this source' };
       }
+      if (server.budget.concurrency <= 0 || server.budget.timeoutMs <= 0) {
+        return { ok: false, durationMs: 0, detail: 'this source has no usable budget' };
+      }
       const step: ResolvedStep = { stepId: 'health', server, method: 'HEAD', url: server.baseUrl };
-      const refusal = refuse(step);
+      const refusal = refuse(step, guardOptions);
       if (refusal) return { ok: false, durationMs: now() - started, detail: refusal.verdict };
       const chunk = await call(server.baseUrl, 'HEAD', undefined, server, budgetKey(step), started, undefined);
       return chunk.kind === 'data'

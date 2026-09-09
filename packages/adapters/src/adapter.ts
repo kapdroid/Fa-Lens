@@ -26,6 +26,10 @@ export interface ResolvedServer {
   database?: string;
   /** The methods the catalog lists for this source. For http this is the read-only guard. */
   methods: string[];
+  /** True only for a sandbox source on a non-production environment, the one place a write-test may run
+   *  (docs/architecture.md §8). Without it the adapter refuses any method beyond GET and HEAD, whatever
+   *  the catalog lists. */
+  sandbox?: boolean;
   budget: Budget;
   /** A vault reference, never a value. */
   credential?: string;
