@@ -1,4 +1,4 @@
-# 2026-09-09 17:14 · 7c0f0db · unit/U-010 · bash tool/gate.sh (full)
+# 2026-09-09 17:19 · 9c3f226 · unit/U-010
 ▸ docs                        ok
 ▸ knowledge-index             ok
 ▸ knowledge-index-selftest    ok
@@ -22,4 +22,3 @@
 ▸ integration-tests           ok
 ▸ e2e                         ok
 gate: GREEN (22 stages)
-exit=0
