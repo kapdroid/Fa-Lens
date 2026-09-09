@@ -1,0 +1,13 @@
+git rev-parse HEAD
+ls tool/test/
+bash tool/gate.sh --fast                              # DoD item 1 -> evidence/U-001/dod1-fast-green.log
+cat > tool/test/zz-fails.test.mjs <<'EOF'
+console.log("FAIL deliberate");
+process.exit(1);
+EOF
+bash tool/gate.sh --fast                              # DoD item 2 (red) -> evidence/U-001/red.log
+rm tool/test/zz-fails.test.mjs
+bash tool/gate.sh --fast                              # DoD item 2 (green after removal) -> evidence/U-001/dod2-green-after-removal.log
+bash tool/gate.sh                                      # DoD item 3 (full gate) -> evidence/U-001/gate.log
+ls tool/test/                                          # confirm zz-fails.test.mjs not present
+git status --short evidence/U-001/ tool/

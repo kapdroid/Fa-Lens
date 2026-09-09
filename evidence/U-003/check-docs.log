@@ -1,0 +1,3 @@
+# 2026-09-09 11:30 · node tool/check-docs.mjs
+check-docs: OK (14 ADRs, 49 markdown files)
+exit=0
